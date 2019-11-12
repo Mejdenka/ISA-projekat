@@ -1,26 +1,26 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Termin {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Date pocetak;
     private Date kraj;
 
     public Termin() {}
 
-    public Termin(int id, Date pocetak, Date kraj) {
-        this.id = id;
+    public Termin(Date pocetak, Date kraj) {
         this.pocetak = pocetak;
         this.kraj = kraj;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Date getPocetak() {

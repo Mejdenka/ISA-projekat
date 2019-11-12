@@ -1,34 +1,44 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.rmi.server.UID;
 
+@Entity
 public class Operacija {
-    private UID idPacijenta;
-    private UID idLekara;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Pacijent pacijent;
+    private Lekar lekar;
     private Termin termin;
 
     public Operacija() {}
 
-    public Operacija(UID idPacijenta, UID idLekara, Termin termin) {
-        this.idPacijenta = idPacijenta;
-        this.idLekara = idLekara;
+    public Operacija(Pacijent pacijent, Lekar lekar, Termin termin) {
+        this.pacijent = pacijent;
+        this.lekar = lekar;
         this.termin = termin;
     }
 
-    public UID getIdPacijenta() {
-        return idPacijenta;
+    public Pacijent getPacijent() {
+        return pacijent;
     }
 
-    public void setIdPacijenta(UID idPacijenta) {
-        this.idPacijenta = idPacijenta;
+    public void setPacijent(Pacijent pacijent) {
+        this.pacijent = pacijent;
     }
 
-    public UID getIdLekara() {
-        return idLekara;
+    public Lekar getLekar() {
+        return lekar;
     }
 
-    public void setIdLekara(UID idLekara) {
-        this.idLekara = idLekara;
+    public void setLekar(Lekar lekar) {
+        this.lekar = lekar;
     }
 
     public Termin getTermin() {

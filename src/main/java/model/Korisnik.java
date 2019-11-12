@@ -1,10 +1,19 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.rmi.server.UID;
 import java.util.Date;
 
+@Entity
 public class Korisnik {
-    private UID id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String ime;
     private String prezime;
     private Date datumRegistrovanja;
@@ -17,8 +26,7 @@ public class Korisnik {
 
     }
 
-    public Korisnik(UID id, String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email) {
-        this.id = id;
+    public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email) {
         this.ime = ime;
         this.prezime = prezime;
         this.datumRegistrovanja = datumRegistrovanja;
@@ -26,14 +34,6 @@ public class Korisnik {
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.email = email;
-    }
-
-    public UID getId() {
-        return id;
-    }
-
-    public void setId(UID id) {
-        this.id = id;
     }
 
     public String getIme() {

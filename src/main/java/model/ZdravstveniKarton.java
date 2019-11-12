@@ -1,21 +1,31 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.rmi.server.UID;
 import java.util.ArrayList;
 
+@Entity
 public class ZdravstveniKarton {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private int broj;
-    private UID idPacijenta;
-    private ArrayList<UID> idDijagnoza;
-    private ArrayList<UID> idPregleda;
+    private Pacijent pacijent;
+    private ArrayList<Dijagnoza> dijagnoze;
+    private ArrayList<Pregled> pregledi;
 
     public ZdravstveniKarton() {}
 
-    public ZdravstveniKarton(int broj, UID idPacijenta, ArrayList<UID> idDijagnoza, ArrayList<UID> idPregleda) {
+    public ZdravstveniKarton(int broj, Pacijent pacijent, ArrayList<Dijagnoza> dijagnoze, ArrayList<Pregled> pregledi) {
         this.broj = broj;
-        this.idPacijenta = idPacijenta;
-        this.idDijagnoza = idDijagnoza;
-        this.idPregleda = idPregleda;
+        this.pacijent = pacijent;
+        this.dijagnoze = dijagnoze;
+        this.pregledi = pregledi;
     }
 
     public int getBroj() {
@@ -26,27 +36,27 @@ public class ZdravstveniKarton {
         this.broj = broj;
     }
 
-    public UID getIdPacijenta() {
-        return idPacijenta;
+    public Pacijent getPacijent() {
+        return pacijent;
     }
 
-    public void setIdPacijenta(UID idPacijenta) {
-        this.idPacijenta = idPacijenta;
+    public void setPacijent(Pacijent pacijent) {
+        this.pacijent = pacijent;
     }
 
-    public ArrayList<UID> getIdDijagnoza() {
-        return idDijagnoza;
+    public ArrayList<Dijagnoza> getDijagnoze() {
+        return dijagnoze;
     }
 
-    public void setIdDijagnoza(ArrayList<UID> idDijagnoza) {
-        this.idDijagnoza = idDijagnoza;
+    public void setDijagnoze(ArrayList<Dijagnoza> dijagnoze) {
+        this.dijagnoze = dijagnoze;
     }
 
-    public ArrayList<UID> getIdPregleda() {
-        return idPregleda;
+    public ArrayList<Pregled> getPregledi() {
+        return pregledi;
     }
 
-    public void setIdPregleda(ArrayList<UID> idPregleda) {
-        this.idPregleda = idPregleda;
+    public void setPregledi(ArrayList<Pregled> pregledi) {
+        this.pregledi = pregledi;
     }
 }

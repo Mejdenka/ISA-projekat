@@ -1,21 +1,31 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Entity
 public class Pacijent extends Korisnik {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private ZdravstveniKarton karton;
     private ArrayList<Recept> recepti;
 
     public Pacijent() {}
 
-    public Pacijent(int id, String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton) {
-        super(id, ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
+    public Pacijent(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton) {
+        super(ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
         this.karton = karton;
     }
 
-    public Pacijent(int id, String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton, ArrayList<Recept> recepti) {
-        super(id, ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
+    public Pacijent(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton, ArrayList<Recept> recepti) {
+        super(ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
         this.karton = karton;
         this.recepti = recepti;
     }

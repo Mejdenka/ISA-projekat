@@ -1,28 +1,28 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Pregled {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Date datumPregleda;
     private int idPacijenta;
     private int idLekara;
 
     public Pregled() {}
 
-    public Pregled(int id, Date datumPregleda, int idPacijenta, int idLekara) {
-        this.id = id;
+    public Pregled(Date datumPregleda, int idPacijenta, int idLekara) {
         this.datumPregleda = datumPregleda;
         this.idPacijenta = idPacijenta;
         this.idLekara = idLekara;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Date getDatumPregleda() {

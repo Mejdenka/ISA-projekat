@@ -17,9 +17,12 @@ public class Lek {
 
     public Lek() {}
 
-    public Lek(int sifra, String naziv) {
-        this.sifra = sifra;
-        this.naziv = naziv;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getSifra() {

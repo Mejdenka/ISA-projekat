@@ -1,24 +1,22 @@
-package model;
+package dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import model.Termin;
+
 import java.util.Date;
 
-@Entity
-public class Termin {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TerminDTO {
     private Long id;
-
     private Date pocetak;
     private Date kraj;
 
-    public Termin() {}
+    public TerminDTO() {}
 
-    public Termin(Date pocetak, Date kraj) {
+    public TerminDTO(Termin termin){
+        this(termin.getId(), termin.getPocetak(), termin.getKraj());
+    }
+
+    public TerminDTO(Long id, Date pocetak, Date kraj) {
+        this.id = id;
         this.pocetak = pocetak;
         this.kraj = kraj;
     }

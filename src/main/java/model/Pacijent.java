@@ -1,11 +1,9 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.Set;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Pacijent extends Korisnik {
@@ -14,20 +12,20 @@ public class Pacijent extends Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
     private ZdravstveniKarton karton;
-    private ArrayList<Recept> recepti;
+
+    @OneToMany
+    private Set<Recept> recepti;
 
     public Pacijent() {}
 
-    public Pacijent(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton) {
-        super(ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
-        this.karton = karton;
+    public Long getId() {
+        return id;
     }
 
-    public Pacijent(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ZdravstveniKarton karton, ArrayList<Recept> recepti) {
-        super(ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
-        this.karton = karton;
-        this.recepti = recepti;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ZdravstveniKarton getKarton() {
@@ -38,11 +36,11 @@ public class Pacijent extends Korisnik {
         this.karton = karton;
     }
 
-    public ArrayList<Recept> getRecepti() {
+    public Set<Recept> getRecepti() {
         return recepti;
     }
 
-    public void setRecepti(ArrayList<Recept> recepti) {
+    public void setRecepti(Set<Recept> recepti) {
         this.recepti = recepti;
     }
 }

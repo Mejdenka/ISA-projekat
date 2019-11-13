@@ -1,12 +1,10 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.rmi.server.UID;
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Lekar extends Korisnik {
@@ -14,22 +12,23 @@ public class Lekar extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer ocena;
+    @OneToMany
+    private Set<Operacija> operacije;
+    @OneToMany
+    private Set<Pregled> pregledi;
 
-    private int ocena;
-    private ArrayList<Operacija> operacije;
-    private ArrayList<Pregled> pregledi;
+    public Lekar() {}
 
-    public Lekar(int ocena) {
-        this.ocena = ocena;
+    public Long getId() {
+        return id;
     }
 
-    public Lekar(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, int ocena) {
-        super(ime, prezime, datumRegistrovanja, datumRodjenja, korisnickoIme, lozinka, email);
-        this.ocena = ocena;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-
-    public int getOcena() {
+    public Integer getOcena() {
         return ocena;
     }
 
@@ -37,19 +36,19 @@ public class Lekar extends Korisnik {
         this.ocena = ocena;
     }
 
-    public ArrayList<Operacija> getOperacije() {
+    public Set<Operacija> getOperacije() {
         return operacije;
     }
 
-    public void setOperacije(ArrayList<Operacija> operacije) {
+    public void setOperacije(Set<Operacija> operacije) {
         this.operacije = operacije;
     }
 
-    public ArrayList<Pregled> getPregledi() {
+    public Set<Pregled> getPregledi() {
         return pregledi;
     }
 
-    public void setPregledi(ArrayList<Pregled> pregledi) {
+    public void setPregledi(Set<Pregled> pregledi) {
         this.pregledi = pregledi;
     }
 }

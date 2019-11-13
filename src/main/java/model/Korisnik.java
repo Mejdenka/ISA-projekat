@@ -1,9 +1,6 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.rmi.server.UID;
 import java.util.Date;
 
@@ -22,9 +19,7 @@ public class Korisnik {
     private String lozinka;
     private String email;
 
-    public Korisnik() {
-
-    }
+    public Korisnik() {}
 
     public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email) {
         this.ime = ime;

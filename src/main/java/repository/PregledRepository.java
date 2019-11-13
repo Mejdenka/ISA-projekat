@@ -1,7 +1,7 @@
 package repository;
 
 import model.Dijagnoza;
-import model.Recept;
+import model.Pregled;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,9 +9,9 @@ import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReceptRepository extends JpaRepository<Recept, Long> {
-    Optional<Recept> findById(Long id);
-    Page<Recept> findAll(Pageable pageable);
-    List<Recept> findAll();
+public interface PregledRepository extends JpaRepository<Pregled, Long> {
+    Optional<Pregled> findById(Long id);
+    Page<Pregled> findAll(Pageable pageable);
+    List<Pregled> findAll();
     void deleteById(Long id);
 }

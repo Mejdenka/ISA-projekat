@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 public interface SifarnikRepository extends JpaRepository<Sifarnik, Long> {
         //osnovne metode za repo
-        Sifarnik findById(long id);
+        Optional<Sifarnik> findById(Long id);
         Page<Sifarnik> findAll(Pageable pageable);
         List<Sifarnik> findAll();
-        void removeById(long id);
+        void deleteById(Long id);
         Sifarnik save(Sifarnik sifarnik);
 
 }

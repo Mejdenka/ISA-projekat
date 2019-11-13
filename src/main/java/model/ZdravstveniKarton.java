@@ -1,11 +1,9 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.rmi.server.UID;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.Set;
 
 @Entity
 public class ZdravstveniKarton {
@@ -14,25 +12,37 @@ public class ZdravstveniKarton {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int broj;
+    private Integer broj;
+
+    @OneToOne
     private Pacijent pacijent;
-    private ArrayList<Dijagnoza> dijagnoze;
-    private ArrayList<Pregled> pregledi;
+    @OneToMany
+    private Set<Dijagnoza> dijagnoze;
+    @OneToMany
+    private Set<Pregled> pregledi;
 
     public ZdravstveniKarton() {}
 
-    public ZdravstveniKarton(int broj, Pacijent pacijent, ArrayList<Dijagnoza> dijagnoze, ArrayList<Pregled> pregledi) {
+    public ZdravstveniKarton(Integer broj, Pacijent pacijent, Set<Dijagnoza> dijagnoze, Set<Pregled> pregledi) {
         this.broj = broj;
         this.pacijent = pacijent;
         this.dijagnoze = dijagnoze;
         this.pregledi = pregledi;
     }
 
-    public int getBroj() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getBroj() {
         return broj;
     }
 
-    public void setBroj(int broj) {
+    public void setBroj(Integer broj) {
         this.broj = broj;
     }
 
@@ -44,19 +54,19 @@ public class ZdravstveniKarton {
         this.pacijent = pacijent;
     }
 
-    public ArrayList<Dijagnoza> getDijagnoze() {
+    public Set<Dijagnoza> getDijagnoze() {
         return dijagnoze;
     }
 
-    public void setDijagnoze(ArrayList<Dijagnoza> dijagnoze) {
+    public void setDijagnoze(Set<Dijagnoza> dijagnoze) {
         this.dijagnoze = dijagnoze;
     }
 
-    public ArrayList<Pregled> getPregledi() {
+    public Set<Pregled> getPregledi() {
         return pregledi;
     }
 
-    public void setPregledi(ArrayList<Pregled> pregledi) {
+    public void setPregledi(Set<Pregled> pregledi) {
         this.pregledi = pregledi;
     }
 }

@@ -1,10 +1,8 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.Set;
+import java.util.Set;
 
 @Entity
 public class Recept {
@@ -12,20 +10,28 @@ public class Recept {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private ArrayList<Lek> lekovi;
+    @OneToMany
+    private Set<Lek> lekovi;
 
     public Recept() {}
 
-    public Recept(ArrayList<Lek> lekovi) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Recept(Set<Lek> lekovi) {
         this.lekovi = lekovi;
     }
 
-    public ArrayList<Lek> getLekovi() {
+    public Set<Lek> getLekovi() {
         return lekovi;
     }
 
-    public void setLekovi(ArrayList<Lek> lekovi) {
+    public void setLekovi(Set<Lek> lekovi) {
         this.lekovi = lekovi;
     }
 }

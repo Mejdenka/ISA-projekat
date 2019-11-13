@@ -1,9 +1,6 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.rmi.server.UID;
 
 @Entity
@@ -12,17 +9,21 @@ public class Operacija {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @OneToOne
     private Pacijent pacijent;
+    @OneToOne
     private Lekar lekar;
+    @OneToOne
     private Termin termin;
 
     public Operacija() {}
 
-    public Operacija(Pacijent pacijent, Lekar lekar, Termin termin) {
-        this.pacijent = pacijent;
-        this.lekar = lekar;
-        this.termin = termin;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Pacijent getPacijent() {

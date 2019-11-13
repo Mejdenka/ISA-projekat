@@ -1,9 +1,6 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -12,40 +9,44 @@ public class Pregled {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Date datumPregleda;
-    private int idPacijenta;
-    private int idLekara;
+    @OneToOne
+    private Termin termin;
+    @OneToOne
+    private Pacijent pacijent;
+    @OneToOne
+    private Lekar lekar;
 
     public Pregled() {}
 
-    public Pregled(Date datumPregleda, int idPacijenta, int idLekara) {
-        this.datumPregleda = datumPregleda;
-        this.idPacijenta = idPacijenta;
-        this.idLekara = idLekara;
+    public Long getId() {
+        return id;
     }
 
-    public Date getDatumPregleda() {
-        return datumPregleda;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDatumPregleda(Date datumPregleda) {
-        this.datumPregleda = datumPregleda;
+    public Termin getTermin() {
+        return termin;
     }
 
-    public int getIdPacijenta() {
-        return idPacijenta;
+    public void setTermin(Termin termin) {
+        this.termin = termin;
     }
 
-    public void setIdPacijenta(int idPacijenta) {
-        this.idPacijenta = idPacijenta;
+    public Pacijent getPacijent() {
+        return pacijent;
     }
 
-    public int getIdLekara() {
-        return idLekara;
+    public void setPacijent(Pacijent pacijent) {
+        this.pacijent = pacijent;
     }
 
-    public void setIdLekara(int idLekara) {
-        this.idLekara = idLekara;
+    public Lekar getLekar() {
+        return lekar;
+    }
+
+    public void setLekar(Lekar lekar) {
+        this.lekar = lekar;
     }
 }

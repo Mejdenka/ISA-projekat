@@ -12,5 +12,13 @@ public class MedicinskaSestra extends Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    MedicinskaSestra() {}
+    public MedicinskaSestra() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

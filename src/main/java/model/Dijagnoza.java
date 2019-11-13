@@ -12,17 +12,20 @@ public class Dijagnoza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int sifra;
+    private Integer sifra;
     private String naziv;
 
     public Dijagnoza() {}
 
-    public Dijagnoza(int sifra, String naziv) {
-        this.sifra = sifra;
-        this.naziv = naziv;
+    public Long getId() {
+        return id;
     }
 
-    public int getSifra() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getSifra() {
         return sifra;
     }
 

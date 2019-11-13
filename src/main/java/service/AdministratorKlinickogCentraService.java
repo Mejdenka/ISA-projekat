@@ -1,6 +1,6 @@
 package service;
 
-import model.AdministratorKlinickogCentra;
+import model.AdministratorKlinickogCentra;••••••••••••
 import repository.AdministratorKlinickogCentraRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

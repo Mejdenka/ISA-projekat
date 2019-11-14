@@ -1,10 +1,13 @@
 $(document).ready(function(){
+
+    $("#password, #password_confirm").keyup(checkPasswordMatch);
+
     $('#formaZaRegistraciju').submit(function(event){
         event.preventDefault();
 
-
         var korisnickoIme=$('#username').val();
         var lozinka=$('#password').val();
+        var lozinka_potvrda=$('#password_confirm').val();
         var ime=$('#first_name').val();
         var prezime=$('#last_name').val();
         var email=$('#email').val();
@@ -15,6 +18,25 @@ $(document).ready(function(){
             return
         }
 
+        if( lozinka!=lozinka_potvrda){
+            alert("Lozinke se ne poklapaju!")
+            return
+        }
+
+        if(lozinka.length < 5){
+            alert("Lozinka mora imati više od 5 karaktera!")
+            return
+        }
+
+        if(ime.length < 3){
+            alert("Ime mora imati bar tri slova!")
+            return
+        }
+
+        if(korisnickoIme.length < 5){
+            alert("Korisnicko ime mora imati bar 5 karaktera!")
+            return
+        }
 
         $.post({
             url: 'api/pacijenti',
@@ -95,3 +117,22 @@ $(document).ready(function(){
         console.log(err);
     }
 });
+
+function checkPasswordMatch() {
+    var password = $("#password").val();
+    var confirmPassword = $("#password_confirm").val();
+
+    if (password != confirmPassword)
+        $('#password_confirm').addClass("error-class");
+
+    else
+        $('#password_confirm').removeClass("error-class");
+
+    if(password.length < 5)
+        $("#divCheckPasswordLength").html("Šifra mora imati više od 5 karaktera!");
+    else
+        $("#divCheckPasswordLength").html("");
+
+}
+
+

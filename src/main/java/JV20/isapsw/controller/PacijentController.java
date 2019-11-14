@@ -43,11 +43,10 @@ public class PacijentController {
 
     @GetMapping(value = "{username}/{password}")
     public ResponseEntity<PacijentDTO> logIn(@PathVariable String username, @PathVariable String password) {
-        //ne prolazi do ovdje
-        System.out.println("pokusaj login");
-        Pacijent pacijent = pacijentService.findOneByUsername(username);
+         Pacijent pacijent = pacijentService.findOneByUsername(username);
 
         PacijentDTO pacijentDTO = new PacijentDTO(pacijent);
+
         if(password.equals(pacijentDTO.getLozinka())){
             return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);
         } else {

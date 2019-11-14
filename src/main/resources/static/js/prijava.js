@@ -11,10 +11,11 @@ $(document).ready(function(){
         }
 
         $.get({
-            url: 'api/pacijenti/'+username+'/'+password,
+            url: 'api/pacijenti/'+korisnickoIme+'/'+lozinka,
             contentType: 'application/json',
             success: function() {
                 alert('Prijavili ste se!');
+                window.location='homepage_pacijent.html';
             },
             error: function() {
                 alert("Neuspešna prijava.")

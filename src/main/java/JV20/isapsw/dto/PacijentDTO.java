@@ -17,13 +17,17 @@ public class PacijentDTO {
     public PacijentDTO() {}
 
     public PacijentDTO(Pacijent pacijent){
-        this(pacijent.getId(), pacijent.getIme(), pacijent.getPrezime(), pacijent.getDatumRodjenja().toString());
+        this(pacijent.getId(), pacijent.getKorisnickoIme(), pacijent.getIme(), pacijent.getPrezime(), pacijent.getEmail(),
+                pacijent.getLozinka(),pacijent.getDatumRodjenja().toString());
     }
 
-    public PacijentDTO(Long id, String ime, String prezime, String datumRodjenja) {
+    public PacijentDTO(Long id, String korisnickoIme, String ime, String prezime, String email, String lozinka, String datumRodjenja) {
         this.id = id;
+        this.korisnickoIme = korisnickoIme;
         this.ime = ime;
         this.prezime = prezime;
+        this.email = email;
+        this.lozinka = lozinka;
         this.datumRodjenja = datumRodjenja;
     }
 

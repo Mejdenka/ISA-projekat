@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface DijagnozaRepository extends JpaRepository<Dijagnoza, Long> {
     Optional<Dijagnoza> findById(Long id);
-    Page<Dijagnoza> findAll(Pageable pageable);
+    //Page<Dijagnoza> findAll(Pageable pageable);
     List<Dijagnoza> findAll();
     void deleteById(Long id);
 }

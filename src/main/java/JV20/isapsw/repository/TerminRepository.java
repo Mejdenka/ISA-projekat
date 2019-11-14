@@ -12,11 +12,9 @@ import java.util.Optional;
 public interface TerminRepository extends JpaRepository<Termin, Long> {
     //osnovne metode za repo
     Optional<Termin> findById(Long id);
-    Page<Termin> findAll(Pageable pageable);
+    //Page<Termin> findAll(Pageable pageable);
     List<Termin> findAll();
     void deleteById(Long id);
     Termin save(Termin termin);
-
-    Termin findByPocetak(Date pocetak);
 
 }

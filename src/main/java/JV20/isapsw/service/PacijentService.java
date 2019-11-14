@@ -20,6 +20,10 @@ public class PacijentService {
         return pacijentRepository.findById(id).orElseGet(null);
     }
 
+    public Pacijent findOneByUsername(String korisnickoIme) {
+        return pacijentRepository.findByKorisnickoIme(korisnickoIme);
+    }
+
     public List<Pacijent> findAll() {
         return pacijentRepository.findAll();
     }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReceptRepository extends JpaRepository<Recept, Long> {
     Optional<Recept> findById(Long id);
-    Page<Recept> findAll(Pageable pageable);
+    //Page<Recept> findAll(Pageable pageable);
     List<Recept> findAll();
     void deleteById(Long id);
 }

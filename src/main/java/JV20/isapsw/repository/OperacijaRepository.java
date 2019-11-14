@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface OperacijaRepository extends JpaRepository<Operacija, Long> {
     Optional<Operacija> findById(Long id);
-    Page<Operacija> findAll(Pageable pageable);
+    //Page<Operacija> findAll(Pageable pageable);
     List<Operacija> findAll();
     void deleteById(Long id);
 }

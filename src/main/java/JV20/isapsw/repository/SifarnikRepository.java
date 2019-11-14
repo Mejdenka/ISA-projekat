@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface SifarnikRepository extends JpaRepository<Sifarnik, Long> {
         //osnovne metode za repo
         Optional<Sifarnik> findById(Long id);
-        Page<Sifarnik> findAll(Pageable pageable);
+        //Page<Sifarnik> findAll(Pageable pageable);
         List<Sifarnik> findAll();
         void deleteById(Long id);
         Sifarnik save(Sifarnik sifarnik);

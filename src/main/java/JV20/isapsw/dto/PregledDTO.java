@@ -13,7 +13,7 @@ public class PregledDTO {
     public PregledDTO(Pregled pregled){
         this(pregled.getId(),
                 new TerminDTO(pregled.getTermin().getId(), pregled.getTermin().getPocetak(), pregled.getTermin().getKraj()),
-                new PacijentDTO(pregled.getPacijent().getId(), pregled.getPacijent().getIme(), pregled.getPacijent().getPrezime(), pregled.getPacijent().getDatumRodjenja()),
+                new PacijentDTO(pregled.getPacijent().getId(), pregled.getPacijent().getIme(), pregled.getPacijent().getPrezime(), pregled.getPacijent().getDatumRodjenja().toString()),
                 new LekarDTO(pregled.getLekar().getId(), pregled.getLekar().getIme(), pregled.getLekar().getPrezime(), pregled.getLekar().getDatumRodjenja(), pregled.getLekar().getOcena())
                 );
     }

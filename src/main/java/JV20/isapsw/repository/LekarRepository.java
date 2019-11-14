@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface LekarRepository extends JpaRepository<Lekar, Long> {
     Optional<Lekar> findById(Long id);
-    Page<Lekar> findAll(Pageable pageable);
+    //Page<Lekar> findAll(Pageable pageable);
     List<Lekar> findAll();
     void deleteById(Long id);
 }

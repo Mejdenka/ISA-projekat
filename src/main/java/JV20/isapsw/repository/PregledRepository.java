@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PregledRepository extends JpaRepository<Pregled, Long> {
     Optional<Pregled> findById(Long id);
-    Page<Pregled> findAll(Pageable pageable);
+    //Page<Pregled> findAll(Pageable pageable);
     List<Pregled> findAll();
     void deleteById(Long id);
 }

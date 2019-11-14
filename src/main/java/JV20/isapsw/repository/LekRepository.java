@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface LekRepository extends JpaRepository<Lek, Long> {
     Optional<Lek> findById(Long id);
-    Page<Lek> findAll(Pageable pageable);
+    //Page<Lek> findAll(Pageable pageable);
     List<Lek> findAll();
     void deleteById(Long id);
 }

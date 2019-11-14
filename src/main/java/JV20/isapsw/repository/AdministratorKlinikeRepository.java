@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AdministratorKlinikeRepository extends JpaRepository<AdministratorKlinike, Long> {
     Optional<AdministratorKlinike> findById(Long id);
-    Page<AdministratorKlinike> findAll(Pageable pageable);
+    //Page<AdministratorKlinike> findAll(Pageable pageable);
     List<AdministratorKlinike> findAll();
     void deleteById(Long id);
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface MedicinskaSestraRepository extends JpaRepository<MedicinskaSestra, Long> {
     Optional<MedicinskaSestra> findById(Long id);
-    Page<MedicinskaSestra> findAll(Pageable pageable);
+    //Page<MedicinskaSestra> findAll(Pageable pageable);
     List<MedicinskaSestra> findAll();
     void deleteById(Long id);
 }

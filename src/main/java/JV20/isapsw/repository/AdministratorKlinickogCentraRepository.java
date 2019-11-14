@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AdministratorKlinickogCentraRepository extends JpaRepository<AdministratorKlinickogCentra, Long> {
     Optional<AdministratorKlinickogCentra> findById(Long id);
-    Page<AdministratorKlinickogCentra> findAll(Pageable pageable);
+    //Page<AdministratorKlinickogCentra> findAll(Pageable pageable);
     List<AdministratorKlinickogCentra> findAll();
     void deleteById(Long id);
 }

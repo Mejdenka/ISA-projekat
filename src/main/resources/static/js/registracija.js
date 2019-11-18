@@ -24,26 +24,32 @@ $(document).ready(function(){
         }
 
         if(lozinka.length < 5){
-            alert("Lozinka mora imati više od 5 karaktera!")
+            alert("Lozinka mora imati više od pet karaktera!")
             return
         }
 
         if(ime.length < 3){
-            alert("Ime mora imati bar tri slova!")
+            alert("Ime mora imati bar tri karaktera!")
             return
         }
 
         if(korisnickoIme.length < 5){
-            alert("Korisnicko ime mora imati bar 5 karaktera!")
+            alert("Korisnicko ime mora imati bar pet karaktera!")
             return
         }
 
+        if(prezime.length < 3){
+            alert("Prezime mora imati bar tri karaktera!")
+            return
+
+        }
+
         $.post({
-            url: 'api/pacijenti',
+            url: 'api/korisnici',
             data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja}),
             contentType: 'application/json',
-            success: function(user) {
-                alert('Registrovali ste se kao ' + user.username);
+            success: function() {
+                alert('Registrovali ste se!');
                 window.location='prijava.html';
             },
             error: function() {

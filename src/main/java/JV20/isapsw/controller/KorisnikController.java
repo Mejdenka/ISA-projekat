@@ -51,11 +51,11 @@ public class KorisnikController {
         }
 
         KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
-
         return new ResponseEntity<>(korisnikDTO, HttpStatus.OK);
 
     }
 
+    //Metoda za signUp
     @PostMapping(consumes = "application/json")
     public ResponseEntity<KorisnikDTO> signUp(@RequestBody KorisnikDTO korisnikDTO) throws ParseException {
 

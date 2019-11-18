@@ -228,7 +228,7 @@ h6 {
    #WRAPPER
    ========================================================================== */
 .wrapper {
-  margin: 0 auto;
+  margin: 20px;
 }
 
 .wrapper--w960 {
@@ -650,4 +650,9 @@ input {
   .card-4 .card-body {
     padding: 50px 40px;
   }
+}
+
+.navbar {
+  height: 70px;
+  font-size: 40px;
 }

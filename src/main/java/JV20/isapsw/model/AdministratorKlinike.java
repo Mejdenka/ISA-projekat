@@ -11,7 +11,7 @@ public class AdministratorKlinike extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private ULOGA uloga = ULOGA.ADMIN_KLINIKE;
     public AdministratorKlinike() {}
 
     public Long getId() {
@@ -20,5 +20,13 @@ public class AdministratorKlinike extends Korisnik {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public ULOGA getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(ULOGA uloga) {
+        this.uloga = uloga;
     }
 }

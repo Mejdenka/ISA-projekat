@@ -1,0 +1,5 @@
+package JV20.isapsw.model;
+
+public enum ULOGA {
+    ADMIN_KLINICKOG_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
+}

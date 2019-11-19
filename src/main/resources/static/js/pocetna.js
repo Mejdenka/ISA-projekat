@@ -1,13 +1,12 @@
 $(document).ready(function(){
         $.get({
-            url: 'api/korisnici/'+"admin"+'/',
+            url: 'api/korisnici/'+"proba"+'/',
             contentType: 'application/json',
             success: function(korisnik) {
-                console.log(korisnik.ime)
-                console.log(korisnik.prezime)
-                console.log(korisnik.email())
-                console.log(korisnik.datumRodjenja)
-                console.log(korisnik.korisnickoIme)
+                console.log(korisnik.uloga)
+                switch (korisnik.uloga) {
+                    case "PACIJENT": alert("Pacijent")
+                }
             },
             error: function() {
                 alert("Neuspešno.")

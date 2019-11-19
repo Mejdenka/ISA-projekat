@@ -18,10 +18,11 @@ public class Korisnik {
     private String korisnickoIme;
     private String lozinka;
     private String email;
+    private ULOGA uloga;
 
     public Korisnik() {}
 
-    public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email) {
+    public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ULOGA uloga) {
         this.ime = ime;
         this.prezime = prezime;
         this.datumRegistrovanja = datumRegistrovanja;
@@ -29,6 +30,7 @@ public class Korisnik {
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.email = email;
+        this.uloga = uloga;
     }
 
     public Long getId() {
@@ -95,4 +97,11 @@ public class Korisnik {
         this.email = email;
     }
 
+    public ULOGA getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(ULOGA uloga) {
+        this.uloga = uloga;
+    }
 }

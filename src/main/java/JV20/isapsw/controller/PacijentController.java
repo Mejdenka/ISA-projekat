@@ -4,6 +4,7 @@ import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.model.Pacijent;
 import JV20.isapsw.model.Pacijent;
+import JV20.isapsw.model.ULOGA;
 import JV20.isapsw.service.PacijentService;
 import net.bytebuddy.build.BuildLogger;
 import org.springframework.beans.factory.annotation.Autowired;

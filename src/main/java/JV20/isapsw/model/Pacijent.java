@@ -9,7 +9,7 @@ public class Pacijent extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private ULOGA uloga = ULOGA.PACIJENT;
     @OneToOne
     private ZdravstveniKarton karton;
 
@@ -40,5 +40,13 @@ public class Pacijent extends Korisnik {
 
     public void setRecepti(Set<Recept> recepti) {
         this.recepti = recepti;
+    }
+
+    public ULOGA getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(ULOGA uloga) {
+        this.uloga = uloga;
     }
 }

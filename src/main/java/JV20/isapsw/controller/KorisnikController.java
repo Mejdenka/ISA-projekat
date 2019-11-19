@@ -55,7 +55,7 @@ public class KorisnikController {
 
     }
 
-    //Metoda za signUp
+    //Metoda za signUp od strane admina --izmijeniti kasnije da dodaje uloge
     @PostMapping(consumes = "application/json")
     public ResponseEntity<KorisnikDTO> signUp(@RequestBody KorisnikDTO korisnikDTO) throws ParseException {
 

@@ -17,4 +17,5 @@ public interface PacijentRepository extends JpaRepository<Pacijent, Long> {
     void removeById(Long id);
     Pacijent save(Pacijent pacijent);
     Pacijent findByKorisnickoIme(String korisnickoIme);
+    Pacijent findByEmail(String email);
 }

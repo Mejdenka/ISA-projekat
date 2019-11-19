@@ -10,7 +10,7 @@ public class Lekar extends Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer ocena;
-    private uloga u = uloga.LEKAR;
+    private ULOGA uloga = ULOGA.LEKAR;
     @OneToMany
     private Set<Operacija> operacije;
     @OneToMany
@@ -50,11 +50,11 @@ public class Lekar extends Korisnik {
         this.pregledi = pregledi;
     }
 
-    public uloga getU() {
-        return u;
+    public ULOGA getUloga() {
+        return uloga;
     }
 
-    public void setU(uloga u) {
-        this.u = u;
+    public void setU(ULOGA uloga) {
+        this.uloga = uloga;
     }
 }

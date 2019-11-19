@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
         $.get({
-            url: 'api/korisnici/'+"proba"+'/',
+            url: 'api/korisnici/'+"predef"+'/',
             contentType: 'application/json',
             success: function(korisnik) {
                 console.log(korisnik.uloga)
@@ -32,7 +32,7 @@ $(document).ready(function(){
         generisiZahteveZaRegistraciju();
     });
     $('body').on('click', '#registracijaKlinikaBtn', function(e) {
-        generisiFormuZaNivuKliniku()
+        generisiFormuZaNovuKliniku()
     });
     $('body').on('click', '#sifarnikBtn', function(e) {
         generisiFormuZaSifanik();
@@ -77,7 +77,7 @@ function pocetnaPacijent(korisnik) {
     }
 }
 
-function pocetnaAdminKlinickogCentra() {
+function pocetnaAdminKlinickogCentra(korisnik) {
     var nazivi = ["Zahtevi za registraciju", "Registruj klinike", "Sifarnik", "Dodaj administratora", korisnik.korisnickoIme];
 
     for(let naziv of nazivi) {
@@ -115,7 +115,7 @@ function generisiKlinike() {
 
 function generisiIstoriju() {
     document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dosupna istorija.");
+    var textnode = document.createTextNode("Jos uvijek nije dostupna istorija.");
     document.getElementById("content").appendChild(textnode);
 }
 
@@ -132,17 +132,25 @@ function generisiProfil() {
 }
 
 function generisiZahteveZaRegistraciju() {
-    
+    document.getElementById("content").innerHTML = "";
+    var textnode = document.createTextNode("Nemate zahteva za registraciju.");
+    document.getElementById("content").appendChild(textnode);
 }
 
-function generisiFormuZaNivuKliniku() {
-
+function generisiFormuZaNovuKliniku() {
+    document.getElementById("content").innerHTML = "";
+    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novu kliniku.");
+    document.getElementById("content").appendChild(textnode);
 }
 
 function generisiFormuZaSifanik() {
-
+    document.getElementById("content").innerHTML = "";
+    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za sifarnik.");
+    document.getElementById("content").appendChild(textnode);
 }
 
 function generisiFormuZaNovogAdmina() {
-
+    document.getElementById("content").innerHTML = "";
+    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novog admina.");
+    document.getElementById("content").appendChild(textnode);
 }

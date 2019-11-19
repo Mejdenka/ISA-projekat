@@ -1,5 +1,6 @@
 package JV20.isapsw;
 
+import JV20.isapsw.model.AdministratorKlinickogCentra;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,6 +1,7 @@
 package JV20.isapsw.repository;
 
 import JV20.isapsw.model.AdministratorKlinickogCentra;
+import JV20.isapsw.model.AdministratorKlinickogCentra;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,4 +14,7 @@ public interface AdministratorKlinickogCentraRepository extends JpaRepository<Ad
     //Page<AdministratorKlinickogCentra> findAll(Pageable pageable);
     List<AdministratorKlinickogCentra> findAll();
     void deleteById(Long id);
+    AdministratorKlinickogCentra findByKorisnickoIme(String korisnickoIme);
+    AdministratorKlinickogCentra save(AdministratorKlinickogCentra administratorKlinickogCentra);
+
 }

@@ -35,4 +35,8 @@ public class AdministratorKlinickogCentraService {
     public void remove(Long id) {
         akcRepository.deleteById(id);
     }
+
+    public AdministratorKlinickogCentra findOneByUsername(String korisnickoIme) {
+        return akcRepository.findByKorisnickoIme(korisnickoIme);
+    }
 }

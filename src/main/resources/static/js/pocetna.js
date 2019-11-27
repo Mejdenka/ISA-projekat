@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
         $.get({
-            url: 'api/korisnici/'+"predef"+'/',
+            url: 'api/korisnici/'+"admin"+'/',
             contentType: 'application/json',
             success: function(korisnik) {
                 console.log(korisnik.uloga)

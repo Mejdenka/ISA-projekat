@@ -1,11 +1,31 @@
 package JV20.isapsw.model;
 
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.joda.time.DateTime;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.rmi.server.UID;
 import java.util.Date;
 
 @Entity
-public class Korisnik {
+public class Korisnik implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +39,9 @@ public class Korisnik {
     private String lozinka;
     private String email;
     private ULOGA uloga;
+    private Authority authority;
+    private boolean enabled;
+    private Timestamp lastPasswordResetDate;
 
     public Korisnik() {}
 
@@ -31,6 +54,7 @@ public class Korisnik {
         this.lozinka = lozinka;
         this.email = email;
         this.uloga = uloga;
+        this.authority.setAuthority(uloga);
     }
 
     public Long getId() {
@@ -103,5 +127,62 @@ public class Korisnik {
 
     public void setUloga(ULOGA uloga) {
         this.uloga = uloga;
+    }
+
+    public Authority getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Authority> uloge = new ArrayList<Authority>();
+        uloge.add(this.authority);
+        return uloge;
+    }
+
+    @Override
+    public String getPassword() {
+        return lozinka;
+    }
+
+    @Override
+    public String getUsername() {
+        return korisnickoIme;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 }

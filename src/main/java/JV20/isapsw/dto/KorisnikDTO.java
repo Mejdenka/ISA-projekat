@@ -1,5 +1,6 @@
 package JV20.isapsw.dto;
 
+import JV20.isapsw.common.TimeProvider;
 import JV20.isapsw.model.Korisnik;
 import JV20.isapsw.model.ULOGA;
 

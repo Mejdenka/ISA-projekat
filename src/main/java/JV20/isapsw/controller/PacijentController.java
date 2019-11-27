@@ -26,6 +26,7 @@ public class PacijentController {
     //signUp metoda sa fronta za registraciju pacijenata iskljucivo
     @PostMapping(consumes = "application/json")
     public ResponseEntity<PacijentDTO> signUp(@RequestBody PacijentDTO pacijentDTO) throws ParseException {
+        System.out.println("USLO");
 
         Pacijent p = pacijentService.findOneByUsername(pacijentDTO.getKorisnickoIme());
         if(p != null){
@@ -35,6 +36,7 @@ public class PacijentController {
         if(p != null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        System.out.println("USLO1");
 
         Pacijent pacijent = new Pacijent();
         pacijent.setIme(pacijentDTO.getIme());
@@ -42,6 +44,7 @@ public class PacijentController {
         pacijent.setEmail(pacijentDTO.getEmail());
         pacijent.setKorisnickoIme(pacijentDTO.getKorisnickoIme());
         pacijent.setLozinka(pacijentDTO.getLozinka());
+        System.out.println("USLO2");
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date date = df.parse(pacijentDTO.getDatumRodjenja());

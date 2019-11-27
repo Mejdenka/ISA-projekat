@@ -1,0 +1,1 @@
+INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, datum_rodjenja, email, uloga, enabled) VALUES ('AdministratorKlinickogCentra', 'admin', 'admin', 'Admin', 'Admin', '1970-01-01 15:12:00','predef@example.com', '0', 1);

@@ -38,14 +38,17 @@ public class Korisnik implements UserDetails{
     private String korisnickoIme;
     private String lozinka;
     private String email;
-    private ULOGA uloga;
-    private Authority authority;
     private boolean enabled;
     private Timestamp lastPasswordResetDate;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "korisnik_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
 
     public Korisnik() {}
 
-    public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email, ULOGA uloga) {
+    public Korisnik(String ime, String prezime, Date datumRegistrovanja, Date datumRodjenja, String korisnickoIme, String lozinka, String email) {
         this.ime = ime;
         this.prezime = prezime;
         this.datumRegistrovanja = datumRegistrovanja;
@@ -53,8 +56,6 @@ public class Korisnik implements UserDetails{
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.email = email;
-        this.uloga = uloga;
-        this.authority.setAuthority(uloga);
     }
 
     public Long getId() {
@@ -121,27 +122,9 @@ public class Korisnik implements UserDetails{
         this.email = email;
     }
 
-    public ULOGA getUloga() {
-        return uloga;
-    }
-
-    public void setUloga(ULOGA uloga) {
-        this.uloga = uloga;
-    }
-
-    public Authority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Authority> uloge = new ArrayList<Authority>();
-        uloge.add(this.authority);
-        return uloge;
+        return this.authorities;
     }
 
     @Override

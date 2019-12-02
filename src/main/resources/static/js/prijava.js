@@ -2,24 +2,31 @@ $(document).ready(function(){
     $('#formaZaPrijavu').submit(function(event){
         event.preventDefault();
 
-        var korisnickoIme=$('#username').val();
-        var lozinka=$('#password').val();
+        var username=$('#username').val();
+        var password=$('#password').val();
 
-        if(korisnickoIme === "" || lozinka === ""){
+        if(username === "" || password === ""){
             alert("Nijedno polje ne sme ostati prazno!")
             return
         }
 
-        $.get({
-            url: 'api/korisnici/'+korisnickoIme+'/'+lozinka,
+        $.post({
+            url: 'api/korisnici',
+            data: JSON.stringify({username, password}),
             contentType: 'application/json',
-            success: function() {
+            success: function(data) {
                 alert('Prijavili ste se!');
-                window.location='pocetna.html';
+                //window.location='pocetna.html';
+                localStorage.setItem('jwt',data)
+                localStorage.getItem('jwt')
+                console.log(data);
+                console.log("to je jwt");
+
             },
             error: function() {
                 alert("Neuspešna prijava.")
             }
         });
+
     });
 });

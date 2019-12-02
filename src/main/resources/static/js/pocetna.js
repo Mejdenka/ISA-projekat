@@ -4,7 +4,6 @@ $(document).ready(function(){
             url: 'api/korisnici/'+"admin"+'/',
             contentType: 'application/json',
             success: function(korisnik) {
-                console.log(korisnik.uloga)
                 switch (korisnik.uloga) {
                     case "PACIJENT": pocetnaPacijent(korisnik)
                     case "ADMIN_KLINICKOG_CENTRA": pocetnaAdminKlinickogCentra(korisnik)

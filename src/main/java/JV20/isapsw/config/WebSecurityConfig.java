@@ -1,6 +1,7 @@
 package JV20.isapsw.config;
 
 import JV20.isapsw.security.TokenUtils;
+import JV20.isapsw.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     TokenUtils tokenUtils;
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    private CustomUserDetailsService jwtUserDetailsService;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    // Definisemo nacin autentifikacije
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
     // Definisemo prava pristupa odredjenim URL-ovima
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,7 +52,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 // svim korisnicima dopusti da pristupe putanjama /auth/**, /h2-console/** i /api/foo
-                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/h2-console/**").permitAll().antMatchers("/api/foo").permitAll();
+                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/api/pacijenti").permitAll()
+                .antMatchers("api/korisnici").permitAll()
+
+                .anyRequest().authenticated().and()
+
+                .cors().and();
+
+                // presretni svaki zahtev filterom
+                //.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
+                 //       BasicAuthenticationFilter.class);
 
         http.csrf().disable();
     }
@@ -40,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web)  {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/korisnici");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }

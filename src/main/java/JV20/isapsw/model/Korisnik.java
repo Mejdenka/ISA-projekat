@@ -122,6 +122,10 @@ public class Korisnik implements UserDetails{
         this.email = email;
     }
 
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;

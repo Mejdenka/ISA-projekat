@@ -1,5 +1,6 @@
 package JV20.isapsw.config;
 
+import JV20.isapsw.security.TokenAuthenticationFilter;
 import JV20.isapsw.security.TokenUtils;
 import JV20.isapsw.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +53,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 // svim korisnicima dopusti da pristupe putanjama /auth/**, /h2-console/** i /api/foo
-                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/h2-console/**").permitAll()
+                .authorizeRequests()
                 .antMatchers("/api/pacijenti").permitAll()
                 .antMatchers("api/korisnici").permitAll()
 
                 .anyRequest().authenticated().and()
 
-                .cors().and();
+                .cors().and()
 
                 // presretni svaki zahtev filterom
-                //.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
-                 //       BasicAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
+                        BasicAuthenticationFilter.class);
 
         http.csrf().disable();
     }

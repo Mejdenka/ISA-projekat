@@ -8,7 +8,7 @@ public class UserRequest {
     private String ime;
     private String prezime;
     private Date datumRegistrovanja;
-    private Date datumRodjenja;
+    private String datumRodjenja;
     private String korisnickoIme;
     private String lozinka;
     private String email;
@@ -45,11 +45,11 @@ public class UserRequest {
         this.datumRegistrovanja = datumRegistrovanja;
     }
 
-    public Date getDatumRodjenja() {
+    public String getDatumRodjenja() {
         return datumRodjenja;
     }
 
-    public void setDatumRodjenja(Date datumRodjenja) {
+    public void setDatumRodjenja(String datumRodjenja) {
         this.datumRodjenja = datumRodjenja;
     }
 

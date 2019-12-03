@@ -37,6 +37,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,7 +95,7 @@ public class KorisnikController {
     }
 
     //Metoda za vraćanje informacija o korisniku
-    @GetMapping(value = "{username}")
+    /*@GetMapping(value = "{username}")
     public ResponseEntity<KorisnikDTO> vratiKorisnika(@PathVariable String username) {
         Korisnik korisnik = korisnikService.findOneByUsername(username);
 
@@ -105,35 +107,17 @@ public class KorisnikController {
         return new ResponseEntity<>(korisnikDTO, HttpStatus.OK);
 
     }
+    */
 
-    //Metoda za signUp od strane admina --izmijeniti kasnije da dodaje uloge
-    /*@PostMapping(consumes = "application/json")
-    public ResponseEntity<KorisnikDTO> signUp(@RequestBody KorisnikDTO korisnikDTO) throws ParseException {
+    @RequestMapping(method = RequestMethod.GET, value = "/korisnik/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Korisnik loadById(@PathVariable Long userId) throws AccessDeniedException {
+        return this.korisnikService.findOne(userId);
+    }
 
-        Korisnik k = korisnikService.findOneByUsername(korisnikDTO.getKorisnickoIme());
-        if(k != null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        k = korisnikService.findOneByEmail(korisnikDTO.getEmail());
-        if(k != null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Korisnik korisnik = new Korisnik();
-        korisnik.setIme(korisnikDTO.getIme());
-        korisnik.setPrezime(korisnikDTO.getPrezime());
-        korisnik.setEmail(korisnikDTO.getEmail());
-        korisnik.setKorisnickoIme(korisnikDTO.getKorisnickoIme());
-        korisnik.setLozinka(korisnikDTO.getLozinka());
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = df.parse(korisnikDTO.getDatumRodjenja());
-
-        korisnik.setDatumRodjenja(date);
-        korisnik.setDatumRegistrovanja(new Date());
-
-        korisnik = korisnikService.save(korisnik);
-
-        return new ResponseEntity<>(new KorisnikDTO(korisnik), HttpStatus.CREATED);
-    }*/
+    @RequestMapping("/whoami")
+    @PreAuthorize("hasRole('USER')")
+    public Korisnik user(Principal user) {
+        return this.korisnikService.findOneByUsername(user.getName());
+    }
 }

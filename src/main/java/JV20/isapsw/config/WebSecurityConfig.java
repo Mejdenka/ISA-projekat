@@ -52,10 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // komunikacija izmedju klijenta i servera je stateless
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-                // svim korisnicima dopusti da pristupe putanjama /auth/**, /h2-console/** i /api/foo
+                // svim korisnicima dopusti da pristupe putanjama
                 .authorizeRequests()
-                .antMatchers("/api/pacijenti").permitAll()
-                .antMatchers("api/korisnici").permitAll()
+                .antMatchers("/api/pacijenti/**").permitAll()
+                .antMatchers("api/korisnici/**").permitAll()
 
                 .anyRequest().authenticated().and()
 
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web)  {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
-        web.ignoring().antMatchers(HttpMethod.POST, "/api/korisnici");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/korisnici/login");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }

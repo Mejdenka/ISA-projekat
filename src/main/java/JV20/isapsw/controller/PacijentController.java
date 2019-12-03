@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,7 @@ public class PacijentController {
     private KorisnikService korisnikService;
 
     //signUp metoda sa fronta za registraciju pacijenata iskljucivo
-    //@RequestMapping(value = "/signup", method = RequestMethod.POST)
-    @PostMapping(consumes = "application/json")
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity<?> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) throws ParseException {
         Korisnik existUser = this.korisnikService.findOneByUsername(userRequest.getKorisnickoIme());
         if (existUser != null) {
@@ -46,38 +46,4 @@ public class PacijentController {
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(pacijent.getId()).toUri());
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
-
-    /*@PostMapping(consumes = "application/json")
-    public ResponseEntity<PacijentDTO> signUp(@RequestBody PacijentDTO pacijentDTO) throws ParseException {
-        System.out.println("USLO");
-
-        Pacijent p = pacijentService.findOneByUsername(pacijentDTO.getKorisnickoIme());
-        if(p != null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        p = pacijentService.findOneByEmail(pacijentDTO.getEmail());
-        if(p != null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        System.out.println("USLO1");
-
-        Pacijent pacijent = new Pacijent();
-        pacijent.setIme(pacijentDTO.getIme());
-        pacijent.setPrezime(pacijentDTO.getPrezime());
-        pacijent.setEmail(pacijentDTO.getEmail());
-        pacijent.setKorisnickoIme(pacijentDTO.getKorisnickoIme());
-        pacijent.setLozinka(pacijentDTO.getLozinka());
-        System.out.println("USLO2");
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = df.parse(pacijentDTO.getDatumRodjenja());
-
-        pacijent.setDatumRodjenja(date);
-        pacijent.setDatumRegistrovanja(new Date());
-
-        pacijent = pacijentService.save(pacijent);
-
-        return new ResponseEntity<>(new PacijentDTO(pacijent), HttpStatus.CREATED);
-    }*/
-
 }

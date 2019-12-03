@@ -11,7 +11,7 @@ $(document).ready(function(){
         }
 
         $.post({
-            url: 'api/korisnici',
+            url: 'api/korisnici/login',
             data: JSON.stringify({username, password}),
             contentType: 'application/json',
             success: function(data) {

@@ -45,8 +45,7 @@ $(document).ready(function(){
         }
 
         $.post({
-            //url: 'api/pacijenti/signup',
-            url: 'api/pacijenti',
+            url: 'api/pacijenti/signup',
             data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja}),
             contentType: 'application/json',
             success: function() {

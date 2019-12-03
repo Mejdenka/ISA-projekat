@@ -59,15 +59,15 @@ public class KorisnikController {
     private PasswordEncoder passwordEncoder;
 
     //Metoda za login
-    //@RequestMapping(value = "/login", method = RequestMethod.POST) //ranije radilo i sa ovim sada error 400?????
-    @PostMapping(consumes = "application/json")     //sada error 405 kada je u bazi hesirana sifra sta??
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    //@PostMapping(consumes = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException, IOException {
 
         Korisnik korisnik = korisnikService.findOneByUsername(authenticationRequest.getUsername());
         if(korisnik == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        System.out.println(passwordEncoder.encode(authenticationRequest.getPassword()));    //kako poredim sifre????
+        System.out.println(passwordEncoder.encode(authenticationRequest.getPassword()));
 
         KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
         System.out.println("USLO1 " + authenticationRequest.getUsername());
@@ -89,9 +89,6 @@ public class KorisnikController {
         // Vrati token kao odgovor na uspesno autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
         //KAKO NA FRONTU DA CUVAM TOKEN???????????????????????????????
-
-        //return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     //Metoda za vraćanje informacija o korisniku

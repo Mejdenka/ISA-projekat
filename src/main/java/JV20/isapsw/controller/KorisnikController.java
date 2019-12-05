@@ -1,14 +1,14 @@
 package JV20.isapsw.controller;
 
 import JV20.isapsw.dto.KorisnikDTO;
-import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.UserTokenState;
+import JV20.isapsw.model.*;
 import JV20.isapsw.security.auth.JwtAuthenticationRequest;
 import JV20.isapsw.security.TokenUtils;
 import JV20.isapsw.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -43,7 +45,6 @@ public class KorisnikController {
 
     //Metoda za login
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    //@PostMapping(consumes = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException, IOException {
 
         Korisnik korisnik = korisnikService.findOneByUsername(authenticationRequest.getUsername());
@@ -69,20 +70,6 @@ public class KorisnikController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-    //Metoda za vraćanje informacija o korisniku
-    /*@GetMapping(value = "{username}")
-    public ResponseEntity<KorisnikDTO> vratiKorisnika(@PathVariable String username) {
-        Korisnik korisnik = korisnikService.findOneByUsername(username);
-
-        if(korisnik == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
-        return new ResponseEntity<>(korisnikDTO, HttpStatus.OK);
-
-    }
-    */
 
     @RequestMapping(method = RequestMethod.GET, value = "/korisnik/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -93,16 +80,52 @@ public class KorisnikController {
     @RequestMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public Korisnik user() {
-        System.out.println("USLO u whoami");
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
-    //DRUGA METODA KOJA RADI ZA JS
-    /*@RequestMapping("/whoami")
-    public Authentication user() {
-        //System.out.println(SecurityContextHolder.getContext().getAuthentication());
-        //return this.korisnikService.findOneByUsername(username);
 
-        return SecurityContextHolder.getContext().getAuthentication();
-    }*/
+    @RequestMapping("/getMyAuthority")
+    @PreAuthorize("hasRole('USER')")
+    public String getMyAuthority() {
+        Korisnik ulogovan = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        //prvo ce da trazi adminsku ulogu, ako je nema onda ulazi u else if za usera
+        if(userHasAuthority(ulogovan, "ROLE_ADMIN")){
+            return "ADMIN";
+        }
+        else if(userHasAuthority(ulogovan, "ROLE_USER")){
+            if(ulogovan instanceof Pacijent){
+                return "PACIJENT";
+            } else if (ulogovan instanceof Lekar){
+                return "LEKAR";
+            } else if (ulogovan instanceof MedicinskaSestra){
+                return "MEDICINSKA_SESTRA";
+            }  else if (ulogovan instanceof AdministratorKlinike){
+                return "ADMINISTRATOR_KLINIKE";
+            } else {
+                return "USER";
+            }
+        }
+
+        return null;
+    }
+
+    //pomocne metode
+    public static boolean userHasAuthority(Korisnik k, String authority)
+    {
+        Collection<? extends GrantedAuthority> authorities = getUserAuthorities(k);
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            if (authority.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static Collection<? extends GrantedAuthority> getUserAuthorities(Korisnik korisnik) {
+        return korisnik.getAuthorities();
+    }
+
+
+
 }

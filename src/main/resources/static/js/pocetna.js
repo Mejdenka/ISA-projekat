@@ -1,6 +1,6 @@
 $(document).ready(function(){
     let token = JSON.parse(localStorage.getItem('jwt'))
-
+    var ulogovan = null;
     $.ajax
     ({
         type: "GET",
@@ -10,23 +10,37 @@ $(document).ready(function(){
             'Authorization': 'Bearer ' + token
         },
         success: function (user){
-            console.log("Uspjelo "+user);
+            ulogovan = user;
+            console.log(user.username)
         }
     });
 
-    /*$.get({
-     beforeSend: function(request) {
-         request.setRequestHeader('Authorization', 'Bearer '+ token);
-     },
-     url: 'api/korisnici/whoami',
-     contentType: 'application/json',
-     success: function(user) {
-         console.log("Uspjelo "+user.username);
-     },
-     error: function() {
-         alert("Neuspešno.")
-     }
- });*/
+    //kako preko securityja unauhorized pristup?
+
+    //Ovaj poziv mozda i ne treba jer u ulogovanom imamo listu authorities i logika iz kontrolera se moze prenijeti ovdje
+
+    $.ajax
+    ({
+        type: "GET",
+        url: 'api/korisnici/getMyAuthority',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function (authority){
+            switch (authority) {
+                case "PACIJENT":
+                    pocetnaPacijent(ulogovan);
+                    break;
+                case "ADMIN":
+                    pocetnaAdminKlinickogCentra(ulogovan);
+                    break;
+                default:
+                    console.log("Jos nismo napravili pocetne za ostale korisnike :)")
+            }
+        }
+    });
+
 
     //************************************************************************************************************************
     //funkcije dugmadi za PACIJENTA
@@ -61,9 +75,10 @@ $(document).ready(function(){
 
 });
 
-function pocetnaPacijent(korisnik) {
-
-    var nazivi = ["Klinike", "Vasa istorija", "Zdravstveni karton", korisnik.korisnickoIme];
+function pocetnaPacijent(ulogovan) {
+    korisnik = ulogovan;
+    var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
+    var nazivi = ["Klinike", "Vasa istorija", "Zdravstveni karton", imeKorisnika];
 
     for(let naziv of nazivi) {
         //pravljenje dugmadi
@@ -82,7 +97,7 @@ function pocetnaPacijent(korisnik) {
             case "Zdravstveni karton":
                 btn.id = "zdravstveniKartonBtn"
                 break;
-            case korisnik.korisnickoIme:
+            case imeKorisnika:
                 btn.id = "profilBtn"
                 break;
 
@@ -90,8 +105,10 @@ function pocetnaPacijent(korisnik) {
     }
 }
 
-function pocetnaAdminKlinickogCentra(korisnik) {
-    var nazivi = ["Zahtevi za registraciju", "Registruj klinike", "Sifarnik", "Dodaj administratora", korisnik.korisnickoIme];
+function pocetnaAdminKlinickogCentra(ulogovan) {
+    korisnik = ulogovan;
+    var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
+    var nazivi = ["Zahtevi za registraciju", "Registruj klinike", "Sifarnik", "Dodaj administratora", imeKorisnika];
 
     for(let naziv of nazivi) {
         //pravljenje dugmadi
@@ -110,7 +127,7 @@ function pocetnaAdminKlinickogCentra(korisnik) {
             case "Sifarnik":
                 btn.id = "sifarnikBtn"
                 break;
-            case korisnik.korisnickoIme:
+            case imeKorisnika:
                 btn.id = "profilBtn"
                 break;
             case "Dodaj administratora":

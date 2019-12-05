@@ -1,6 +1,5 @@
 $(document).ready(function(){
     let token = JSON.parse(localStorage.getItem('jwt'))
-    console.log(token)
 
     $.ajax
     ({
@@ -10,8 +9,8 @@ $(document).ready(function(){
         headers: {
             'Authorization': 'Bearer ' + token
         },
-        success: function (){
-            console.log("Uspjelo "+user.username);
+        success: function (user){
+            console.log("Uspjelo "+user);
         }
     });
 

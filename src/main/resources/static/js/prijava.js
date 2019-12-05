@@ -16,9 +16,9 @@ $(document).ready(function(){
             contentType: 'application/json',
             success: function(data) {
                 alert('Prijavili ste se!')
-                localStorage.setItem('jwt',JSON.stringify(data))
+                localStorage.setItem('jwt', JSON.stringify(data.accessToken))
+                //A sta sa expires in poljem???
                 window.location='pocetna.html'
-
             },
             error: function() {
                 alert("Neuspešna prijava.")

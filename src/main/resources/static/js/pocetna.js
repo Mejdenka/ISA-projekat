@@ -1,18 +1,33 @@
 $(document).ready(function(){
+    let token = JSON.parse(localStorage.getItem('jwt'))
+    console.log(token)
 
-        $.get({
-            url: 'api/korisnici/'+"admin"+'/',
-            contentType: 'application/json',
-            success: function(korisnik) {
-                switch (korisnik.uloga) {
-                    case "PACIJENT": pocetnaPacijent(korisnik)
-                    case "ADMIN_KLINICKOG_CENTRA": pocetnaAdminKlinickogCentra(korisnik)
-                }
-            },
-            error: function() {
-                alert("Neuspešno.")
-            }
-        });
+    $.ajax
+    ({
+        type: "GET",
+        url: 'api/korisnici/whoami',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function (){
+            console.log("Uspjelo "+user.username);
+        }
+    });
+
+    /*$.get({
+     beforeSend: function(request) {
+         request.setRequestHeader('Authorization', 'Bearer '+ token);
+     },
+     url: 'api/korisnici/whoami',
+     contentType: 'application/json',
+     success: function(user) {
+         console.log("Uspjelo "+user.username);
+     },
+     error: function() {
+         alert("Neuspešno.")
+     }
+ });*/
 
     //************************************************************************************************************************
     //funkcije dugmadi za PACIJENTA

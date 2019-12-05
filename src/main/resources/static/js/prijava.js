@@ -15,12 +15,9 @@ $(document).ready(function(){
             data: JSON.stringify({username, password}),
             contentType: 'application/json',
             success: function(data) {
-                alert('Prijavili ste se!');
-                //window.location='pocetna.html';
-                localStorage.setItem('jwt',data)
-                localStorage.getItem('jwt')
-                console.log(data);
-                console.log("to je jwt");
+                alert('Prijavili ste se!')
+                localStorage.setItem('jwt',JSON.stringify(data))
+                window.location='pocetna.html'
 
             },
             error: function() {

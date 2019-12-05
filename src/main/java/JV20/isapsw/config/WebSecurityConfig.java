@@ -1,6 +1,7 @@
 package JV20.isapsw.config;
 
-import JV20.isapsw.security.TokenAuthenticationFilter;
+import JV20.isapsw.security.auth.RestAuthenticationEntryPoint;
+import JV20.isapsw.security.auth.TokenAuthenticationFilter;
 import JV20.isapsw.security.TokenUtils;
 import JV20.isapsw.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService jwtUserDetailsService;
 
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -51,11 +55,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // komunikacija izmedju klijenta i servera je stateless
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 // svim korisnicima dopusti da pristupe putanjama
                 .authorizeRequests()
                 .antMatchers("/api/pacijenti/**").permitAll()
-                .antMatchers("api/korisnici/**").permitAll()
+                .antMatchers("/api/korisnici/login").permitAll()
 
                 .anyRequest().authenticated().and()
 

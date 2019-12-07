@@ -93,6 +93,12 @@ li > ul {
   margin-bottom: 0;
 }
 
+/*ZA EROR*/
+
+.error-class {
+  color:#FF0000;  /* red */
+}
+
 /**
  * Remove default table spacing.
  */

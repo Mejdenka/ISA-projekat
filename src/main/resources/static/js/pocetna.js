@@ -106,8 +106,8 @@ function pocetnaPacijent(ulogovan) {
     }
 }
 
-function pocetnaAdminKlinickogCentra(ulogovan) {
-    korisnik = ulogovan;
+function pocetnaAdminKlinickogCentra(korisnik) {
+    //korisnik = ulogovan;
     var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
     var nazivi = ["Zahtevi za registraciju", "Registruj klinike", "Sifarnik", "Dodaj administratora", imeKorisnika];
 
@@ -139,9 +139,51 @@ function pocetnaAdminKlinickogCentra(ulogovan) {
 }
 
 function generisiKlinike() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije registrovana nijedna klinika u sistemu.");
-    document.getElementById("content").appendChild(textnode);
+    var content = document.getElementById("content")
+    content.innerHTML = "";
+
+    $.get({
+
+        url:'api/klinike/getAll',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function(klinike)
+        {
+            let naslov = $('<h3 id=naslov>Klinike:</h3>');
+            let tabela = $('<table id="tabelaKlinika"> <thead> <tr> <th>Naziv klinike</th></tr></thead><tbody> </tbody></table>');
+            $("#content").append(naslov);
+            $("#content").append(tabela);
+
+            for(let klinika of klinike)
+            {
+                dodajKlinike(klinika);
+            }
+
+            $("#content").fadeIn(500);
+        }
+
+    });
+
+}
+
+function dodajKlinike(klinika)
+{
+    let tr=$('<tr></tr>');
+
+    let klinikaDugme = $('<td><button class = "button1" name="'+klinika.naziv+'" id="klinikaBtn">'+klinika.naziv+'</button></td>');
+    /*klinikaDugme.click(
+        function(){
+            prikaziInfoKlinike(klinika);
+        });*/
+
+    tr.append(klinikaDugme);
+    $('#tabelaKlinika tbody').append(tr);
+
+    //$('#tabelaKlinika tbody').append(klinikaDugme);
+
+
 }
 
 function generisiIstoriju() {

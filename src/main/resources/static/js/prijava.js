@@ -17,7 +17,6 @@ $(document).ready(function(){
             success: function(data) {
                 alert('Prijavili ste se!')
                 localStorage.setItem('jwt', JSON.stringify(data.accessToken))
-                //A sta sa expires in poljem???
                 window.location='pocetna.html'
             },
             error: function() {

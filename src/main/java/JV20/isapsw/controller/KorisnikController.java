@@ -87,45 +87,18 @@ public class KorisnikController {
     @PreAuthorize("hasRole('USER')")
     public String getMyAuthority() {
         Korisnik ulogovan = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        //prvo ce da trazi adminsku ulogu, ako je nema onda ulazi u else if za usera
-        if(userHasAuthority(ulogovan, "ROLE_ADMIN")){
-            return "ADMIN";
-        }
-        else if(userHasAuthority(ulogovan, "ROLE_USER")){
-            if(ulogovan instanceof Pacijent){
-                return "PACIJENT";
-            } else if (ulogovan instanceof Lekar){
-                return "LEKAR";
-            } else if (ulogovan instanceof MedicinskaSestra){
-                return "MEDICINSKA_SESTRA";
-            }  else if (ulogovan instanceof AdministratorKlinike){
-                return "ADMINISTRATOR_KLINIKE";
-            } else {
-                return "USER";
+        for(GrantedAuthority a : ulogovan.getAuthorities()){
+            //Ako ima administratorsku rolu, vrati nju jer je prioritetnija od korisnicke role
+            if(a.getAuthority().equals("ROLE_ADMIN")){
+                return a.getAuthority();
+            }
+
+            //ako nema administratorsku, neoj vracati korisnicku nego specificnu ulogu
+            if(!a.getAuthority().equals("ROLE_USER")){
+                return a.getAuthority();
             }
         }
 
         return null;
     }
-
-    //pomocne metode
-    public static boolean userHasAuthority(Korisnik k, String authority)
-    {
-        Collection<? extends GrantedAuthority> authorities = getUserAuthorities(k);
-
-        for (GrantedAuthority grantedAuthority : authorities) {
-            if (authority.equals(grantedAuthority.getAuthority())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static Collection<? extends GrantedAuthority> getUserAuthorities(Korisnik korisnik) {
-        return korisnik.getAuthorities();
-    }
-
-
-
 }

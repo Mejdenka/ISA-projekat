@@ -10,6 +10,7 @@ import JV20.isapsw.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -63,7 +65,8 @@ public class KorisnikService{
         u.setDatumRegistrovanja(timeProvider.now());
         u.setEnabled(true);
 
-        List<Authority> auth = authService.findByname("ROLE_USER");
+        List<Authority> auth = new ArrayList<>();
+        auth.add(authService.findByname("ROLE_USER"));
         u.setAuthorities(auth);
 
         u = this.korisnikRepository.save(u);

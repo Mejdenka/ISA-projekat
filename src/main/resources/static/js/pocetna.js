@@ -16,7 +16,8 @@ $(document).ready(function(){
     });
 
     //kako preko securityja unauhorized pristup?
-
+    //i refresh kesa pa ako nema ulogovanog baci zabranjenu stranicu
+    //ovdje problem s null objektom rijesi tako sto ces  zabraniti back dugme!!!!!!!!!!!!!!!!!!!!!!!!
     //Ovaj poziv mozda i ne treba jer u ulogovanom imamo listu authorities i logika iz kontrolera se moze prenijeti ovdje
 
     $.ajax
@@ -29,10 +30,10 @@ $(document).ready(function(){
         },
         success: function (authority){
             switch (authority) {
-                case "PACIJENT":
+                case "ROLE_PACIJENT":
                     pocetnaPacijent(ulogovan);
                     break;
-                case "ADMIN":
+                case "ROLE_ADMIN":
                     pocetnaAdminKlinickogCentra(ulogovan);
                     break;
                 default:

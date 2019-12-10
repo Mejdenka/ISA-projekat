@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +64,9 @@ public class PacijentService {
         pacijent.setDatumRegistrovanja(timeProvider.now());
         pacijent.setEnabled(true);
 
-        List<Authority> auth = authService.findByname("ROLE_USER");
+        List<Authority> auth = new ArrayList<>();
+        auth.add(authService.findByname("ROLE_PACIJENT"));
+        auth.add(authService.findByname("ROLE_USER"));
         pacijent.setAuthorities(auth);
 
         pacijent = this.pacijentRepository.save(pacijent);

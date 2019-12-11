@@ -64,6 +64,7 @@ public class KorisnikService{
         u.setDatumRodjenja(date);
         u.setDatumRegistrovanja(timeProvider.now());
         u.setEnabled(true);
+        u.setConfirmed(false);
 
         List<Authority> auth = new ArrayList<>();
         auth.add(authService.findByname("ROLE_USER"));

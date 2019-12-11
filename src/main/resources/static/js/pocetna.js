@@ -224,9 +224,39 @@ function generisiProfil() {
 }
 
 function generisiZahteveZaRegistraciju() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Nemate zahteva za registraciju.");
-    document.getElementById("content").appendChild(textnode);
+    var content = document.getElementById("content")
+    content.innerHTML = "";
+
+    $.get({
+
+        url:'api/korisnici/getRequests',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function(korisnici)
+        {
+            if (korisnici.size == 0)
+            {
+                var textnode = document.createTextNode("Nema zahtjeva za registraciju.");
+                document.getElementById("content").appendChild(btn);
+            }
+            else
+            {
+                for(let korisnik of korisnici)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
+                    btn.id = korisnik.username;
+                    document.getElementById("content").appendChild(btn);
+                }
+            }
+
+            $("#content").fadeIn(500);
+        }
+
+    });
 }
 
 function generisiFormuZaNovuKliniku() {

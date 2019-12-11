@@ -101,4 +101,18 @@ public class KorisnikController {
 
         return null;
     }
+
+    @RequestMapping("/getRequests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Korisnik> getRequests() throws AccessDeniedException {
+        List<Korisnik> korisnici = null;
+
+        for (Korisnik k : korisnici){
+            if (!k.isConfirmed()){
+                korisnici.add(k);
+            }
+        }
+
+        return korisnici;
+    }
 }

@@ -151,14 +151,22 @@ function generisiKlinike() {
         },
         success: function(klinike)
         {
-            let naslov = $('<h3 id=naslov>Klinike:</h3>');
-            let tabela = $('<table id="tabelaKlinika"> <thead> <tr> <th>Naziv klinike</th></tr></thead><tbody> </tbody></table>');
-            $("#content").append(naslov);
-            $("#content").append(tabela);
 
             for(let klinika of klinike)
             {
-                dodajKlinike(klinika);
+                var btn = document.createElement("BUTTON");
+                btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                btn.innerHTML = klinika.naziv;
+                btn.id = klinika.naziv;
+                /*btn.onclick = function(){
+
+                }*/
+                /*btn.click(
+                    function(){
+                        infoKlinike(klinika.naziv);
+                    });*/
+                btn.onclick = infoKlinike(klinika.naziv);
+                document.getElementById("content").appendChild(btn);
             }
 
             $("#content").fadeIn(500);
@@ -168,21 +176,32 @@ function generisiKlinike() {
 
 }
 
-function dodajKlinike(klinika)
+function infoKlinike(naziv)
 {
-    let tr=$('<tr></tr>');
+    return function(){
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        var p = document.getElementById("nazivKlinike");
+        p.innerHTML = "";
+        p.append("Naziv klinike: " + naziv);
+        // When the user clicks on the button, open the modal
+        modal.style.display = "block";
 
-    let klinikaDugme = $('<td><button class = "button1" name="'+klinika.naziv+'" id="klinikaBtn">'+klinika.naziv+'</button></td>');
-    /*klinikaDugme.click(
-        function(){
-            prikaziInfoKlinike(klinika);
-        });*/
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-    tr.append(klinikaDugme);
-    $('#tabelaKlinika tbody').append(tr);
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
 
-    //$('#tabelaKlinika tbody').append(klinikaDugme);
-
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
 
 }
 

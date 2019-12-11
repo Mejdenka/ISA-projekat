@@ -106,8 +106,8 @@ function pocetnaPacijent(ulogovan) {
     }
 }
 
-function pocetnaAdminKlinickogCentra(ulogovan) {
-    korisnik = ulogovan;
+function pocetnaAdminKlinickogCentra(korisnik) {
+    //korisnik = ulogovan;
     var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
     var nazivi = ["Zahtevi za registraciju", "Registruj klinike", "Sifarnik", "Dodaj administratora", imeKorisnika];
 
@@ -139,9 +139,70 @@ function pocetnaAdminKlinickogCentra(ulogovan) {
 }
 
 function generisiKlinike() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije registrovana nijedna klinika u sistemu.");
-    document.getElementById("content").appendChild(textnode);
+    var content = document.getElementById("content")
+    content.innerHTML = "";
+
+    $.get({
+
+        url:'api/klinike/getAll',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function(klinike)
+        {
+
+            for(let klinika of klinike)
+            {
+                var btn = document.createElement("BUTTON");
+                btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                btn.innerHTML = klinika.naziv;
+                btn.id = klinika.naziv;
+                /*btn.onclick = function(){
+
+                }*/
+                /*btn.click(
+                    function(){
+                        infoKlinike(klinika.naziv);
+                    });*/
+                btn.onclick = infoKlinike(klinika.naziv);
+                document.getElementById("content").appendChild(btn);
+            }
+
+            $("#content").fadeIn(500);
+        }
+
+    });
+
+}
+
+function infoKlinike(naziv)
+{
+    return function(){
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        var p = document.getElementById("nazivKlinike");
+        p.innerHTML = "";
+        p.append("Naziv klinike: " + naziv);
+        // When the user clicks on the button, open the modal
+        modal.style.display = "block";
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
 }
 
 function generisiIstoriju() {

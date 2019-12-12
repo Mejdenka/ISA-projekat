@@ -139,6 +139,7 @@ function pocetnaAdminKlinickogCentra(korisnik) {
 }
 
 function generisiKlinike() {
+    $("#content").fadeOut(500);
     var content = document.getElementById("content")
     content.innerHTML = "";
 
@@ -206,43 +207,67 @@ function infoKlinike(naziv)
 }
 
 function generisiIstoriju() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dostupna istorija.");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Jos uvijek nije dostupna istorija.");
+        document.getElementById("content").appendChild(textnode);
+    });
+    $("#content").fadeIn(500);
 }
 
 function generisiZdravstveniKarton() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dostupan zdravstveni karton.");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Jos uvijek nije dostupan zdravstveni karton.");
+        document.getElementById("content").appendChild(textnode);
+    });
+    $("#content").fadeIn(500);
 }
 
 function generisiProfil() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Informacije: ");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Informacije: ");
+        document.getElementById("content").appendChild(textnode);
+    });
+    $("#content").fadeIn(500);
 }
 
 function generisiZahteveZaRegistraciju() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Nemate zahteva za registraciju.");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Nemate zahteva za registraciju.");
+        document.getElementById("content").appendChild(textnode);
+    });
+
+    $("#content").fadeIn(500);
 }
 
 function generisiFormuZaNovuKliniku() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novu kliniku.");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novu kliniku.");
+        document.getElementById("content").appendChild(textnode);
+    });
+    $("#content").fadeIn(500);
 }
 
 function generisiFormuZaSifanik() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za sifarnik.");
-    document.getElementById("content").appendChild(textnode);
+
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Jos uvijek nije dostupna forma za sifarnik.");
+        document.getElementById("content").appendChild(textnode);
+    });
+
+    $("#content").fadeIn(500);
 }
 
 function generisiFormuZaNovogAdmina() {
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novog admina.");
-    document.getElementById("content").appendChild(textnode);
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novog admina.");
+        document.getElementById("content").appendChild(textnode);
+    });
+    $("#content").fadeIn(500);
 }

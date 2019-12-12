@@ -113,9 +113,13 @@ fieldset {
 button {
     outline: none;
     background: none;
+    margin-bottom: 2px;
+    margin-top: 2px;
     border: none;
 }
-
+klinika{
+    background-color: #6e9cff;
+}
 /* ==========================================================================
    #PAGE WRAPPER
    ========================================================================== */
@@ -242,6 +246,53 @@ h6 {
     max-width: 680px;
 }
 
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content-request {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    font-size: 20px;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /* ==========================================================================
    #BUTTON
    ========================================================================== */
@@ -260,7 +311,38 @@ h6 {
     margin-left: 5px;
     margin-right: 5px;
 }
-
+.btn2 {
+    display: inline-block;
+    line-height: 40px;
+    line-width: 130px;
+    padding: 0 50px;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.btn-list {
+    display: inline-block;
+    line-height: 50px;
+    padding: 0 50px;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+    margin-left: 5px;
+    margin-right: 5px;
+    width:100%;
+}
 .btn--radius {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -285,6 +367,14 @@ h6 {
 
 .btn--green:hover {
     background: #4dae3c;
+}
+
+.btn--red {
+  background: #DB4A26;
+}
+
+.btn--red:hover {
+  background: #C54222;
 }
 
 .btn--blue {

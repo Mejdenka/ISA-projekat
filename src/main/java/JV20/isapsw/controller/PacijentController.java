@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/pacijenti")
@@ -45,5 +48,36 @@ public class PacijentController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(pacijent.getId()).toUri());
         return new ResponseEntity<User>( HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/getRequests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Pacijent> getRequests() throws AccessDeniedException {
+        List<Pacijent> pacijenti = new ArrayList<>();
+
+        for (Pacijent p : pacijentService.findAll()){
+            if (!p.isConfirmed()){
+                pacijenti.add(p);
+            }
+        }
+
+        return pacijenti;
+    }
+
+    @RequestMapping(value = "/confirmRequest", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void confirmRequest(@RequestBody String username) {
+        Korisnik existUser = this.korisnikService.findOneByUsername(username);
+
+        existUser.setConfirmed(true);
+        korisnikService.save(existUser);
+    }
+
+    @RequestMapping(value = "/rejectRequest", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void rejectRequest(@RequestBody String username) {
+        Korisnik existUser = this.korisnikService.findOneByUsername(username);
+
+        korisnikService.remove(existUser.getId());
     }
 }

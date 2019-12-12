@@ -106,7 +106,11 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+/*ZA EROR*/
 
+.error-class {
+  color:#FF0000;  /* red */
+}
 /**
  * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
  *    on fieldsets.

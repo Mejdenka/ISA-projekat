@@ -49,7 +49,6 @@ $(document).ready(function(){
             data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja}),
             contentType: 'application/json',
             success: function() {
-                alert('Registrovali ste se!');
                 window.location='prijava.html';
             },
             error: function() {

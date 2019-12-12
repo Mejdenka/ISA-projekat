@@ -15,7 +15,6 @@ $(document).ready(function(){
             data: JSON.stringify({username, password}),
             contentType: 'application/json',
             success: function(data) {
-                alert('Prijavili ste se!')
                 localStorage.setItem('jwt', JSON.stringify(data.accessToken))
                 window.location='pocetna.html'
             },

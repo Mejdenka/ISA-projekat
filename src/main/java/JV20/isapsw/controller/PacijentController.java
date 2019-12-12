@@ -23,6 +23,7 @@ import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,14 +53,31 @@ public class PacijentController {
     @RequestMapping("/getRequests")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Pacijent> getRequests() throws AccessDeniedException {
-        List<Pacijent> pacijenti = pacijentService.findAll();
+        List<Pacijent> pacijenti = new ArrayList<>();
 
-        for (Pacijent p : pacijenti){
-            if (p.isConfirmed()){
-                pacijenti.remove(p);
+        for (Pacijent p : pacijentService.findAll()){
+            if (!p.isConfirmed()){
+                pacijenti.add(p);
             }
         }
 
         return pacijenti;
+    }
+
+    @RequestMapping(value = "/confirmRequest", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void confirmRequest(@RequestBody String username) {
+        Korisnik existUser = this.korisnikService.findOneByUsername(username);
+
+        existUser.setConfirmed(true);
+        korisnikService.save(existUser);
+    }
+
+    @RequestMapping(value = "/rejectRequest", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void rejectRequest(@RequestBody String username) {
+        Korisnik existUser = this.korisnikService.findOneByUsername(username);
+
+        korisnikService.remove(existUser.getId());
     }
 }

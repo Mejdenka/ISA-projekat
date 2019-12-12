@@ -235,14 +235,23 @@ function generisiZahteveZaRegistraciju() {
         },
         success: function(korisnici)
         {
-            for(let korisnik of korisnici)
+            if( korisnici.length == 0)
             {
-                var btn = document.createElement("BUTTON");
-                btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
-                btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
-                btn.id = korisnik.username;
-                btn.onclick = infoKorisnik(korisnik);
-                document.getElementById("content").appendChild(btn);
+                document.getElementById("content").innerHTML = "";
+                var textnode = document.createTextNode("Trenutno nema aktivnih zahtjeva za registraciju!");
+                document.getElementById("content").appendChild(textnode);
+            }
+            else
+            {
+                for(let korisnik of korisnici)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
+                    btn.id = korisnik.username;
+                    btn.onclick = infoKorisnik(korisnik);
+                    document.getElementById("content").appendChild(btn);
+                }
             }
         }
 
@@ -264,17 +273,62 @@ function infoKorisnik(korisnik)
         p.append(document.createElement("br"));
         p.append("E-mail: " + korisnik.email);
         p.append(document.createElement("br"));
+        p.append("Razlog: ");
+        p.append(document.createElement("br"));
+        var textbox = document.createElement('input');
+        textbox.type = 'text';
+        textbox.id = "rejectionReason";
+        textbox.style.border="1px solid black";
+        textbox.style.height = "40px"
+        p.append(textbox);
+        p.append(document.createElement("br"));
+        p.append(document.createElement("br"));
         var btnPrihvati = document.createElement("BUTTON");
         btnPrihvati.classList.add("btn2", "btn--green");
         btnPrihvati.innerHTML = "Prihvati";
-        btnPrihvati.onclick = function() {
+        btnPrihvati.onclick = function(){
+            $.post({
+                url: 'api/pacijenti/confirmRequest',
+                data: korisnik.username,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert('Zahtjev za registraciju prihvacen!');
+                    generisiZahteveZaRegistraciju();
+                },
+                error: function() {
+                    alert("Prihvatanje zahtjeva za registraciju nije uspjelo!")
+                }
+            });
             modal.style.display = "none";
         }
         p.append(btnPrihvati);
+
         var btnOdbij = document.createElement("BUTTON");
         btnOdbij.classList.add("btn2", "btn--red");
         btnOdbij.innerHTML = "Odbij";
-        btnOdbij.onclick = function() {
+        btnOdbij.onclick = function(){
+            if (document.getElementById("rejectionReason").value == "" ){
+                alert("Morate unijeti razlog odbijanja");
+                return;
+            }
+            $.post({
+                url: 'api/pacijenti/rejectRequest',
+                data: korisnik.username,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert('Zahtjev za registraciju odbijen!');
+                    generisiZahteveZaRegistraciju();
+                },
+                error: function() {
+                    alert("Odbijanje zahtjeva za registraciju nije uspjelo!")
+                }
+            });
             modal.style.display = "none";
         }
         p.append(btnOdbij);
@@ -296,7 +350,6 @@ function infoKorisnik(korisnik)
             }
         }
     }
-
 }
 
 function generisiFormuZaNovuKliniku() {

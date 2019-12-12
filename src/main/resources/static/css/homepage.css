@@ -269,6 +269,15 @@ h6 {
     width: 80%; /* Could be more or less, depending on screen size */
 }
 
+.modal-content-request {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    font-size: 20px;
+}
+
 /* The Close Button */
 .close {
     color: #aaa;
@@ -297,6 +306,22 @@ h6 {
     transition: all 0.4s ease;
     cursor: pointer;
     font-size: 18px;
+    color: #fff;
+    font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.btn2 {
+    display: inline-block;
+    line-height: 40px;
+    line-width: 130px;
+    padding: 0 50px;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 20px;
     color: #fff;
     font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
     margin-left: 5px;
@@ -342,6 +367,14 @@ h6 {
 
 .btn--green:hover {
     background: #4dae3c;
+}
+
+.btn--red {
+  background: #DB4A26;
+}
+
+.btn--red:hover {
+  background: #C54222;
 }
 
 .btn--blue {

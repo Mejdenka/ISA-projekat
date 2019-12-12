@@ -224,39 +224,79 @@ function generisiProfil() {
 }
 
 function generisiZahteveZaRegistraciju() {
-    var content = document.getElementById("content")
-    content.innerHTML = "";
+    document.getElementById("content").innerHTML = "";
 
     $.get({
 
-        url:'api/korisnici/getRequests',
+        url:'api/pacijenti/getRequests',
         contentType: 'application/json',
         headers: {
             'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
         },
         success: function(korisnici)
         {
-            if (korisnici.size == 0)
+            for(let korisnik of korisnici)
             {
-                var textnode = document.createTextNode("Nema zahtjeva za registraciju.");
+                var btn = document.createElement("BUTTON");
+                btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
+                btn.id = korisnik.username;
+                btn.onclick = infoKorisnik(korisnik);
                 document.getElementById("content").appendChild(btn);
             }
-            else
-            {
-                for(let korisnik of korisnici)
-                {
-                    var btn = document.createElement("BUTTON");
-                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
-                    btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
-                    btn.id = korisnik.username;
-                    document.getElementById("content").appendChild(btn);
-                }
-            }
-
-            $("#content").fadeIn(500);
         }
 
     });
+}
+
+function infoKorisnik(korisnik)
+{
+    return function(){
+        // Get the modal
+        var modal = document.getElementById("requestModal");
+        var p = document.getElementById("requestUsername");
+        p.innerHTML = "";
+        p.append("Ime: " + korisnik.ime);
+        p.append(document.createElement("br"));
+        p.append("Prezime: " + korisnik.prezime);
+        p.append(document.createElement("br"));
+        p.append("Korisnicko ime: " + korisnik.username);
+        p.append(document.createElement("br"));
+        p.append("E-mail: " + korisnik.email);
+        p.append(document.createElement("br"));
+        var btnPrihvati = document.createElement("BUTTON");
+        btnPrihvati.classList.add("btn2", "btn--green");
+        btnPrihvati.innerHTML = "Prihvati";
+        btnPrihvati.onclick = function() {
+            modal.style.display = "none";
+        }
+        p.append(btnPrihvati);
+        var btnOdbij = document.createElement("BUTTON");
+        btnOdbij.classList.add("btn2", "btn--red");
+        btnOdbij.innerHTML = "Odbij";
+        btnOdbij.onclick = function() {
+            modal.style.display = "none";
+        }
+        p.append(btnOdbij);
+        // When the user clicks on the button, open the modal
+        modal.style.display = "block";
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[1];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
 }
 
 function generisiFormuZaNovuKliniku() {

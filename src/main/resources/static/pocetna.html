@@ -21,7 +21,6 @@
     <!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
-
     <!-- Main CSS-->
     <link href="css/homepage.css" rel="stylesheet" media="all">
 </head>
@@ -47,14 +46,25 @@
 </div>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="klinikaModal" class="modal">
 
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
         <p id = "nazivKlinike"> </p>
+        <table id="infoKlinike" class="tabela">
+            <thead>
+                <tr>
+                    <th>Naziv:</th>
+                    <th>Lokacija:</th>
+                    <th>Broj lekara:</th>
+                    <th>Broj sala:</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-
 </div>
 <!-- Jquery JS-->
 <script src="vendor/jquery/jquery-3.3.1.min.js"></script>
@@ -67,7 +77,6 @@
 <script src="js/global.js"></script>
 <script src="js/pocetna.js"></script>
 
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
+</body>
 </html>
 <!-- end document-->

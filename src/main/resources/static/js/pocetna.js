@@ -12,6 +12,29 @@ $(document).ready(function(){
         success: function (user){
             ulogovan = user;
             console.log(user.username)
+
+            $.ajax
+            ({
+                type: "GET",
+                url: 'api/korisnici/getMyAuthority',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function (authority){
+                    switch (authority) {
+                        case "ROLE_PACIJENT":
+                            pocetnaPacijent(ulogovan);
+                            break;
+                        case "ROLE_ADMIN":
+                            pocetnaAdminKlinickogCentra(ulogovan);
+                            break;
+                        default:
+                            console.log("Jos nismo napravili pocetne za ostale korisnike :)")
+                    }
+                }
+            });
+
         }
     });
 
@@ -20,27 +43,6 @@ $(document).ready(function(){
     //ovdje problem s null objektom rijesi tako sto ces  zabraniti back dugme!!!!!!!!!!!!!!!!!!!!!!!!
     //Ovaj poziv mozda i ne treba jer u ulogovanom imamo listu authorities i logika iz kontrolera se moze prenijeti ovdje
 
-    $.ajax
-    ({
-        type: "GET",
-        url: 'api/korisnici/getMyAuthority',
-        contentType: 'application/json',
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function (authority){
-            switch (authority) {
-                case "ROLE_PACIJENT":
-                    pocetnaPacijent(ulogovan);
-                    break;
-                case "ROLE_ADMIN":
-                    pocetnaAdminKlinickogCentra(ulogovan);
-                    break;
-                default:
-                    console.log("Jos nismo napravili pocetne za ostale korisnike :)")
-            }
-        }
-    });
 
 
     //************************************************************************************************************************
@@ -139,10 +141,6 @@ function pocetnaAdminKlinickogCentra(korisnik) {
 }
 
 function generisiKlinike() {
-    $("#content").fadeOut(500);
-    var content = document.getElementById("content")
-    content.innerHTML = "";
-
     $.get({
 
         url:'api/klinike/getAll',
@@ -152,7 +150,9 @@ function generisiKlinike() {
         },
         success: function(klinike)
         {
-
+            $("#content").fadeOut(100, function(){
+                document.getElementById("content").innerHTML = "";
+            });
             for(let klinika of klinike)
             {
                 var btn = document.createElement("BUTTON");
@@ -181,12 +181,34 @@ function infoKlinike(naziv)
 {
     return function(){
         // Get the modal
-        var modal = document.getElementById("myModal");
-        var p = document.getElementById("nazivKlinike");
-        p.innerHTML = "";
-        p.append("Naziv klinike: " + naziv);
+        var modal = document.getElementById("klinikaModal");
+        //var p = document.getElementById("nazivKlinike");
+        //p.innerHTML = "";
+        //p.append("Naziv klinike: " + naziv);
+
+        var tableRef = document.getElementById('infoKlinike').getElementsByTagName('tbody')[0];
+        tableRef.innerHTML="";
+        var podaciKlinike   = tableRef.insertRow();
+
+        var nazivKlinike  = podaciKlinike.insertCell(0);
+        var nazivText  = document.createTextNode(naziv);
+        nazivKlinike.appendChild(nazivText);
+
+        var lokacijaKlinike  = podaciKlinike.insertCell(1);
+        var lokacijaText  = document.createTextNode("Nedostupno");
+        lokacijaKlinike.appendChild(lokacijaText);
+
+        var brLekara  = podaciKlinike.insertCell(2);
+        var brLekaraText  = document.createTextNode("Nedostupno");
+        brLekara.appendChild(brLekaraText);
+
+        var brSala  = podaciKlinike.insertCell(3);
+        var brSalaText  = document.createTextNode("Nedostupno");
+        brSala.appendChild(brSalaText);
+
         // When the user clicks on the button, open the modal
-        modal.style.display = "block";
+        //modal.style.display = "block";
+        $("#klinikaModal").fadeIn(500);
 
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
@@ -199,7 +221,8 @@ function infoKlinike(naziv)
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
             if (event.target == modal) {
-                modal.style.display = "none";
+                //modal.style.display = "none";
+                $("#klinikaModal").fadeOut(100);
             }
         }
     }

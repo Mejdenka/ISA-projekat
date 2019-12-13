@@ -94,12 +94,37 @@ li > ul {
 
 /**
  * Remove default table spacing.
- */
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}*/
+.tabela {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
+.tabela td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela tr:nth-child(even){background-color: #6e9cff;}
+
+.tabela tr:hover {background-color: #ddd;}
+
+.tabela th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #6e9cff;
+    color: white;
+}
+/*
+.tabela{
+    text-align: left;
+}*/
 /**
  * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
  *    on fieldsets.

@@ -32,6 +32,26 @@ $(document).ready(function(){
                         default:
                             console.log("Jos nismo napravili pocetne za ostale korisnike :)")
                     }
+                    var div = document.createElement("div");
+                    div.classList.add("dropdown");
+
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("dropbtn", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = "&#9660;"
+
+                    var div1 = document.createElement("div");
+                    div1.classList.add("dropdown-content");
+
+                    var a = document.createElement('a');
+                    var linkText = document.createTextNode("Odjava");
+                    a.appendChild(linkText);
+                    a.id = "logOutBtn"
+
+                    div1.appendChild(a);
+                    div.appendChild(btn);
+                    div.appendChild(div1);
+                    document.getElementById("navbar").appendChild(div);
+
                 }
             });
 
@@ -74,6 +94,10 @@ $(document).ready(function(){
     //funkcija profil-dugmeta
     $('body').on('click', '#profilBtn', function(e) {
         generisiProfil();
+    });
+    //funkcija za logOut
+    $('body').on('click', '#logOutBtn', function(e) {
+        logOut();
     });
 
 });
@@ -141,72 +165,64 @@ function pocetnaAdminKlinickogCentra(korisnik) {
 }
 
 function generisiKlinike() {
-    $.get({
 
-        url:'api/klinike/getAll',
-        contentType: 'application/json',
-        headers: {
-            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-        },
-        success: function(klinike)
-        {
-            $("#content").fadeOut(100, function(){
-                document.getElementById("content").innerHTML = "";
-            });
-            for(let klinika of klinike)
+    $("#content").fadeOut(100, function(){
+        document.getElementById("content").innerHTML = "";
+        $.get({
+
+            url:'api/klinike/getAll',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(klinike)
             {
-                var btn = document.createElement("BUTTON");
-                btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
-                btn.innerHTML = klinika.naziv;
-                btn.id = klinika.naziv;
-                /*btn.onclick = function(){
 
-                }*/
-                /*btn.click(
-                    function(){
-                        infoKlinike(klinika.naziv);
-                    });*/
-                btn.onclick = infoKlinike(klinika.naziv);
-                document.getElementById("content").appendChild(btn);
+                for(let klinika of klinike)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = klinika.naziv;
+                    btn.id = klinika.naziv;
+                    btn.onclick = infoKlinike(klinika);
+                    document.getElementById("content").appendChild(btn);
+                }
+
+
             }
 
-            $("#content").fadeIn(500);
-        }
-
+        });
     });
 
+    $("#content").fadeIn(500);
 }
 
-function infoKlinike(naziv)
+function infoKlinike(klinika)
 {
     return function(){
         // Get the modal
         var modal = document.getElementById("klinikaModal");
-        //var p = document.getElementById("nazivKlinike");
-        //p.innerHTML = "";
-        //p.append("Naziv klinike: " + naziv);
-
         var tableRef = document.getElementById('infoKlinike').getElementsByTagName('tbody')[0];
         tableRef.innerHTML="";
         var podaciKlinike   = tableRef.insertRow();
 
         var nazivKlinike  = podaciKlinike.insertCell(0);
-        var nazivText  = document.createTextNode(naziv);
+        var nazivText  = document.createTextNode(klinika.naziv);
         nazivKlinike.appendChild(nazivText);
 
         var lokacijaKlinike  = podaciKlinike.insertCell(1);
-        var lokacijaText  = document.createTextNode("Nedostupno");
+        var lokacijaText  = document.createTextNode(klinika.lokacija);
         lokacijaKlinike.appendChild(lokacijaText);
 
         var brLekara  = podaciKlinike.insertCell(2);
-        var brLekaraText  = document.createTextNode("Nedostupno");
+        var brLekaraText  = document.createTextNode(klinika.brLekara);
         brLekara.appendChild(brLekaraText);
 
         var brSala  = podaciKlinike.insertCell(3);
-        var brSalaText  = document.createTextNode("Nedostupno");
+        var brSalaText  = document.createTextNode(klinika.brSala);
         brSala.appendChild(brSalaText);
 
-        // When the user clicks on the button, open the modal
+            // When the user clicks on the button, open the modal
         //modal.style.display = "block";
         $("#klinikaModal").fadeIn(500);
 
@@ -293,4 +309,9 @@ function generisiFormuZaNovogAdmina() {
         document.getElementById("content").appendChild(textnode);
     });
     $("#content").fadeIn(500);
+}
+
+function logOut() {
+    localStorage.removeItem('jwt');
+    window.location = "index.html"
 }

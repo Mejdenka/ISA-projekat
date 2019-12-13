@@ -20,7 +20,6 @@ public class KlinikaController {
     @RequestMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
     public List<Klinika> getAll() {
-        System.out.println("Uslo u klinike");
         return this.klinikaService.findAll();
     }
 }

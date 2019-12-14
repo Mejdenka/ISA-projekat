@@ -55,6 +55,9 @@ $(document).ready(function(){
                 }
             });
 
+        },
+        error: function(){
+            window.location = "prijava.html";
         }
     });
 

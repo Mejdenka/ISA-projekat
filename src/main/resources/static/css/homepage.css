@@ -94,12 +94,37 @@ li > ul {
 
 /**
  * Remove default table spacing.
- */
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}*/
+.tabela {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
+.tabela td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela tr:nth-child(even){background-color: #6e9cff;}
+
+.tabela tr:hover {background-color: #ddd;}
+
+.tabela th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #6e9cff;
+    color: white;
+}
+/*
+.tabela{
+    text-align: left;
+}*/
 /**
  * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
  *    on fieldsets.
@@ -258,6 +283,7 @@ h6 {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    border-radius: 3px;
 }
 
 /* Modal Content/Box */
@@ -267,6 +293,9 @@ h6 {
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
 .modal-content-request {
@@ -392,6 +421,56 @@ h6 {
 .btn--light-blue:hover {
     background: #4272d7;
 }
+/* =========================================================================
+    DROPDOWN
+   =========================================================================
+ */
+.dropbtn {
+    display: inline-block;
+    line-height: 50px;
+    padding: 0 50px;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 18px;
+    background: #6e9cff;
+    color: #fff;
+    font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    cursor: pointer;
+}
+
+.dropdown-content a {
+    font-size: 18px;
+    color: #000000;
+    font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+    padding: 2px 4px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background: #879fd4;}
 
 /* ==========================================================================
    #DATE PICKER

@@ -1,5 +1,6 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.AdministratorKlinickogCentraDTO;
 import JV20.isapsw.dto.KorisnikDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;

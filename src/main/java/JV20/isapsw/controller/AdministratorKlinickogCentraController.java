@@ -47,9 +47,10 @@ public class AdministratorKlinickogCentraController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addAKC(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) throws ParseException {
+        System.out.println("Uslo u dodavanje admina klinickog centra!");
         AdministratorKlinickogCentra akc = this.akcService.findOneByUsername(userRequest.getKorisnickoIme());
-        System.out.println("ajde jebo mamu");
         if (akc != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -57,7 +58,7 @@ public class AdministratorKlinickogCentraController {
         akc = akcService.save(userRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(akc.getId()).toUri());
-
+//
         return new ResponseEntity<>(new AdministratorKlinickogCentraDTO(akc), HttpStatus.CREATED);
     }
 }

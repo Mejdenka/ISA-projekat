@@ -1,14 +1,17 @@
 package JV20.isapsw.controller;
 
 import JV20.isapsw.dto.KorisnikDTO;
+import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.security.auth.JwtAuthenticationRequest;
 import JV20.isapsw.security.TokenUtils;
 import JV20.isapsw.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,10 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "api/korisnici")
@@ -87,14 +93,14 @@ public class KorisnikController {
     @PreAuthorize("hasRole('USER')")
     public String getMyAuthority() {
         Korisnik ulogovan = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        for(GrantedAuthority a : ulogovan.getAuthorities()){
+        for (GrantedAuthority a : ulogovan.getAuthorities()) {
             //Ako ima administratorsku rolu, vrati nju jer je prioritetnija od korisnicke role
-            if(a.getAuthority().equals("ROLE_ADMIN")){
+            if (a.getAuthority().equals("ROLE_ADMIN")) {
                 return a.getAuthority();
             }
 
             //ako nema administratorsku, neoj vracati korisnicku nego specificnu ulogu
-            if(!a.getAuthority().equals("ROLE_USER")){
+            if (!a.getAuthority().equals("ROLE_USER")) {
                 return a.getAuthority();
             }
         }

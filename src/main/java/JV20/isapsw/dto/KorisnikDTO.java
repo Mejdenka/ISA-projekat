@@ -13,6 +13,7 @@ public class KorisnikDTO {
     private String email;
     private String lozinka;
     private String datumRodjenja;
+    private boolean confirmed;
     private List<Authority> authorities;
 
     public KorisnikDTO() {}
@@ -30,6 +31,7 @@ public class KorisnikDTO {
         this.email = email;
         this.lozinka = lozinka;
         this.datumRodjenja = datumRodjenja;
+        this.confirmed = false;
     }
 
     public Long getId() {
@@ -58,5 +60,13 @@ public class KorisnikDTO {
 
     public String getLozinka() {
         return lozinka;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

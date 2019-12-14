@@ -35,7 +35,7 @@ public class AdministratorKlinickogCentraController {
         akc.setKorisnickoIme(akcDTO.getKorisnickoIme());
         akc.setLozinka(akcDTO.getLozinka());
         akc.setDatumRodjenja(new Date());
-
+        akc.setConfirmed(true);
         akc = akcService.save(akc);
 
         return new ResponseEntity<>(new AdministratorKlinickogCentraDTO(akc), HttpStatus.CREATED);

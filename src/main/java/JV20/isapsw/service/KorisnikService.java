@@ -64,6 +64,7 @@ public class KorisnikService{
         u.setDatumRodjenja(date);
         u.setDatumRegistrovanja(timeProvider.now());
         u.setEnabled(true);
+        u.setConfirmed(false);
 
         List<Authority> auth = new ArrayList<>();
         auth.add(authService.findByname("ROLE_USER"));
@@ -71,6 +72,10 @@ public class KorisnikService{
 
         u = this.korisnikRepository.save(u);
         return u;
+    }
+
+    public void save(Korisnik korisnik){
+        this.korisnikRepository.save(korisnik);
     }
 
     public void remove(Long id) {

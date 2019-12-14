@@ -39,6 +39,7 @@ public class Korisnik implements UserDetails{
     private String lozinka;
     private String email;
     private boolean enabled;
+    private boolean confirmed;
     private Timestamp lastPasswordResetDate;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "korisnik_authority",
@@ -56,6 +57,7 @@ public class Korisnik implements UserDetails{
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.email = email;
+        this.confirmed = false;
     }
 
     public Long getId() {
@@ -171,5 +173,13 @@ public class Korisnik implements UserDetails{
 
     public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

@@ -273,13 +273,132 @@ function generisiProfil() {
 }
 
 function generisiZahteveZaRegistraciju() {
-    $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Nemate zahteva za registraciju.");
-        document.getElementById("content").appendChild(textnode);
-    });
+    document.getElementById("content").innerHTML = "";
 
-    $("#content").fadeIn(500);
+    $.get({
+
+        url:'api/pacijenti/getRequests',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function(korisnici)
+        {
+            if( korisnici.length == 0)
+            {
+                document.getElementById("content").innerHTML = "";
+                var textnode = document.createTextNode("Trenutno nema aktivnih zahtjeva za registraciju!");
+                document.getElementById("content").appendChild(textnode);
+            }
+            else
+            {
+                for(let korisnik of korisnici)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = korisnik.ime + " " + korisnik.prezime;
+                    btn.id = korisnik.username;
+                    btn.onclick = infoKorisnik(korisnik);
+                    document.getElementById("content").appendChild(btn);
+                }
+            }
+        }
+
+    });
+}
+
+function infoKorisnik(korisnik)
+{
+    return function(){
+        // Get the modal
+        var modal = document.getElementById("requestModal");
+        var p = document.getElementById("requestUsername");
+        p.innerHTML = "";
+        p.append("Ime: " + korisnik.ime);
+        p.append(document.createElement("br"));
+        p.append("Prezime: " + korisnik.prezime);
+        p.append(document.createElement("br"));
+        p.append("Korisnicko ime: " + korisnik.username);
+        p.append(document.createElement("br"));
+        p.append("E-mail: " + korisnik.email);
+        p.append(document.createElement("br"));
+        p.append("Razlog: ");
+        p.append(document.createElement("br"));
+        var textbox = document.createElement('input');
+        textbox.type = 'text';
+        textbox.id = "rejectionReason";
+        textbox.style.border="1px solid black";
+        textbox.style.height = "40px"
+        p.append(textbox);
+        p.append(document.createElement("br"));
+        p.append(document.createElement("br"));
+        var btnPrihvati = document.createElement("BUTTON");
+        btnPrihvati.classList.add("btn2", "btn--green");
+        btnPrihvati.innerHTML = "Prihvati";
+        btnPrihvati.onclick = function(){
+            $.post({
+                url: 'api/pacijenti/confirmRequest',
+                data: korisnik.username,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert('Zahtjev za registraciju prihvacen!');
+                    generisiZahteveZaRegistraciju();
+                },
+                error: function() {
+                    alert("Prihvatanje zahtjeva za registraciju nije uspjelo!")
+                }
+            });
+            modal.style.display = "none";
+        }
+        p.append(btnPrihvati);
+
+        var btnOdbij = document.createElement("BUTTON");
+        btnOdbij.classList.add("btn2", "btn--red");
+        btnOdbij.innerHTML = "Odbij";
+        btnOdbij.onclick = function(){
+            if (document.getElementById("rejectionReason").value == "" ){
+                alert("Morate unijeti razlog odbijanja");
+                return;
+            }
+            $.post({
+                url: 'api/pacijenti/rejectRequest',
+                data: korisnik.username,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert('Zahtjev za registraciju odbijen!');
+                    generisiZahteveZaRegistraciju();
+                },
+                error: function() {
+                    alert("Odbijanje zahtjeva za registraciju nije uspjelo!")
+                }
+            });
+            modal.style.display = "none";
+        }
+        p.append(btnOdbij);
+        // When the user clicks on the button, open the modal
+        modal.style.display = "block";
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[1];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
 }
 
 function generisiFormuZaNovuKliniku() {

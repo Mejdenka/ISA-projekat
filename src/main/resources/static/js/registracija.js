@@ -49,7 +49,7 @@ $(document).ready(function(){
             data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja}),
             contentType: 'application/json',
             success: function() {
-                window.location='prijava.html';
+                window.location='afterReg.html';
             },
             error: function() {
                 alert("Neuspešna registracija.")

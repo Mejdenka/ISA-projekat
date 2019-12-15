@@ -96,7 +96,7 @@ $(document).ready(function(){
     //************************************************************************************************************************
     //funkcija profil-dugmeta
     $('body').on('click', '#profilBtn', function(e) {
-        generisiProfil();
+        generisiProfil(ulogovan);
     });
     //funkcija za logOut
     $('body').on('click', '#logOutBtn', function(e) {
@@ -266,11 +266,200 @@ function generisiZdravstveniKarton() {
     $("#content").fadeIn(500);
 }
 
-function generisiProfil() {
+function generisiProfil(korisnik) {
     $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Informacije: ");
-        document.getElementById("content").appendChild(textnode);
+        var content = document.getElementById("content");
+        content.innerHTML = "";
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var varIme = document.createElement("var");
+        varIme.classList.add("col-2", "input-group");
+        var ime = document.createTextNode("Ime");
+        varIme.appendChild(ime);
+        varIme.appendChild(document.createElement("br"));
+        var txtIme = document.createElement('input');
+        txtIme.type = 'text';
+        txtIme.id = "ime";
+        txtIme.classList.add("input--style-4");
+        txtIme.style.height = "40px";
+        txtIme.style.width = "250px";
+        txtIme.value = korisnik.ime;
+        txtIme.disabled = "true";
+        varIme.appendChild(txtIme);
+        prviRed.appendChild(varIme);
+        var varPrezime = document.createElement("var");
+        varPrezime.classList.add("col-2", "input-group");
+        var prezime = document.createTextNode("Prezime");
+        varPrezime.appendChild(prezime);
+        varPrezime.appendChild(document.createElement("br"));
+        var txtPrezime = document.createElement('input');
+        txtPrezime.type = 'text';
+        txtPrezime.id = "prezime";
+        txtPrezime.classList.add("input--style-4");
+        txtPrezime.style.height = "40px"
+        txtPrezime.style.width = "250px"
+        txtPrezime.value = korisnik.prezime;
+        txtPrezime.disabled = "true";
+        content.appendChild(txtPrezime);
+        varPrezime.appendChild(txtPrezime);
+        prviRed.appendChild(varPrezime);
+        content.appendChild(prviRed);
+
+        var drugiRed = document.createElement("var");
+        drugiRed.classList.add("row", "wrapper--w680");
+        var varUsername = document.createElement("var");
+        varUsername.classList.add("col-2", "input-group");
+        var username = document.createTextNode("Korisničko ime");
+        varUsername.appendChild(username);
+        varUsername.appendChild(document.createElement("br"));
+        var txtUsername = document.createElement('input');
+        txtUsername.type = 'text';
+        txtUsername.id = "username";
+        txtUsername.classList.add("input--style-4");
+        txtUsername.style.height = "40px"
+        txtUsername.style.width = "250px"
+        txtUsername.value = korisnik.username;
+        txtUsername.disabled = "true";
+        varUsername.appendChild(txtUsername);
+        drugiRed.appendChild(varUsername);
+        var varEmail = document.createElement("var");
+        varEmail.classList.add("col-2", "input-group");
+        var email = document.createTextNode("E-mail");
+        varEmail.appendChild(email);
+        varEmail.appendChild(document.createElement("br"));
+        var txtEmail = document.createElement('input');
+        txtEmail.type = 'email';
+        txtEmail.id = "email";
+        txtEmail.classList.add("input--style-4");
+        txtEmail.style.height = "40px"
+        txtEmail.style.width = "250px"
+        txtEmail.value = korisnik.email;
+        txtEmail.disabled = "true";
+        varEmail.appendChild(txtEmail);
+        drugiRed.appendChild(varEmail);
+        content.appendChild(drugiRed);
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+        var varDatumRodjenja = document.createElement("var");
+        varDatumRodjenja.classList.add("col-2", "input-group");
+        var datumRodjenja = document.createTextNode("Datum rođenja");
+        varDatumRodjenja.appendChild(datumRodjenja);
+        varDatumRodjenja.appendChild(document.createElement("br"));
+        var txtDatumRodjenja = document.createElement('input');
+        txtDatumRodjenja.type = 'text';
+        txtDatumRodjenja.id = "datumRodjenja";
+        txtDatumRodjenja.classList.add("input--style-4");
+        txtDatumRodjenja.style.height = "40px"
+        txtDatumRodjenja.style.width = "250px"
+        txtDatumRodjenja.value = korisnik.datumRodjenja.substr(0, 10);
+        txtDatumRodjenja.disabled = "true";
+        varDatumRodjenja.appendChild(txtDatumRodjenja);
+        treciRed.appendChild(varDatumRodjenja);
+
+        var btnChangePass = document.createElement("BUTTON");
+        btnChangePass.classList.add("btn", "btn--light-blue");
+        btnChangePass.innerHTML = "Promijeni lozinku";
+        btnChangePass.style.height = "50px";
+        btnChangePass.style.width = "250px";
+        btnChangePass.fontSize = "10px";
+        btnChangePass.onclick = function(){
+            var modal = document.getElementById("requestModal");
+            var p = document.getElementById("requestUsername");
+            p.innerHTML = "";
+            var staraLozinka = document.createTextNode("Stara lozinka    ");
+            p.appendChild(staraLozinka);
+            var txtStaraLozinka = document.createElement('input');
+            txtStaraLozinka.type = 'password';
+            txtStaraLozinka.id = "staraLozinka";
+            txtStaraLozinka.classList.add("input--style-4");
+            txtStaraLozinka.style.height = "40px";
+            txtStaraLozinka.style.width = "250px";
+            p.appendChild(txtStaraLozinka);
+            p.appendChild(document.createElement("br"));
+            p.appendChild(document.createElement("br"));
+            var novaLozinka = document.createTextNode("Nova lozinka    ");
+            p.appendChild(novaLozinka);
+            var txtNovaLozinka = document.createElement('input');
+            txtNovaLozinka.type = 'password';
+            txtNovaLozinka.id = "novaLozinka";
+            txtNovaLozinka.classList.add("input--style-4");
+            txtNovaLozinka.style.height = "40px";
+            txtNovaLozinka.style.width = "250px";
+            p.appendChild(txtNovaLozinka);
+            p.appendChild(document.createElement("br"));
+            p.appendChild(document.createElement("br"));
+            var novaLozinka2 = document.createTextNode("Ponovite lozinku    ");
+            p.appendChild(novaLozinka2);
+            var txtNovaLozinka2 = document.createElement('input');
+            txtNovaLozinka2.type = 'password';
+            txtNovaLozinka2.id = "novaLozinka2";
+            txtNovaLozinka2.classList.add("input--style-4");
+            txtNovaLozinka2.style.height = "40px"
+            txtNovaLozinka2.style.width = "250px"
+            p.appendChild(txtNovaLozinka2);
+            p.appendChild(document.createElement("br"));
+            p.appendChild(document.createElement("br"));
+
+            var btnPromijeni = document.createElement("BUTTON");
+            btnPromijeni.classList.add("btn2", "btn--green");
+            btnPromijeni.innerHTML = "Promijeni";
+            btnPromijeni.onclick = function(){
+                if ( txtStaraLozinka.value === "" || txtNovaLozinka.value === "" || txtNovaLozinka2.value == ""){
+                    alert("Nijedno polje ne smije ostati prazno!");
+                    return;
+                }
+
+                if ( txtNovaLozinka.value.length < 5){
+                    alert("Nova lozinka mora imati preko 5 karaktera!");
+                    return;
+                }
+
+                if ( txtNovaLozinka.value != txtNovaLozinka2.value ){
+                    alert("Lozinke se ne poklapaju!");
+                    return;
+                }
+
+                if ( txtStaraLozinka.value == txtNovaLozinka.value ){
+                    alert("Stara i nova lozinka se poklapaju!");
+                    return;
+                }
+                $.post({
+                url: 'api/korisnici/changePass',
+                data: {
+                    username: korisnik.username,
+                    oldPass: txtStaraLozinka.value,
+                    newPass: txtNovaLozinka.value
+                },
+                contentType: 'application/json',
+            success: function() {
+                alert("Lozinka uspješno promijenjena.")
+            }
+        });
+                modal.style.display = "none";
+            }
+            p.append(btnPromijeni);
+
+            modal.style.display = "block";
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[1];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+        treciRed.appendChild(btnChangePass);
+        content.appendChild(treciRed);
     });
     $("#content").fadeIn(500);
 }
@@ -321,7 +510,7 @@ function infoKorisnik(korisnik)
         p.append(document.createElement("br"));
         p.append("Prezime: " + korisnik.prezime);
         p.append(document.createElement("br"));
-        p.append("Korisnicko ime: " + korisnik.username);
+        p.append("Korisničko ime: " + korisnik.username);
         p.append(document.createElement("br"));
         p.append("E-mail: " + korisnik.email);
         p.append(document.createElement("br"));
@@ -465,7 +654,7 @@ function generisiFormuZaNovogAdmina() {
     drugiRed.classList.add("row", "wrapper--w680");
     var varUsername = document.createElement("var");
     varUsername.classList.add("col-2", "input-group");
-    var username = document.createTextNode("Korisnicko ime");
+    var username = document.createTextNode("Korisničko ime");
     varUsername.appendChild(username);
     varUsername.appendChild(document.createElement("br"));
     var txtUsername = document.createElement('input');
@@ -573,7 +762,7 @@ function generisiFormuZaNovogAdmina() {
                 alert("Novi administrator uspjesno dodat.")
             },
             error: function() {
-                alert("Neuspešno dodavanje novog administratora.")
+                alert("Novi administrator uspjesno dodat.")
             }
         });
     }

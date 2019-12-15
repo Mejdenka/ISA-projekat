@@ -108,4 +108,19 @@ public class KorisnikController {
 
         return null;
     }
+
+    @RequestMapping("/changePass")
+    @PreAuthorize("hasRole('USER')")
+    public boolean getMyAuthority(@RequestBody String username, String oldPass, String newPass) {
+        Korisnik korisnik = korisnikService.findOneByUsername(username);
+
+        if (korisnik.getPassword() != oldPass ){
+            System.out.println(oldPass+ " " + korisnik.getPassword());
+            return false;
+        }
+
+        korisnik.setLozinka(newPass);
+        korisnikService.save(korisnik);
+        return true;
+    }
 }

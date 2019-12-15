@@ -55,7 +55,7 @@ public class KorisnikController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException, IOException {
 
         Korisnik korisnik = korisnikService.findOneByUsername(authenticationRequest.getUsername());
-        if(korisnik == null){
+        if(korisnik == null || !korisnik.isConfirmed()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

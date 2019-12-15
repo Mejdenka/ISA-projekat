@@ -11,7 +11,6 @@ $(document).ready(function(){
         },
         success: function (user){
             ulogovan = user;
-            console.log(user.username)
 
             $.ajax
             ({
@@ -51,7 +50,11 @@ $(document).ready(function(){
                     div.appendChild(btn);
                     div.appendChild(div1);
                     document.getElementById("navbar").appendChild(div);
-
+                    var dobrodoslica = document.createTextNode("Dobro došli " + ulogovan.ime + "!");
+                    var span = document.createElement('span');
+                    span.style.fontSize = "20px";
+                    span.appendChild(dobrodoslica);
+                    document.getElementById("content").appendChild(span);
                 }
             });
 
@@ -340,8 +343,6 @@ function generisiProfil(korisnik) {
         drugiRed.appendChild(varEmail);
         content.appendChild(drugiRed);
 
-        var treciRed = document.createElement("var");
-        treciRed.classList.add("row", "wrapper--w680");
         var varDatumRodjenja = document.createElement("var");
         varDatumRodjenja.classList.add("col-2", "input-group");
         var datumRodjenja = document.createTextNode("Datum rođenja");
@@ -356,14 +357,11 @@ function generisiProfil(korisnik) {
         txtDatumRodjenja.value = korisnik.datumRodjenja.substr(0, 10);
         txtDatumRodjenja.disabled = "true";
         varDatumRodjenja.appendChild(txtDatumRodjenja);
-        treciRed.appendChild(varDatumRodjenja);
+        content.appendChild(varDatumRodjenja);
 
         var btnChangePass = document.createElement("BUTTON");
-        btnChangePass.classList.add("btn", "btn--light-blue");
+        btnChangePass.classList.add("btn2", "btn--light-blue");
         btnChangePass.innerHTML = "Promijeni lozinku";
-        btnChangePass.style.height = "50px";
-        btnChangePass.style.width = "250px";
-        btnChangePass.fontSize = "10px";
         btnChangePass.onclick = function(){
             var modal = document.getElementById("requestModal");
             var p = document.getElementById("requestUsername");
@@ -441,6 +439,14 @@ function generisiProfil(korisnik) {
             }
             p.append(btnPromijeni);
 
+            var btnOdustani = document.createElement("BUTTON");
+            btnOdustani.classList.add("btn2", "btn--red");
+            btnOdustani.innerHTML = "Odustani";
+            btnOdustani.onclick = function(){
+                modal.style.display = "none";
+            }
+            p.append(btnOdustani);
+
             modal.style.display = "block";
 
             // Get the <span> element that closes the modal
@@ -458,8 +464,9 @@ function generisiProfil(korisnik) {
                 }
             }
         }
-        treciRed.appendChild(btnChangePass);
-        content.appendChild(treciRed);
+        content.appendChild(document.createElement("br"));
+        content.appendChild(document.createElement("br"));
+        content.appendChild(btnChangePass);
     });
     $("#content").fadeIn(500);
 }
@@ -636,7 +643,6 @@ function generisiFormuZaNovogAdmina() {
     var varPrezime = document.createElement("var");
     varPrezime.classList.add("col-2", "input-group");
     var prezime = document.createTextNode("Prezime");
-    prezime.fontSize = "50px";
     varPrezime.appendChild(prezime);
     varPrezime.appendChild(document.createElement("br"));
     var txtPrezime = document.createElement('input');

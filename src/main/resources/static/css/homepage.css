@@ -103,6 +103,7 @@ table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    text-align: center;
 }
 
 .tabela td, #customers th {
@@ -117,7 +118,6 @@ table {
 .tabela th {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: left;
     background-color: #6e9cff;
     color: white;
 }
@@ -258,6 +258,9 @@ h6 {
 .wrapper {
     margin: 20px;
     margin: 20px;
+    text-align: center;
+    content-align: center;
+    position: relative;
 }
 
 .wrapper--w960 {

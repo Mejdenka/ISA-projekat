@@ -1,5 +1,6 @@
 package JV20.isapsw.service;
 
+import JV20.isapsw.common.TimeProvider;
 import JV20.isapsw.model.AdministratorKlinickogCentra;
 import JV20.isapsw.model.Authority;
 import JV20.isapsw.model.UserRequest;
@@ -27,6 +28,9 @@ public class AdministratorKlinickogCentraService {
     @Autowired
     private AuthorityService authService;
 
+    @Autowired
+    private TimeProvider timeProvider;
+
     public AdministratorKlinickogCentra findOne(Long id){
         return akcRepository.findById(id).orElseGet(null);
     }
@@ -52,6 +56,10 @@ public class AdministratorKlinickogCentraService {
         akc.setEmail(userRequest.getEmail());
         akc.setEnabled(true);
         akc.setConfirmed(true);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        akc.setDatumRodjenja(timeProvider.now());
+        akc.setDatumRegistrovanja(timeProvider.now());
+        akc.setEnabled(true);
 
         List<Authority> auth = new ArrayList<>();
         auth.add(authService.findByname("ROLE_ADMIN"));

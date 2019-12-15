@@ -423,13 +423,16 @@ function generisiProfil(korisnik) {
                     alert("Stara i nova lozinka se poklapaju!");
                     return;
                 }
+
+                var oldPassword = txtStaraLozinka.value;
+                var newPassword = txtNovaLozinka.value;
+
                 $.post({
                 url: 'api/korisnici/changePass',
-                data: {
-                    username: korisnik.username,
-                    oldPass: txtStaraLozinka.value,
-                    newPass: txtNovaLozinka.value
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
+                data: JSON.stringify({oldPassword, newPassword}),
                 contentType: 'application/json',
             success: function() {
                 alert("Lozinka uspješno promijenjena.")
@@ -764,11 +767,14 @@ function generisiFormuZaNovogAdmina() {
             url: 'api/adminKC/signup',
             data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email}),
             contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
             success: function() {
                 alert("Novi administrator uspjesno dodat.")
             },
             error: function() {
-                alert("Novi administrator uspjesno dodat.")
+                alert("Novi administrator nije dodat.")
             }
         });
     }

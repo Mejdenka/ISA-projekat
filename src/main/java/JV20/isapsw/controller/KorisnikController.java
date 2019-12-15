@@ -6,6 +6,7 @@ import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.security.auth.JwtAuthenticationRequest;
 import JV20.isapsw.security.TokenUtils;
+import JV20.isapsw.service.CustomUserDetailsService;
 import JV20.isapsw.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,9 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -49,6 +48,10 @@ public class KorisnikController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
 
     //Metoda za login
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -109,18 +112,16 @@ public class KorisnikController {
         return null;
     }
 
-    @RequestMapping("/changePass")
+
+    @RequestMapping(value = "/changePass", method = RequestMethod.POST)
     @PreAuthorize("hasRole('USER')")
-    public boolean getMyAuthority(@RequestBody String username, String oldPass, String newPass) {
-        Korisnik korisnik = korisnikService.findOneByUsername(username);
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
+        userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-        if (korisnik.getPassword() != oldPass ){
-            System.out.println(oldPass+ " " + korisnik.getPassword());
-            return false;
-        }
-
-        korisnik.setLozinka(newPass);
-        korisnikService.save(korisnik);
-        return true;
+    static class PasswordChanger {
+        public String oldPassword;
+        public String newPassword;
     }
 }

@@ -26,26 +26,6 @@ public class AdministratorKlinickogCentraController {
     @Autowired
     private AdministratorKlinickogCentraService akcService;
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<AdministratorKlinickogCentraDTO> registracijaAdminaKC(@RequestBody AdministratorKlinickogCentraDTO akcDTO) throws ParseException {
-
-        AdministratorKlinickogCentra akc = akcService.findOneByUsername(akcDTO.getKorisnickoIme());
-        if(akc != null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        akc = new AdministratorKlinickogCentra();
-        akc.setIme(akcDTO.getIme());
-        akc.setPrezime(akcDTO.getPrezime());
-        akc.setKorisnickoIme(akcDTO.getKorisnickoIme());
-        akc.setLozinka(akcDTO.getLozinka());
-        akc.setDatumRodjenja(new Date());
-        akc.setConfirmed(true);
-        akc = akcService.save(akc);
-
-        return new ResponseEntity<>(new AdministratorKlinickogCentraDTO(akc), HttpStatus.CREATED);
-    }
-
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addAKC(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) throws ParseException {

@@ -28,6 +28,10 @@ $(document).ready(function(){
                         case "ROLE_ADMIN":
                             pocetnaAdminKlinickogCentra(ulogovan);
                             break;
+                        case "ROLE_ADMIN_KLINIKE":
+                            console.log(JSON.stringify(ulogovan))
+                            pocetnaAdminKlinike(ulogovan);
+                            break;
                         default:
                             console.log("Jos nismo napravili pocetne za ostale korisnike :)")
                     }
@@ -58,18 +62,11 @@ $(document).ready(function(){
                 }
             });
 
-        },
-        error: function(){
-            window.location = "prijava.html";
-        }
+         }//,
+        // error: function(){
+        //     window.location = "prijava.html";
+        // }
     });
-
-    //kako preko securityja unauhorized pristup?
-    //i refresh kesa pa ako nema ulogovanog baci zabranjenu stranicu
-    //ovdje problem s null objektom rijesi tako sto ces  zabraniti back dugme!!!!!!!!!!!!!!!!!!!!!!!!
-    //Ovaj poziv mozda i ne treba jer u ulogovanom imamo listu authorities i logika iz kontrolera se moze prenijeti ovdje
-
-
 
     //************************************************************************************************************************
     //funkcije dugmadi za PACIJENTA
@@ -97,6 +94,11 @@ $(document).ready(function(){
         generisiFormuZaNovogAdmina();
     });
     //************************************************************************************************************************
+    //funkcije dugmadi za ADMINA KLINIKE
+    /*$('body').on('click', '#klinikaAdminaBtn', function(e) {
+        generisiKlinikuAdmina();
+    });*/
+    //************************************************************************************************************************
     //funkcija profil-dugmeta
     $('body').on('click', '#profilBtn', function(e) {
         generisiProfil(ulogovan);
@@ -107,6 +109,32 @@ $(document).ready(function(){
     });
 
 });
+
+function pocetnaAdminKlinike(ulogovan) {
+    korisnik = ulogovan;
+    var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
+    var nazivi = ["Vasa klinika", imeKorisnika];
+
+    for(let naziv of nazivi) {
+        //pravljenje dugmadi
+        var btn = document.createElement("BUTTON");
+        btn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        btn.innerHTML = naziv;
+        document.getElementById("navbar").appendChild(btn);
+        //dodjela specificnih id-jeva dugmadima
+        switch (naziv) {
+            case "Vasa klinika":
+                btn.id = "klinikaAdminaBtn"
+                btn.onclick = generisiKlinikuAdmina(ulogovan.klinika);
+                break;
+            case imeKorisnika:
+                btn.id = "profilBtn"
+                break;
+
+        }
+    }
+
+}
 
 function pocetnaPacijent(ulogovan) {
     korisnik = ulogovan;
@@ -167,6 +195,17 @@ function pocetnaAdminKlinickogCentra(korisnik) {
                 btn.id = "dodajAdministratoraBtn"
                 break;
         }
+    }
+}
+
+function generisiKlinikuAdmina(klinika) {
+    return function(){
+        $("#content").fadeOut(100, function(){
+            document.getElementById("content").innerHTML = "";
+            var textnode = document.createTextNode("Klinika: " + klinika.naziv);
+            document.getElementById("content").appendChild(textnode);
+        });
+        $("#content").fadeIn(500);
     }
 }
 

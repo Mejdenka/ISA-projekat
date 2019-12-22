@@ -58,12 +58,12 @@ public class KorisnikController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException, IOException {
 
         Korisnik korisnik = korisnikService.findOneByUsername(authenticationRequest.getUsername());
+
         if(korisnik == null || !korisnik.isConfirmed()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
-
         final Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                         authenticationRequest.getPassword()));
@@ -90,6 +90,7 @@ public class KorisnikController {
     @RequestMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public Korisnik user() {
+        Korisnik k = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         return this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

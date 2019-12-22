@@ -16,6 +16,9 @@ public class Sala {
     @OneToMany
     private Set<Termin> termini;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Klinika klinika;
+
     public Sala() {}
 
     public Long getId() {
@@ -48,5 +51,13 @@ public class Sala {
 
     public void setTermini(Set<Termin> termini) {
         this.termini = termini;
+    }
+
+    public Klinika getKlinika() {
+        return klinika;
+    }
+
+    public void setKlinika(Klinika klinika) {
+        this.klinika = klinika;
     }
 }

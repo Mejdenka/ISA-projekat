@@ -203,6 +203,9 @@ function generisiKlinikuAdmina(klinika) {
         $("#content").fadeOut(100, function(){
             document.getElementById("content").innerHTML = "";
             var textnode = document.createTextNode("Klinika: " + klinika.naziv);
+            for(let lekar of klinika.lekari){
+                console.log(lekar.ime);
+            }
             document.getElementById("content").appendChild(textnode);
         });
         $("#content").fadeIn(500);

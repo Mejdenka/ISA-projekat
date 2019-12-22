@@ -1,9 +1,6 @@
 package JV20.isapsw.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -15,6 +12,9 @@ public class Termin {
 
     private Date pocetak;
     private Date kraj;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Klinika klinika;
 
     public Termin() {}
 
@@ -45,5 +45,13 @@ public class Termin {
 
     public void setKraj(Date kraj) {
         this.kraj = kraj;
+    }
+
+    public Klinika getKlinika() {
+        return klinika;
+    }
+
+    public void setKlinika(Klinika klinika) {
+        this.klinika = klinika;
     }
 }

@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -14,6 +16,10 @@ public class Lekar extends Korisnik {
     private Set<Operacija> operacije;
     @OneToMany
     private Set<Pregled> pregledi;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Klinika klinika;
 
     public Lekar() {}
 
@@ -49,4 +55,11 @@ public class Lekar extends Korisnik {
         this.pregledi = pregledi;
     }
 
+    public Klinika getKlinika() {
+        return klinika;
+    }
+
+    public void setKlinika(Klinika klinika) {
+        this.klinika = klinika;
+    }
 }

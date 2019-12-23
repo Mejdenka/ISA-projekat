@@ -12,6 +12,9 @@ public class Lekar extends Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer ocena;
+    private boolean slobodan;
+    private boolean naGodisnjem;
+
     @OneToMany
     private Set<Operacija> operacije;
     @OneToMany
@@ -37,6 +40,22 @@ public class Lekar extends Korisnik {
 
     public void setOcena(Integer ocena) {
         this.ocena = ocena;
+    }
+
+    public boolean isSlobodan() {
+        return slobodan;
+    }
+
+    public void setSlobodan(boolean slobodan) {
+        this.slobodan = slobodan;
+    }
+
+    public boolean isNaGodisnjem() {
+        return naGodisnjem;
+    }
+
+    public void setNaGodisnjem(boolean naGodisnjem) {
+        this.naGodisnjem = naGodisnjem;
     }
 
     public Set<Operacija> getOperacije() {

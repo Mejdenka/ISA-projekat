@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,6 +11,9 @@ public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String naziv;
+    private boolean slobodna;
     @OneToMany
     private Set<Pregled> pregledi;
     @OneToMany
@@ -17,6 +22,7 @@ public class Sala {
     private Set<Termin> termini;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private Klinika klinika;
 
     public Sala() {}
@@ -27,6 +33,22 @@ public class Sala {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNaziv() {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public boolean isSlobodna() {
+        return slobodna;
+    }
+
+    public void setSlobodna(boolean slobodna) {
+        this.slobodna = slobodna;
     }
 
     public Set<Pregled> getPregledi() {

@@ -265,6 +265,8 @@ function generisiKlinikuAdmina(klinika) {
         btnLekari.style.width = "250px"
         btnLekari.style.marginLeft = "27px"
         btnLekari.style.marginTop = "10px"
+        btnLekari.onclick = prikaziLekareKlinike(klinika);
+
         var btnSale = document.createElement('btn');
         btnSale.classList.add("btn", "btn--radius-2", "btn--light-blue");
         btnSale.innerHTML = "Sale";
@@ -272,6 +274,7 @@ function generisiKlinikuAdmina(klinika) {
         btnSale.style.marginTop = "10px"
         btnSale.style.marginLeft = "57px"
         btnSale.style.width = "250px"
+        btnSale.onclick = prikaziSaleKlinike(klinika);
         treciRed.appendChild(btnLekari);
         treciRed.appendChild(btnSale);
         content.appendChild(treciRed);
@@ -368,6 +371,92 @@ function infoKlinike(klinika)
         }
     }
 
+}
+
+function prikaziSaleKlinike(klinika) {
+    return function(){
+        $.get({
+
+            url:'api/klinike/getSale/'+klinika.naziv,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(sale)
+            {
+                var modal = document.getElementById("saleModal");
+                modal.style.display = "block";
+
+                var span = document.getElementById("closeSale");
+
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+                var saleDiv = document.getElementById("saleDiv");
+                saleDiv.innerHTML = "";
+                for(let sala of sale)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = sala.naziv;
+                    btn.id = sala.naziv;
+                    //btn.onclick = infoSale(sala);
+                    saleDiv.appendChild(btn);
+                }
+
+            }
+
+        });
+    }
+}
+
+function prikaziLekareKlinike(klinika) {
+    return function(){
+        $.get({
+
+            url:'api/klinike/getLekari/'+klinika.naziv,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(lekari)
+            {
+                var modal = document.getElementById("lekariModal");
+                modal.style.display = "block";
+
+                var span = document.getElementById("closeLekari");
+
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+                var lekariDiv = document.getElementById("lekariDiv");
+                lekariDiv.innerHTML = "";
+                for(let lekar of lekari)
+                {
+                    var btn = document.createElement("BUTTON");
+                    btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+                    btn.innerHTML = lekar.ime + " " + lekar.prezime;
+                    //btn.onclick = infoLekara(lekar);
+                    lekariDiv.appendChild(btn);
+                }
+
+            }
+
+        });
+    }
 }
 
 function generisiIstoriju() {

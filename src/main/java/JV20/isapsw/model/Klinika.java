@@ -26,9 +26,11 @@ public class Klinika {
     private List<Lekar> lekari;
 
     @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Sala> sale;
 
     @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Termin> termini;
 
     public Klinika() {}

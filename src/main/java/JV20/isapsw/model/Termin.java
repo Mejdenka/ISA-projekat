@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class Termin {
     private Date kraj;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private Klinika klinika;
 
     public Termin() {}

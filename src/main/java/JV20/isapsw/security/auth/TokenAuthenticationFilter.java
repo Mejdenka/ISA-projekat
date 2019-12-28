@@ -28,7 +28,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("USLO U FILTER");
         String username;
         String authToken = tokenUtils.getToken(request);
-
+        System.out.println(authToken);
         if (authToken != null) {
             // uzmi username iz tokena
             username = tokenUtils.getUsernameFromToken(authToken);

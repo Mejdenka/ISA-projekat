@@ -17,7 +17,7 @@ public class Termin {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
-    private Klinika klinika;
+    private Sala sala;
 
     public Termin() {}
 
@@ -50,11 +50,11 @@ public class Termin {
         this.kraj = kraj;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Sala getSala() {
+        return sala;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 }

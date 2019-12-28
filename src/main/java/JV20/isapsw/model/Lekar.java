@@ -14,6 +14,7 @@ public class Lekar extends Korisnik {
     private Integer ocena;
     private boolean slobodan;
     private boolean naGodisnjem;
+    private boolean obrisan = false;
 
     @OneToMany
     private Set<Operacija> operacije;
@@ -56,6 +57,14 @@ public class Lekar extends Korisnik {
 
     public void setNaGodisnjem(boolean naGodisnjem) {
         this.naGodisnjem = naGodisnjem;
+    }
+
+    public boolean isObrisan() {
+        return obrisan;
+    }
+
+    public void setObrisan(boolean obrisan) {
+        this.obrisan = obrisan;
     }
 
     public Set<Operacija> getOperacije() {

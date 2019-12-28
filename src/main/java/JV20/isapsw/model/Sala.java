@@ -1,6 +1,7 @@
 package JV20.isapsw.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,11 +15,15 @@ public class Sala {
 
     private String naziv;
     private boolean slobodna;
+    private boolean rezervisana;
+    private boolean obrisana = false;
     @OneToMany
     private Set<Pregled> pregledi;
     @OneToMany
     private Set<Operacija> operacije;
-    @OneToMany
+
+    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Termin> termini;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -49,6 +54,22 @@ public class Sala {
 
     public void setSlobodna(boolean slobodna) {
         this.slobodna = slobodna;
+    }
+
+    public boolean isRezervisana() {
+        return rezervisana;
+    }
+
+    public void setRezervisana(boolean rezervisana) {
+        this.rezervisana = rezervisana;
+    }
+
+    public boolean isObrisana() {
+        return obrisana;
+    }
+
+    public void setObrisana(boolean obrisana) {
+        this.obrisana = obrisana;
     }
 
     public Set<Pregled> getPregledi() {

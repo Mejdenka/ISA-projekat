@@ -1,12 +1,14 @@
 package JV20.isapsw.controller;
 
 
-import JV20.isapsw.model.Klinika;
-import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.Lekar;
-import JV20.isapsw.model.Sala;
+import JV20.isapsw.dto.LekarDTO;
+import JV20.isapsw.dto.SalaDTO;
+import JV20.isapsw.dto.TerminDTO;
+import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,23 +38,60 @@ public class KlinikaController {
         List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
         List<Sala> retVal = new ArrayList<>();
         for(Sala s : sale){
-            if(s.isSlobodna()){
+            if(!s.isObrisana()){
                 retVal.add(s);
             }
         }
         return retVal;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{nazivKlinike}")
+    /* Mozda je ljepse sa salaDTO... problem je sto nije povezano sa rezervacijama */
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodneSale/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<Lekar> getLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Lekar> lekari = klinikaService.findByNaziv(nazivKlinike).getLekari();
-        List<Lekar> retVal = new ArrayList<>();
-        for(Lekar l : lekari){
-            if(l.isSlobodan() && !l.isNaGodisnjem()){
-                retVal.add(l);
+    public List<SalaDTO> getSlobodneSale(@PathVariable String nazivKlinike) throws AccessDeniedException {
+        List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
+        List<SalaDTO> retVal = new ArrayList<>();
+        for(Sala s : sale){
+            if(s.isSlobodna() && !s.isObrisana()){
+                retVal.add(new SalaDTO(s));
             }
         }
         return retVal;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{nazivKlinike}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<LekarDTO> getLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
+        List<Lekar> lekari = klinikaService.findByNaziv(nazivKlinike).getLekari();
+        List<LekarDTO> retVal = new ArrayList<>();
+        for(Lekar l : lekari){
+            if(!l.isObrisan()){
+                retVal.add(new LekarDTO(l));
+            }
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniLekari/{nazivKlinike}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<LekarDTO> getSlonodniLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
+        List<Lekar> lekari = klinikaService.findByNaziv(nazivKlinike).getLekari();
+        List<LekarDTO> retVal = new ArrayList<>();
+        for(Lekar l : lekari){
+            if(!l.isObrisan() && l.isSlobodan() && !l.isNaGodisnjem()){
+                retVal.add(new LekarDTO(l));
+            }
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/izmenaKlinike")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> izmenaKlinike(Klinika klinika) throws AccessDeniedException {
+        Klinika zaIzmenu = klinikaService.findOne(klinika.getId());
+        //ovdje setovati novu kliniku i sacuvati u bazi
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

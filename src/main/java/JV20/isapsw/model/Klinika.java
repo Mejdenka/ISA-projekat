@@ -29,10 +29,6 @@ public class Klinika {
     @JsonManagedReference
     private List<Sala> sale;
 
-    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Termin> termini;
-
     public Klinika() {}
 
     public Long getId() {
@@ -107,11 +103,4 @@ public class Klinika {
         this.sale = sale;
     }
 
-    public List<Termin> getTermini() {
-        return termini;
-    }
-
-    public void setTermini(List<Termin> termini) {
-        this.termini = termini;
-    }
 }

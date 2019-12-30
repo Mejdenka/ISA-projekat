@@ -80,7 +80,6 @@ public class KorisnikController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/korisnik/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public Korisnik loadById(@PathVariable Long userId) throws AccessDeniedException {

@@ -12,6 +12,8 @@ public class UserRequest {
     private String korisnickoIme;
     private String lozinka;
     private String email;
+    //Za lekara
+    private Long idKlinike;
 
     public Long getId() {
         return id;
@@ -75,5 +77,13 @@ public class UserRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getIdKlinike() {
+        return idKlinike;
+    }
+
+    public void setIdKlinike(Long idKlinike) {
+        this.idKlinike = idKlinike;
     }
 }

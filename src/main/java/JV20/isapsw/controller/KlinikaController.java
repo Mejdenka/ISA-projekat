@@ -72,7 +72,7 @@ public class KlinikaController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniLekari/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<LekarDTO> getSlonodniLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
+    public List<LekarDTO> getSlobodniLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
         List<Lekar> lekari = klinikaService.findByNaziv(nazivKlinike).getLekari();
         List<LekarDTO> retVal = new ArrayList<>();
         for(Lekar l : lekari){

@@ -17,6 +17,8 @@ public class Sala {
     private boolean slobodna;
     private boolean rezervisana;
     private boolean obrisana = false;
+    private Long idKlinike;
+
     @OneToMany
     private Set<Pregled> pregledi;
     @OneToMany
@@ -102,5 +104,13 @@ public class Sala {
 
     public void setKlinika(Klinika klinika) {
         this.klinika = klinika;
+    }
+
+    public Long getIdKlinike() {
+        return idKlinike;
+    }
+
+    public void setIdKlinike(Long idKlinike) {
+        this.idKlinike = idKlinike;
     }
 }

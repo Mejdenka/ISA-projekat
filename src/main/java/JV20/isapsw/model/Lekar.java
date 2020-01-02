@@ -90,4 +90,5 @@ public class Lekar extends Korisnik {
     public void setKlinika(Klinika klinika) {
         this.klinika = klinika;
     }
+
 }

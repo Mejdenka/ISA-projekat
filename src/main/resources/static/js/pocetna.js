@@ -147,7 +147,72 @@ function pocetnaAdminKlinike(ulogovan) {
 }
 function generisiFormuZaNovuSalu(klinika) {
     return function () {
+        $("#content").fadeOut(100, function(){
+            var content = document.getElementById("content");
+            content.innerHTML = "";
 
+            var prviRed = document.createElement("var");
+            prviRed.classList.add("row", "wrapper--w680");
+            var varNaziv = document.createElement("var");
+            varNaziv.classList.add("col-2", "input-group");
+            var naziv = document.createTextNode("Naziv");
+            varNaziv.appendChild(naziv);
+            varNaziv.appendChild(document.createElement("br"));
+            var txtNaziv = document.createElement('input');
+            txtNaziv.type = 'text';
+            txtNaziv.id = "nazivSale";
+            txtNaziv.classList.add("input--style-4");
+            txtNaziv.style.height = "40px";
+            txtNaziv.style.width = "250px";
+            varNaziv.appendChild(txtNaziv);
+            prviRed.appendChild(varNaziv);
+
+            var varDodaj = document.createElement("var");
+            varDodaj.classList.add("col-2", "input-group");
+            varDodaj.appendChild(document.createElement("br"));
+            var btnAdd = document.createElement('button');
+            btnAdd.classList.add("btn2", "btn--light-blue");
+            btnAdd.style.height = "35px"
+            btnAdd.style.width = "250px"
+            btnAdd.innerHTML = "Dodaj salu";
+
+            btnAdd.onclick = function(){
+                var naziv=$('#nazivSale').val();
+
+                if(naziv === ""){
+                    alert("Polje ne sme ostati prazno.")
+                    return
+                }
+
+                if(naziv.length < 3){
+                    alert("Naziv mora imati više od tri karaktera!")
+                    return
+                }
+
+                var idKlinike = klinika.id;
+
+                $.post({
+                    url: 'api/sale/dodajSalu',
+                    data: JSON.stringify({naziv, idKlinike}),
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function() {
+                        alert("Nova sala uspesno dodata.")
+                    },
+                    error: function() {
+                        alert("Greška pri dodavanju sale.")
+                    }
+                });
+            }
+            varDodaj.appendChild(btnAdd);
+            varDodaj.appendChild(document.createElement("br"));
+            prviRed.appendChild(varDodaj);
+            content.appendChild(prviRed);
+
+        });
+        $("#content").fadeIn(500);
     }
 }
 
@@ -260,7 +325,7 @@ function generisiFormuZaNovogLekara(klinika) {
                 var ime=$('#ime').val();
                 var prezime=$('#prezime').val();
                 var email=$('#email').val();
-
+                var idKlinike = klinika.id;
                 if(korisnickoIme === "" || lozinka === "" || lozinka_potvrda === "" || ime === "" || prezime === "" || email === ""){
                     alert("Nijedno polje ne sme ostati prazno.")
                     return
@@ -294,7 +359,7 @@ function generisiFormuZaNovogLekara(klinika) {
 
                 $.post({
                     url: 'api/lekari/dodajLekara',
-                    data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email}),
+                    data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, idKlinike}),
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -593,8 +658,8 @@ function infoSale(sala)
                     txtNaziv.style.height = "40px";
                     txtNaziv.style.width = "250px";
                     txtNaziv.value = sala.naziv;
-                    //if(sala.zazeta == true)
-                        //txtNaziv.disabled = "true";
+                    if(sala.slobodna != true)
+                        txtNaziv.disabled = "true";
                     varNaziv.appendChild(txtNaziv);
                     prviRed.appendChild(varNaziv);
 
@@ -606,7 +671,12 @@ function infoSale(sala)
                     btnObrisi.style.height = "35px"
                     btnObrisi.style.width = "250px"
                     btnObrisi.innerHTML = "Obrisi salu";
+
                     btnObrisi.onclick = function(){
+                        if(sala.slobodna == false ||sala.rezervisana == true){
+                            alert("Nemoguće je trenutno obrisati salu!");
+                            return;
+                        }
                         $.ajax({
                             url:'api/sale/'+sala.id,
                             type: 'DELETE',
@@ -650,12 +720,39 @@ function infoSale(sala)
                     drugiRed.appendChild(varRezervacije);
                     content.appendChild(drugiRed);
 
+                    var sacuvajIzmjene = document.createElement("var");
+                    sacuvajIzmjene.classList.add("col-2", "input-group");
+                    sacuvajIzmjene.appendChild(document.createElement("br"));
                     var sacuvajIzmjeneBtn = document.createElement("BUTTON");
                     sacuvajIzmjeneBtn.classList.add("btn2", "btn--light-blue");
                     sacuvajIzmjeneBtn.innerHTML = "Sacuvaj izmjene";
                     sacuvajIzmjeneBtn.onclick = function(){
-                        console.log("klik")
+                        if(sala.slobodna == false ||sala.rezervisana == true){
+                            alert("Nemoguće je trenutno izmeniti salu!");
+                            return;
+                        }
+                        var id = sala.id;
+                        var naziv = $('#nazivSale').val();
+                        $.ajax({
+                            url:'api/sale/izmenaSale',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id, naziv}),
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function() {
+                                alert("Uspešno izmenjena sala.")
+                            },
+                            error: function() {
+                                alert("Greška pri izmeni sale.")
+                            }
+                        });
                     }
+                    sacuvajIzmjene.appendChild(sacuvajIzmjeneBtn);
+                    sacuvajIzmjene.appendChild(document.createElement("br"));
+                    drugiRed.appendChild(sacuvajIzmjene);
+                    content.appendChild(drugiRed);
                 }
 
             });

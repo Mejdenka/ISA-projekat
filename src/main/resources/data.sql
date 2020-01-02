@@ -7,7 +7,7 @@ INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabl
 
 INSERT INTO klinika (naziv, lokacija, br_lekara, br_sala, opis, img_path) VALUES ('Klinika 1', 'Janka Veselinovica, 20', 10, 4, 'Prva klinika u centru.','images.icons/favicon.ico');
 
-INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 1', 1, 0, 0, 1);
+INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 1', 1, 1, 0, 1);
 INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 2', 0, 0, 0, 1);
 INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 3', 1, 0, 0, 1);
 

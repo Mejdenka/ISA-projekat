@@ -2,6 +2,7 @@ package JV20.isapsw.service;
 
 import JV20.isapsw.common.TimeProvider;
 import JV20.isapsw.model.*;
+import JV20.isapsw.repository.KlinikaRepository;
 import JV20.isapsw.repository.LekarRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,9 @@ public class LekarService {
         lekar = this.lekarRepository.save(lekar);
         return lekar;
     }
-
+    public Lekar save(Lekar lekar) {
+        return  this.lekarRepository.save(lekar);
+    }
     public void remove(Long id) {
         lekarRepository.deleteById(id);
     }

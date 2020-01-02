@@ -19,7 +19,9 @@ public class SalaService {
     public Sala findOne(Long id) {
         return salaRepository.findById(id).orElseGet(null);
     }
-
+    public Sala findOneByNaziv(String naziv) {
+        return salaRepository.findByNaziv(naziv);
+    }
     public List<Sala> findAll() {
         return salaRepository.findAll();
     }

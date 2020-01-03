@@ -85,10 +85,14 @@ public class KlinikaController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaKlinike")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> izmenaKlinike(Klinika klinika) throws AccessDeniedException {
+    public ResponseEntity<?> izmenaKlinike(@RequestBody Klinika klinika) throws AccessDeniedException {
         Klinika zaIzmenu = klinikaService.findOne(klinika.getId());
         //ovdje setovati novu kliniku i sacuvati u bazi
-
+        zaIzmenu.setNaziv(klinika.getNaziv());
+        System.out.println(zaIzmenu.getLokacija() + zaIzmenu.getNaziv());
+        zaIzmenu.setLokacija(klinika.getLokacija());
+        zaIzmenu.setOpis(klinika.getOpis());
+        klinikaService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

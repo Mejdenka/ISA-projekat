@@ -533,6 +533,28 @@ function generisiKlinikuAdmina(klinika) {
             btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
             btnIzmene.innerHTML = "Sacuvaj izmene";
             btnIzmene.id = "izmeneBtn";
+            btnIzmene.onclick = function(){
+                var id = klinika.id;
+
+                var naziv = $('#naziv').val();
+                var opis = $('#opis').val();
+                var lokacija = $('#lokacija').val();
+                $.ajax({
+                    url:'api/klinike/izmenaKlinike',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id, naziv, opis, lokacija}),
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function() {
+                        alert("Uspešno izmenjena klinika.")
+                    },
+                    error: function() {
+                        alert("Greška pri izmeni klinike.")
+                    }
+                });
+            }
             content.appendChild(document.createElement("br"));
             content.appendChild(document.createElement("br"));
             content.appendChild(btnIzmene);

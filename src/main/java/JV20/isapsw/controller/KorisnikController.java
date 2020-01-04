@@ -86,6 +86,13 @@ public class KorisnikController {
         return this.korisnikService.findOne(userId);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getKlinikaAdmina/{userId}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Klinika getKlinika(@PathVariable Long userId) throws AccessDeniedException {
+        AdministratorKlinike ak = (AdministratorKlinike) korisnikService.findOne(userId);
+        return ak.getKlinika();
+    }
+
     @RequestMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public Korisnik user() {

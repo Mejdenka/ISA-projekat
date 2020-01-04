@@ -123,7 +123,7 @@ function pocetnaAdminKlinike(ulogovan) {
         switch (naziv) {
             case "Vasa klinika":
                 btn.id = "klinikaAdminaBtn"
-                btn.onclick = generisiKlinikuAdmina(ulogovan.klinika);
+                btn.onclick = generisiKlinikuAdmina();
                 break;
             case "Dodaj salu":
                 btn.id = "dodajSaluBtn"
@@ -446,121 +446,137 @@ function pocetnaAdminKlinickogCentra(korisnik) {
     }
 }
 
-function generisiKlinikuAdmina(klinika) {
+function generisiKlinikuAdmina() {
+    var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+    console.log(ulogovan.korisnickoIme)
     return function(){
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/korisnici/getKlinikaAdmina/'+ulogovan.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (klinika){
+                $("#content").fadeOut(100, function() {
+                    var content = document.getElementById("content");
+                    content.innerHTML = "";
 
-        $("#content").fadeOut(100, function() {
-            var content = document.getElementById("content");
-            content.innerHTML = "";
+                    var prviRed = document.createElement("var");
+                    prviRed.classList.add("row", "wrapper--w680");
+                    var varNaziv = document.createElement("var");
+                    varNaziv.classList.add("col-2", "input-group");
+                    var naziv = document.createTextNode("Naziv");
+                    varNaziv.appendChild(naziv);
+                    varNaziv.appendChild(document.createElement("br"));
+                    var txtNaziv = document.createElement('input');
+                    txtNaziv.type = 'text';
+                    txtNaziv.id = "naziv";
+                    txtNaziv.classList.add("input--style-4");
+                    txtNaziv.style.height = "40px";
+                    txtNaziv.style.width = "250px";
+                    txtNaziv.value = klinika.naziv;
+                    varNaziv.appendChild(txtNaziv);
+                    prviRed.appendChild(varNaziv);
 
-            var prviRed = document.createElement("var");
-            prviRed.classList.add("row", "wrapper--w680");
-            var varNaziv = document.createElement("var");
-            varNaziv.classList.add("col-2", "input-group");
-            var naziv = document.createTextNode("Naziv");
-            varNaziv.appendChild(naziv);
-            varNaziv.appendChild(document.createElement("br"));
-            var txtNaziv = document.createElement('input');
-            txtNaziv.type = 'text';
-            txtNaziv.id = "naziv";
-            txtNaziv.classList.add("input--style-4");
-            txtNaziv.style.height = "40px";
-            txtNaziv.style.width = "250px";
-            txtNaziv.value = klinika.naziv;
-            varNaziv.appendChild(txtNaziv);
-            prviRed.appendChild(varNaziv);
+                    var varLokacija = document.createElement("var");
+                    varLokacija.classList.add("col-2", "input-group");
+                    var lokacija = document.createTextNode("Lokacija");
+                    varLokacija.appendChild(lokacija);
+                    varLokacija.appendChild(document.createElement("br"));
+                    var txtLokacija = document.createElement('input');
+                    txtLokacija.type = 'text';
+                    txtLokacija.id = "lokacija";
+                    txtLokacija.classList.add("input--style-4");
+                    txtLokacija.style.height = "40px"
+                    txtLokacija.style.width = "250px"
+                    txtLokacija.value = klinika.lokacija;
+                    content.appendChild(txtLokacija);
+                    varLokacija.appendChild(txtLokacija);
+                    prviRed.appendChild(varLokacija);
+                    content.appendChild(prviRed);
 
-            var varLokacija = document.createElement("var");
-            varLokacija.classList.add("col-2", "input-group");
-            var lokacija = document.createTextNode("Lokacija");
-            varLokacija.appendChild(lokacija);
-            varLokacija.appendChild(document.createElement("br"));
-            var txtLokacija = document.createElement('input');
-            txtLokacija.type = 'text';
-            txtLokacija.id = "lokacija";
-            txtLokacija.classList.add("input--style-4");
-            txtLokacija.style.height = "40px"
-            txtLokacija.style.width = "250px"
-            txtLokacija.value = klinika.lokacija;
-            content.appendChild(txtLokacija);
-            varLokacija.appendChild(txtLokacija);
-            prviRed.appendChild(varLokacija);
-            content.appendChild(prviRed);
+                    var drugiRed = document.createElement("var");
+                    drugiRed.classList.add("row", "wrapper--w680");
+                    var varOpis = document.createElement("var");
+                    varOpis.classList.add("col-2", "input-group");
+                    var opis = document.createTextNode("Opis");
+                    varOpis.appendChild(opis);
+                    varOpis.appendChild(document.createElement("br"));
+                    var txtOpis = document.createElement('input');
+                    txtOpis.type = 'text';
+                    txtOpis.id = "opis";
+                    txtOpis.classList.add("input--style-4");
+                    txtOpis.style.height = "45px"
+                    txtOpis.style.width = "565px"
+                    txtOpis.style.marginLeft = "27px"
+                    txtOpis.value = klinika.opis;
+                    varOpis.appendChild(txtOpis);
+                    drugiRed.appendChild(varOpis);
+                    content.appendChild(drugiRed);
 
-            var drugiRed = document.createElement("var");
-            drugiRed.classList.add("row", "wrapper--w680");
-            var varOpis = document.createElement("var");
-            varOpis.classList.add("col-2", "input-group");
-            var opis = document.createTextNode("Opis");
-            varOpis.appendChild(opis);
-            varOpis.appendChild(document.createElement("br"));
-            var txtOpis = document.createElement('input');
-            txtOpis.type = 'text';
-            txtOpis.id = "opis";
-            txtOpis.classList.add("input--style-4");
-            txtOpis.style.height = "45px"
-            txtOpis.style.width = "565px"
-            txtOpis.style.marginLeft = "27px"
-            txtOpis.value = klinika.opis;
-            varOpis.appendChild(txtOpis);
-            drugiRed.appendChild(varOpis);
-            content.appendChild(drugiRed);
+                    var treciRed = document.createElement("var");
+                    treciRed.classList.add("row", "wrapper--w680");
+                    var btnLekari = document.createElement('btn');
+                    btnLekari.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    btnLekari.innerHTML = "Lekari";
+                    btnLekari.id = "lekariBtn";
+                    btnLekari.style.width = "250px"
+                    btnLekari.style.marginLeft = "27px"
+                    btnLekari.style.marginTop = "10px"
+                    btnLekari.onclick = prikaziLekareKlinike(klinika);
 
-            var treciRed = document.createElement("var");
-            treciRed.classList.add("row", "wrapper--w680");
-            var btnLekari = document.createElement('btn');
-            btnLekari.classList.add("btn", "btn--radius-2", "btn--light-blue");
-            btnLekari.innerHTML = "Lekari";
-            btnLekari.id = "lekariBtn";
-            btnLekari.style.width = "250px"
-            btnLekari.style.marginLeft = "27px"
-            btnLekari.style.marginTop = "10px"
-            btnLekari.onclick = prikaziLekareKlinike(klinika);
+                    var btnSale = document.createElement('btn');
+                    btnSale.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    btnSale.innerHTML = "Sale";
+                    btnSale.id = "saleBtn";
+                    btnSale.style.marginTop = "10px"
+                    btnSale.style.marginLeft = "57px"
+                    btnSale.style.width = "250px"
+                    btnSale.onclick = prikaziSaleKlinike(klinika);
+                    treciRed.appendChild(btnLekari);
+                    treciRed.appendChild(btnSale);
+                    content.appendChild(treciRed);
 
-            var btnSale = document.createElement('btn');
-            btnSale.classList.add("btn", "btn--radius-2", "btn--light-blue");
-            btnSale.innerHTML = "Sale";
-            btnSale.id = "saleBtn";
-            btnSale.style.marginTop = "10px"
-            btnSale.style.marginLeft = "57px"
-            btnSale.style.width = "250px"
-            btnSale.onclick = prikaziSaleKlinike(klinika);
-            treciRed.appendChild(btnLekari);
-            treciRed.appendChild(btnSale);
-            content.appendChild(treciRed);
+                    var btnIzmene = document.createElement('btn');
+                    btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    btnIzmene.innerHTML = "Sacuvaj izmene";
+                    btnIzmene.id = "izmeneBtn";
+                    btnIzmene.onclick = function(){
+                        var id = klinika.id;
 
-            var btnIzmene = document.createElement('btn');
-            btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
-            btnIzmene.innerHTML = "Sacuvaj izmene";
-            btnIzmene.id = "izmeneBtn";
-            btnIzmene.onclick = function(){
-                var id = klinika.id;
+                        var naziv = $('#naziv').val();
+                        var opis = $('#opis').val();
+                        var lokacija = $('#lokacija').val();
+                        $.ajax({
+                            url:'api/klinike/izmenaKlinike',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id, naziv, opis, lokacija}),
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function() {
+                                alert("Uspešno izmenjena klinika.")
 
-                var naziv = $('#naziv').val();
-                var opis = $('#opis').val();
-                var lokacija = $('#lokacija').val();
-                $.ajax({
-                    url:'api/klinike/izmenaKlinike',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({id, naziv, opis, lokacija}),
-                    headers: {
-                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-                    },
-                    success: function() {
-                        alert("Uspešno izmenjena klinika.")
-                    },
-                    error: function() {
-                        alert("Greška pri izmeni klinike.")
+                            },
+                            error: function() {
+                                alert("Greška pri izmeni klinike.")
+                            }
+                        });
                     }
-                });
-            }
-            content.appendChild(document.createElement("br"));
-            content.appendChild(document.createElement("br"));
-            content.appendChild(btnIzmene);
+                    content.appendChild(document.createElement("br"));
+                    content.appendChild(document.createElement("br"));
+                    content.appendChild(btnIzmene);
 
+                });
+                $("#content").fadeIn(500);
+            },
+            error: function () {
+                alert("Greska pri dobavljanju informacija o klinici.")
+            }
         });
-        $("#content").fadeIn(500);
     }
 }
 

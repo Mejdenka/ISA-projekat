@@ -11,6 +11,9 @@ INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('S
 INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 2', 0, 0, 0, 1);
 INSERT INTO sala (naziv, slobodna, rezervisana, obrisana, klinika_id) VALUES ('Sala 3', 1, 0, 0, 1);
 
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 100, 1, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 200, 1, 0);
+
 INSERT INTO termin (pocetak, kraj, sala_id) VALUES ('2019-12-24 15:50:00', '2019-12-24 16:50:00', 1);
 INSERT INTO termin (pocetak, kraj, sala_id) VALUES ('2019-12-25 12:50:00', '2019-12-25 13:20:00', 1);
 

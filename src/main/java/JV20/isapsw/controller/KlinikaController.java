@@ -83,6 +83,41 @@ public class KlinikaController {
         return retVal;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getTipoviPregleda/{klinikaId}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<TipPregleda> getTipoviPregleda(@PathVariable Long klinikaId) throws AccessDeniedException {
+       //if bool zauzeto == true onda ne ubacujes u listu
+        List<TipPregleda> tipoviPregleda= klinikaService.findOne(klinikaId).getTipoviPregleda();
+        List<TipPregleda> retVal = new ArrayList<>();
+        for(TipPregleda tp : tipoviPregleda){
+            if(!tp.isObrisan()){
+                retVal.add(tp);
+            }
+        }
+        return retVal;
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteTipPregleda/{klinikaId}/{tipPregledaId}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<TipPregleda> deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
+        //if bool zauzeto == true onda ne ubacujes u listu
+        Klinika klinika = this.klinikaService.findOne(klinikaId);
+        TipPregleda zaObrisati = null;
+        System.out.println("allallalaaa uslo");
+
+        for(TipPregleda tp : klinika.getTipoviPregleda()){
+            //ako ne postoji rezervisan pregled po tim tipom obrisi
+            if(tp.getId().equals(tipPregledaId)){
+                tp.setObrisan(true);
+            }
+        }
+
+        klinikaService.save(klinika);
+
+        return this.klinikaService.findOne(klinikaId).getTipoviPregleda();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaKlinike")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public ResponseEntity<?> izmenaKlinike(@RequestBody Klinika klinika) throws AccessDeniedException {

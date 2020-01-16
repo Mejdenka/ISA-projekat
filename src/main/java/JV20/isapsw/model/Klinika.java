@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Entity
 public class Klinika {
-    //**************************************TREBA JOS CJENOVNIK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +27,10 @@ public class Klinika {
     @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Sala> sale;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<TipPregleda> tipoviPregleda;
 
     public Klinika() {}
 
@@ -103,4 +106,11 @@ public class Klinika {
         this.sale = sale;
     }
 
+    public List<TipPregleda> getTipoviPregleda() {
+        return tipoviPregleda;
+    }
+
+    public void setTipoviPregleda(List<TipPregleda> tipoviPregleda) {
+        this.tipoviPregleda = tipoviPregleda;
+    }
 }

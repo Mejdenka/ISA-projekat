@@ -96,6 +96,10 @@ $(document).ready(function(){
     //************************************************************************************************************************
     //funkcije dugmadi za ADMINA KLINIKE
 
+    $('body').on('click', '#tipoviPregledaBtn', function(e) {
+        generisiTipovePregleda();
+    });
+
     //************************************************************************************************************************
     //funkcija profil-dugmeta
     $('body').on('click', '#profilBtn', function(e) {
@@ -135,7 +139,7 @@ function pocetnaAdminKlinike(ulogovan) {
                 break;
             case "Tipovi pregleda":
                 btn.id = "tipoviPregledaBtn"
-                btn.onclick = generisiTipovePregleda(ulogovan.klinika);
+                //btn.onclick = generisiTipovePregleda(ulogovan.klinika);
                 break;
             case imeKorisnika:
                 btn.id = "profilBtn"
@@ -378,9 +382,86 @@ function generisiFormuZaNovogLekara(klinika) {
     }
 }
 
-function generisiTipovePregleda(klinika) {
-    return function () {
+function generisiTipovePregleda() {
+    var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/korisnici/getKlinikaAdmina/' + ulogovan.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (klinika) {
+                $("#content").fadeOut(100, function () {
+                    $.get({
+                        url: 'api/klinike/getTipoviPregleda/' + klinika.id,
+                        contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                        },
+                        success: function (tipoviPregleda) {
+                            $("#content").fadeOut(100, function() {
+                                var content = document.getElementById('content')
+                                content.innerHTML = "";
+                                var table = document.createElement('table');
+                                table.classList.add("tabela");
+                                var tableRef = document.createElement('tbody');
 
+                                for(let tipPregleda of tipoviPregleda) {
+                                    var podaciPregleda   = tableRef.insertRow();
+                                    var nazivPregleda = podaciPregleda.insertCell(0);
+                                    var nazivPregledaText = document.createTextNode(tipPregleda.naziv);
+                                    nazivPregleda.appendChild(nazivPregledaText);
+
+                                    var cenaPregleda = podaciPregleda.insertCell(1);
+                                    var cenaPregledaText = document.createTextNode(tipPregleda.cena);
+                                    cenaPregleda.appendChild(cenaPregledaText);
+
+                                    var izmeni = podaciPregleda.insertCell(2);
+                                    var izmeniBtn = document.createElement("BUTTON");
+                                    izmeniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                    izmeniBtn.innerHTML = "Izmeni";
+                                    izmeni.appendChild(izmeniBtn);
+
+                                    var ukloni = podaciPregleda.insertCell(3);
+                                    var ukloniBtn = document.createElement("BUTTON");
+                                    ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                    ukloniBtn.innerHTML = "-";
+                                    ukloniBtn.onclick = ukloniTipPregleda(klinika.id, tipPregleda.id);
+                                    ukloni.appendChild(ukloniBtn);
+
+                                }
+                                table.appendChild(tableRef);
+                                content.appendChild(table);
+                                var dodajBtn = document.createElement("BUTTON");
+                                dodajBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                dodajBtn.innerHTML = "+";
+                                content.appendChild(dodajBtn);
+                            });
+                            $("#content").fadeIn(500);
+                        }, error: function () {
+                            console.log("Greska")
+                        }
+
+                    });
+                });
+            }
+        })
+}
+function ukloniTipPregleda(klinikaId, tipPregledaId) {
+    return function(){
+
+        $.ajax({
+            url:'api/klinike/deleteTipPregleda/'+klinikaId+'/'+tipPregledaId,
+            type: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function() {
+               generisiTipovePregleda();
+            }
+        });
     }
 }
 
@@ -448,7 +529,6 @@ function pocetnaAdminKlinickogCentra(korisnik) {
 
 function generisiKlinikuAdmina() {
     var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
-    console.log(ulogovan.korisnickoIme)
     return function(){
         $.ajax
         ({

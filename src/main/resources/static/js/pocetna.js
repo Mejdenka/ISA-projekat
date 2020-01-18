@@ -422,6 +422,7 @@ function generisiTipovePregleda() {
                                     var izmeniBtn = document.createElement("BUTTON");
                                     izmeniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                                     izmeniBtn.innerHTML = "Izmeni";
+                                    izmeniBtn.onclick = izmeniTipPregleda(tipPregleda);
                                     izmeni.appendChild(izmeniBtn);
 
                                     var ukloni = podaciPregleda.insertCell(3);
@@ -449,6 +450,93 @@ function generisiTipovePregleda() {
             }
         })
 }
+
+function izmeniTipPregleda(tipPregleda) {
+    return function(){
+
+        var modal = document.getElementById("tipPregledaModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeTipPregleda");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        var content = document.getElementById("tipPregledaDiv");
+        content.innerHTML = "";
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var varNaziv = document.createElement("var");
+        varNaziv.classList.add("col-2", "input-group");
+        var naziv = document.createTextNode("Naziv");
+        varNaziv.appendChild(naziv);
+        varNaziv.appendChild(document.createElement("br"));
+        var txtNaziv = document.createElement('input');
+        txtNaziv.type = 'text';
+        txtNaziv.id = "naziv";
+        txtNaziv.classList.add("input--style-4");
+        txtNaziv.style.height = "40px";
+        txtNaziv.style.width = "250px";
+        txtNaziv.value = tipPregleda.naziv;
+        varNaziv.appendChild(txtNaziv);
+        prviRed.appendChild(varNaziv);
+
+        var varCijena = document.createElement("var");
+        varCijena.classList.add("col-2", "input-group");
+        var cijena = document.createTextNode("Cena");
+        varCijena.appendChild(cijena);
+        varCijena.appendChild(document.createElement("br"));
+        var cifra = document.createElement('input');
+        cifra.type = 'number';
+        cifra.id = "cena";
+        //cifra.classList.add("input--style-4");
+        cifra.style.height = "40px"
+        cifra.style.width = "250px"
+        cifra.value = tipPregleda.cena;
+        content.appendChild(cifra);
+        varCijena.appendChild(cifra);
+        prviRed.appendChild(varCijena);
+        content.appendChild(prviRed);
+
+        var okBtn = document.createElement("BUTTON");
+        okBtn.innerText = "OK"
+        okBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+
+        content.appendChild(okBtn);
+        okBtn.onclick = function(){
+
+            id = tipPregleda.id;
+            naziv =  $('#naziv').val();
+            cena =  $('#cena').val();
+
+            $.ajax({
+                url:'api/klinike/izmeniTipPregleda',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({id, naziv, cena}),
+
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    modal.style.display = "none";
+                    generisiTipovePregleda();
+                }
+            });
+        }
+
+    }
+}
+
+
 function ukloniTipPregleda(klinikaId, tipPregledaId) {
     return function(){
 

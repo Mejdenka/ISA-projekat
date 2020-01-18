@@ -6,6 +6,7 @@ import JV20.isapsw.dto.SalaDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
+import JV20.isapsw.service.TipPregledaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,10 @@ import java.util.List;
 public class KlinikaController {
     @Autowired
     private KlinikaService klinikaService;
+
+    @Autowired
+    private TipPregledaService tipPregledaService;
+
 
     @RequestMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
@@ -98,13 +103,27 @@ public class KlinikaController {
     }
 
 
+    @RequestMapping(method = RequestMethod.POST, value = "/izmeniTipPregleda")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<TipPregleda> izmeniTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
+        //if bool zauzeto == true onda ne ubacujes u listu
+        TipPregleda tp = this.tipPregledaService.findOne(tipPregleda.getId());
+        Klinika klinika = tp.getKlinika();
+
+        tp.setNaziv(tipPregleda.getNaziv());
+        tp.setCena(tipPregleda.getCena());
+
+        tipPregledaService.save(tp);
+        klinikaService.save(klinika);
+
+        return klinika.getTipoviPregleda();
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteTipPregleda/{klinikaId}/{tipPregledaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public List<TipPregleda> deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
         //if bool zauzeto == true onda ne ubacujes u listu
         Klinika klinika = this.klinikaService.findOne(klinikaId);
-        TipPregleda zaObrisati = null;
-        System.out.println("allallalaaa uslo");
 
         for(TipPregleda tp : klinika.getTipoviPregleda()){
             //ako ne postoji rezervisan pregled po tim tipom obrisi

@@ -14,8 +14,8 @@ public class TipPregleda {
 
     private String naziv;
     private Double cena;
-
     private boolean obrisan;
+    private Long idKlinike;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
@@ -66,5 +66,13 @@ public class TipPregleda {
 
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
+    }
+
+    public Long getIdKlinike() {
+        return idKlinike;
+    }
+
+    public void setIdKlinike(Long idKlinike) {
+        this.idKlinike = idKlinike;
     }
 }

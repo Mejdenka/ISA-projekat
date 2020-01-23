@@ -102,6 +102,26 @@ public class KlinikaController {
         return retVal;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/dodajTipPregleda")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodajTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
+        TipPregleda tp = this.tipPregledaService.findOneByNaziv(tipPregleda.getNaziv());
+        if(tp != null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Klinika klinika = this.klinikaService.findOne(tipPregleda.getIdKlinike());
+
+        tp = new TipPregleda();
+        tp.setNaziv(tipPregleda.getNaziv());
+        tp.setCena(tipPregleda.getCena());
+        tp.setIdKlinike(tipPregleda.getIdKlinike());
+        tp.setKlinika(klinika);
+        tipPregledaService.save(tp);
+        klinikaService.save(klinika);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmeniTipPregleda")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")

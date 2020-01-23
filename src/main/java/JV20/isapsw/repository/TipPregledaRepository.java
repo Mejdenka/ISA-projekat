@@ -11,6 +11,7 @@ public interface TipPregledaRepository extends JpaRepository<TipPregleda, Long> 
     //osnovne metode za repo
     Optional<TipPregleda> findById(Long id);
     List<TipPregleda> findAll();
+    TipPregleda findByNaziv(String naziv);
     void deleteById(Long id);
     TipPregleda save(TipPregleda tipPregleda);
 }

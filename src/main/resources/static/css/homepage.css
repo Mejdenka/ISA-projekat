@@ -310,6 +310,16 @@ h6 {
     width: 40%; /* Could be more or less, depending on screen size */
     font-size: 20px;
 }
+
+.modal-content-tp {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    font-size: 20px;
+}
+
 ul {
     list-style-type: none;
 }

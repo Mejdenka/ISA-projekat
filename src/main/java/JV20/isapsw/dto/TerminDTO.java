@@ -9,7 +9,6 @@ public class TerminDTO {
     private Long id;
     private String pocetak;
     private String kraj;
-    private Long salaId;
 
     public TerminDTO() {}
 
@@ -20,7 +19,6 @@ public class TerminDTO {
         String strKraj= formatter.format(termin.getKraj());
         this.pocetak = strPocetak;
         this.kraj = strKraj;
-        this.salaId = termin.getSala().getId();
     }
 
     public TerminDTO(Long id, Date pocetak, Date kraj) {
@@ -57,11 +55,4 @@ public class TerminDTO {
         this.kraj = kraj;
     }
 
-    public Long getSalaId() {
-        return salaId;
-    }
-
-    public void setSalaId(Long salaId) {
-        this.salaId = salaId;
-    }
 }

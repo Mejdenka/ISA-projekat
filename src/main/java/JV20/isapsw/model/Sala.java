@@ -20,13 +20,11 @@ public class Sala {
     private Long idKlinike;
 
     @OneToMany
-    private Set<Pregled> pregledi;
-    @OneToMany
     private Set<Operacija> operacije;
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private Set<Termin> termini;
+    private Set<Pregled> pregledi;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
@@ -88,14 +86,6 @@ public class Sala {
 
     public void setOperacije(Set<Operacija> operacije) {
         this.operacije = operacije;
-    }
-
-    public Set<Termin> getTermini() {
-        return termini;
-    }
-
-    public void setTermini(Set<Termin> termini) {
-        this.termini = termini;
     }
 
     public Klinika getKlinika() {

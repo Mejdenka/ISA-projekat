@@ -6,6 +6,7 @@ import JV20.isapsw.dto.SalaDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
+import JV20.isapsw.service.TerminService;
 import JV20.isapsw.service.TipPregledaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,6 +31,8 @@ public class KlinikaController {
     @Autowired
     private TipPregledaService tipPregledaService;
 
+    @Autowired
+    private TerminService terminService;
 
     @RequestMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
@@ -61,6 +67,35 @@ public class KlinikaController {
         return retVal;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{nazivKlinike}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<TerminDTO> getSlobodniTermini(@PathVariable String nazivKlinike) throws AccessDeniedException {
+        List<Termin> termini = klinikaService.findByNaziv(nazivKlinike).getSlobodniTermini();
+        List<TerminDTO> retVal = new ArrayList<>();
+        for(Termin t : termini){
+            if(!t.isRezervisan() && !t.isObrisan()){
+                retVal.add(new TerminDTO(t));
+            }
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/deleteTermin/{idKlinike}/{idTermina}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<Termin> deleteTermin(@PathVariable Long idKlinike, @PathVariable Long idTermina) throws AccessDeniedException {
+        Klinika klinika = klinikaService.findOne(idKlinike);
+        List<Termin> termini = klinika.getSlobodniTermini();
+
+        for(Termin t: termini){
+            if(t.getId().equals(idTermina)){
+                t.setObrisan(true);
+            }
+        }
+
+        klinikaService.save(klinika);
+
+        return klinikaService.findOne(idKlinike).getSlobodniTermini();
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -119,6 +154,29 @@ public class KlinikaController {
         tp.setKlinika(klinika);
         tipPregledaService.save(tp);
         klinikaService.save(klinika);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "{idKlinike}/dodajSlobodanTermin")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodajSlobodanTermin(@PathVariable Long idKlinike, @RequestBody TerminDTO termin) throws AccessDeniedException, ParseException {
+
+        Klinika klinika = this.klinikaService.findOne(idKlinike);
+        Termin t = new Termin();
+
+        SimpleDateFormat formatter;
+        formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date pocetak = formatter.parse(termin.getPocetak());
+        Date kraj = formatter.parse(termin.getKraj());
+
+        t.setPocetak(pocetak);
+        t.setKraj(kraj);
+        t.setRezervisan(false);
+        t.setKlinika(klinika);
+        klinika.getSlobodniTermini().add(t);
+
+        this.klinikaService.save(klinika);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

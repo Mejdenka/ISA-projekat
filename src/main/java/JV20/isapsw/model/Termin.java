@@ -15,9 +15,12 @@ public class Termin {
     private Date pocetak;
     private Date kraj;
 
+    private boolean rezervisan;
+    private boolean obrisan = false;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
-    private Sala sala;
+    private Klinika klinika;
 
     public Termin() {}
 
@@ -50,11 +53,27 @@ public class Termin {
         this.kraj = kraj;
     }
 
-    public Sala getSala() {
-        return sala;
+    public boolean isRezervisan() {
+        return rezervisan;
     }
 
-    public void setSala(Sala sala) {
-        this.sala = sala;
+    public void setRezervisan(boolean rezervisan) {
+        this.rezervisan = rezervisan;
+    }
+
+    public Klinika getKlinika() {
+        return klinika;
+    }
+
+    public void setKlinika(Klinika klinika) {
+        this.klinika = klinika;
+    }
+
+    public boolean isObrisan() {
+        return obrisan;
+    }
+
+    public void setObrisan(boolean obrisan) {
+        this.obrisan = obrisan;
     }
 }

@@ -11,7 +11,6 @@ public class SalaDTO {
     private Long id;
     private Set<PregledDTO> pregledi;
     private Set<OperacijaDTO> operacije;
-    private Set<TerminDTO> termini;
 
     public SalaDTO() {}
 
@@ -28,17 +27,12 @@ public class SalaDTO {
             operacije.add(oDTO);
         }
 
-        for (Termin termin: sala.getTermini()) {
-            TerminDTO tDTO = new TerminDTO(termin);
-            termini.add(tDTO);
-        }
     }
 
-    public SalaDTO(Long id, Set<PregledDTO> pregledi, Set<OperacijaDTO> operacije, Set<TerminDTO> termini){
+    public SalaDTO(Long id, Set<PregledDTO> pregledi, Set<OperacijaDTO> operacije){
         this.id = id;
         this.pregledi = pregledi;
         this.operacije = operacije;
-        this.termini = termini;
     }
 
     public Long getId() {
@@ -65,11 +59,5 @@ public class SalaDTO {
         this.operacije = operacije;
     }
 
-    public Set<TerminDTO> getTermini() {
-        return termini;
-    }
 
-    public void setTermini(Set<TerminDTO> termini) {
-        this.termini = termini;
-    }
 }

@@ -33,8 +33,9 @@ public class SalaController {
         //konverzija termina sale u terminDTO-ove kako bi datum bio u zadovoljavajucem obliku
         Sala sala = this.salaService.findOne(salaId);
         List<TerminDTO> terminDTOS = new ArrayList<>();
-        for(Termin t : sala.getTermini()){
-            terminDTOS.add(new TerminDTO(t));
+        for(Pregled p : sala.getPregledi()){
+            if(!p.getTermin().isObrisan())
+                terminDTOS.add(new TerminDTO(p.getTermin()));
         }
         return terminDTOS;
     }

@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,15 @@ public class Pregled {
     private Pacijent pacijent;
     @OneToOne
     private Lekar lekar;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Sala sala;
+
+    @OneToOne
+    private TipPregleda tipPregleda;
+
+    private int trajanje;
 
     public Pregled() {}
 
@@ -47,5 +58,29 @@ public class Pregled {
 
     public void setLekar(Lekar lekar) {
         this.lekar = lekar;
+    }
+
+    public int getTrajanje() {
+        return trajanje;
+    }
+
+    public void setTrajanje(int trajanje) {
+        this.trajanje = trajanje;
+    }
+
+    public TipPregleda getTipPregleda() {
+        return tipPregleda;
+    }
+
+    public void setTipPregleda(TipPregleda tipPregleda) {
+        this.tipPregleda = tipPregleda;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 }

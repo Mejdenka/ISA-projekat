@@ -32,6 +32,12 @@ public class Klinika {
     @JsonManagedReference
     private List<TipPregleda> tipoviPregleda;
 
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Termin> slobodniTermini;
+
+
     public Klinika() {}
 
     public Long getId() {
@@ -112,5 +118,13 @@ public class Klinika {
 
     public void setTipoviPregleda(List<TipPregleda> tipoviPregleda) {
         this.tipoviPregleda = tipoviPregleda;
+    }
+
+    public List<Termin> getSlobodniTermini() {
+        return slobodniTermini;
+    }
+
+    public void setSlobodniTermini(List<Termin> slobodniTermini) {
+        this.slobodniTermini = slobodniTermini;
     }
 }

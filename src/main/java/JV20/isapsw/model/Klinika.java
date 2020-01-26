@@ -16,9 +16,7 @@ public class Klinika {
     private String naziv;
     private String lokacija;
     private String opis;
-    private int brLekara;
-    private int brSala;
-    private String imgPath;
+    private Double prosecnaOcena;
 
     @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -32,10 +30,13 @@ public class Klinika {
     @JsonManagedReference
     private List<TipPregleda> tipoviPregleda;
 
-
     @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Termin> slobodniTermini;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Pregled> obavljeniPregledi;
 
 
     public Klinika() {}
@@ -64,28 +65,12 @@ public class Klinika {
         this.lokacija = lokacija;
     }
 
-    public int getBrLekara() {
-        return brLekara;
+    public Double getProsecnaOcena() {
+        return prosecnaOcena;
     }
 
-    public void setBrLekara(int brLekara) {
-        this.brLekara = brLekara;
-    }
-
-    public int getBrSala() {
-        return brSala;
-    }
-
-    public void setBrSala(int brSala) {
-        this.brSala = brSala;
-    }
-
-    public String getImgPath() {
-        return imgPath;
-    }
-
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 
     public String getOpis() {
@@ -126,5 +111,13 @@ public class Klinika {
 
     public void setSlobodniTermini(List<Termin> slobodniTermini) {
         this.slobodniTermini = slobodniTermini;
+    }
+
+    public List<Pregled> getObavljeniPregledi() {
+        return obavljeniPregledi;
+    }
+
+    public void setObavljeniPregledi(List<Pregled> obavljeniPregledi) {
+        this.obavljeniPregledi = obavljeniPregledi;
     }
 }

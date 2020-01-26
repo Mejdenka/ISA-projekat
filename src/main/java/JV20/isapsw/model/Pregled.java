@@ -21,6 +21,10 @@ public class Pregled {
     @JsonBackReference
     private Sala sala;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Klinika klinika;
+
     @OneToOne
     private TipPregleda tipPregleda;
 
@@ -82,5 +86,13 @@ public class Pregled {
 
     public void setSala(Sala sala) {
         this.sala = sala;
+    }
+
+    public Klinika getKlinika() {
+        return klinika;
+    }
+
+    public void setKlinika(Klinika klinika) {
+        this.klinika = klinika;
     }
 }

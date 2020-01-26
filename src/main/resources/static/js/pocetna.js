@@ -822,14 +822,38 @@ function generisiKlinikuAdmina() {
                     treciRed.appendChild(btnSale);
                     content.appendChild(treciRed);
 
-                    var btnTermini = document.createElement('btn');
+                    /*var btnTermini = document.createElement('btn');
                     btnTermini.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     btnTermini.innerHTML = "Slobodni termini";
                     btnTermini.id = "slobodniTerminiBtn";
                     //btnTermini.onclick = generisiSlobodneTermine(klinika);
                     content.appendChild(document.createElement("br"));
                     content.appendChild(document.createElement("br"));
-                    content.appendChild(btnTermini);
+                    content.appendChild(btnTermini);*/
+
+                    //****************************************************
+                    var cetvrtiRed = document.createElement("var");
+                    cetvrtiRed.classList.add("row", "wrapper--w680");
+                    var btnTermini = document.createElement('btn');
+                    btnTermini.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    btnTermini.innerHTML = "Slobodni termini";
+                    btnTermini.id = "slobodniTerminiBtn";
+                    btnTermini.style.width = "250px"
+                    btnTermini.style.marginLeft = "27px"
+                    btnTermini.style.marginTop = "10px"
+
+                    var btnIzvestaj = document.createElement('btn');
+                    btnIzvestaj.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    btnIzvestaj.innerHTML = "Izvestaj";
+                    btnIzvestaj.id = "izvestajBtn";
+                    btnIzvestaj.style.marginTop = "10px"
+                    btnIzvestaj.style.marginLeft = "57px"
+                    btnIzvestaj.style.width = "250px"
+                    btnIzvestaj.onclick = prikaziIzvestajPoslovanja(klinika);
+                    cetvrtiRed.appendChild(btnTermini);
+                    cetvrtiRed.appendChild(btnIzvestaj);
+                    content.appendChild(cetvrtiRed);
+                    //******************************************
 
                     var btnIzmene = document.createElement('btn');
                     btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
@@ -871,6 +895,145 @@ function generisiKlinikuAdmina() {
         });
 
 
+    }
+}
+
+function prikaziIzvestajPoslovanja(klinika) {
+    return function () {
+        $("#content").fadeOut(100, function(){
+            var content = document.getElementById("content");
+            content.innerHTML = "";
+
+            var prviRed = document.createElement("var");
+            prviRed.classList.add("row", "wrapper--w680");
+
+            var varNaziv = document.createElement("var");
+            varNaziv.classList.add("col-2", "input-group");
+            var naziv = document.createTextNode("Naziv klinike: " + klinika.naziv);
+            varNaziv.appendChild(naziv);
+            varNaziv.appendChild(document.createElement("br"));
+            prviRed.appendChild(varNaziv)
+
+            var varOcena = document.createElement("var");
+            varOcena.classList.add("col-2", "input-group");
+            var ocena = document.createTextNode("Prosecna ocena klinike: " + klinika.prosecnaOcena);
+            varOcena.appendChild(ocena);
+            varOcena.appendChild(document.createElement("br"));
+            prviRed.appendChild(varOcena);
+
+            var drugiRed = document.createElement("var");
+            drugiRed.classList.add("row", "wrapper--w680");
+
+            var table = document.createElement('table');
+            table.classList.add("tabela");
+            var tableRef = document.createElement('tbody');
+
+            var nasloviRed = tableRef.insertRow();
+            var lekarNaslov = nasloviRed.insertCell(0);
+            var lekarNaslovText = document.createTextNode("Ime i prezime lekara");
+            lekarNaslov.appendChild(lekarNaslovText);
+
+            var ocenaNaslov = nasloviRed.insertCell(1);
+            var ocenaNaslovText = document.createTextNode("Prosecna ocena lekara");
+            ocenaNaslov.appendChild(ocenaNaslovText);
+
+            for (let lekar of klinika.lekari) {
+                var lekarRed = tableRef.insertRow();
+                var naziv = lekarRed.insertCell(0);
+                var nazivText = document.createTextNode(lekar.ime + " " + lekar.prezime);
+                naziv.appendChild(nazivText);
+
+                var ocenaLekara = lekarRed.insertCell(1);
+                var ocenaLekaraText = document.createTextNode(lekar.ocena);
+                ocenaLekara.appendChild(ocenaLekaraText);
+            }
+            table.appendChild(tableRef);
+            drugiRed.appendChild(table);
+
+            var treciRed = document.createElement("var");
+            treciRed.classList.add("row", "wrapper--w680");
+
+            var varPocDatum = document.createElement("var");
+            varPocDatum.classList.add("col-2", "input-group");
+            var datumTxt = document.createTextNode("Pocetni datum prihoda klinike");
+            varPocDatum.style.marginTop = "20px";
+            varPocDatum.appendChild(datumTxt);
+            varPocDatum.appendChild(document.createElement("br"));
+            var datumPocetak = document.createElement('input');
+            datumPocetak.type = 'date';
+            datumPocetak.id = "datumPocetakPrihoda";
+            datumPocetak.classList.add("input--style-4");
+            datumPocetak.style.height = "40px";
+            datumPocetak.style.width = "250px"
+            datumPocetak.onchange = prihodiKlinike(klinika);
+            varPocDatum.appendChild(datumPocetak);
+            treciRed.appendChild(varPocDatum);
+
+            var varKrajDatum = document.createElement("var");
+            varKrajDatum.classList.add("col-2", "input-group");
+            var datumTxt = document.createTextNode("Krajnji datum prihoda klinike");
+            varKrajDatum.style.marginTop = "20px";
+            varKrajDatum.appendChild(datumTxt);
+            varKrajDatum.appendChild(document.createElement("br"));
+            var datumKraj = document.createElement('input');
+            datumKraj.type = 'date';
+            datumKraj.id = "datumKrajPrihoda";
+            datumKraj.classList.add("input--style-4");
+            datumKraj.style.height = "40px";
+            datumKraj.style.width = "250px"
+            datumKraj.onchange = prihodiKlinike(klinika);
+            varKrajDatum.appendChild(datumKraj);
+            treciRed.appendChild(varKrajDatum);
+
+            var varPrihodi = document.createElement("var");
+            varPrihodi.classList.add("col-2", "input-group");
+            var prihodi = document.createElement('input');
+            prihodi.type = 'number';
+            prihodi.disabled = true;
+            prihodi.id = "prihodi";
+            prihodi.classList.add("input--style-4");
+            prihodi.style.height = "40px";
+            prihodi.style.width = "250px"
+            varPrihodi.appendChild(prihodi);
+
+            var odrzaniPreglediBtn = document.createElement("BUTTON");
+            odrzaniPreglediBtn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
+            odrzaniPreglediBtn.innerHTML = "Održani pregledi";
+            odrzaniPreglediBtn.style.marginTop = "20px"
+            odrzaniPreglediBtn.id = "odrzaniPreglediBtn";
+            //odrzaniPreglediBtn.onclick = prikazOdrzanihPregleda(klinika);
+
+            content.appendChild(prviRed);
+            content.appendChild(drugiRed);
+            content.appendChild(treciRed);
+            content.appendChild(varPrihodi);
+            content.appendChild(odrzaniPreglediBtn);
+
+        });
+
+        $("#content").fadeIn(500);
+    }
+}
+
+function prihodiKlinike(klinika) {
+    return function(){
+        var poc = $("#datumPocetakPrihoda").val();
+        var kr = $("#datumKrajPrihoda").val();
+        if( poc == "" || kr == ""){
+            return;
+        } else if(kr < poc){
+            alert("Krajnji datum mora biti veći od početnog.")
+            return;
+        }
+
+        var prihodi = 0;
+        for( let pregled of klinika.obavljeniPregledi){
+            if(pregled.termin.pocetak > poc && pregled.termin.kraj < kr){
+                prihodi = prihodi + pregled.tipPregleda.cena;
+            }
+        }
+        var polje = $("#prihodi");
+        polje.val(prihodi);
     }
 }
 

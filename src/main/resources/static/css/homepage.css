@@ -103,6 +103,7 @@ table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    text-align: center;
 }
 
 .tabela td, #customers th {
@@ -117,7 +118,6 @@ table {
 .tabela th {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: left;
     background-color: #6e9cff;
     color: white;
 }
@@ -257,6 +257,10 @@ h6 {
    ========================================================================== */
 .wrapper {
     margin: 20px;
+    margin: 20px;
+    text-align: center;
+    content-align: center;
+    position: relative;
 }
 
 .wrapper--w960 {
@@ -303,10 +307,30 @@ h6 {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
+    width: 40%; /* Could be more or less, depending on screen size */
     font-size: 20px;
 }
 
+.modal-content-tp {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    font-size: 20px;
+}
+.modal-content-termin {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    font-size: 15px;
+}
+
+ul {
+    list-style-type: none;
+}
 /* The Close Button */
 .close {
     color: #aaa;

@@ -1,32 +1,31 @@
 package JV20.isapsw.model;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-public class Termin {
+public class TipPregleda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date pocetak;
-    private Date kraj;
-
-    private boolean rezervisan;
-    private boolean obrisan = false;
+    private String naziv;
+    private Double cena;
+    private boolean obrisan;
+    private Long idKlinike;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Klinika klinika;
 
-    public Termin() {}
+    public TipPregleda() {}
 
-    public Termin(Date pocetak, Date kraj) {
-        this.pocetak = pocetak;
-        this.kraj = kraj;
+    public TipPregleda(String naziv, Double cena) {
+        this.naziv = naziv;
+        this.cena = cena;
     }
 
     public Long getId() {
@@ -37,28 +36,20 @@ public class Termin {
         this.id = id;
     }
 
-    public Date getPocetak() {
-        return pocetak;
+    public String getNaziv() {
+        return naziv;
     }
 
-    public void setPocetak(Date pocetak) {
-        this.pocetak = pocetak;
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
     }
 
-    public Date getKraj() {
-        return kraj;
+    public Double getCena() {
+        return cena;
     }
 
-    public void setKraj(Date kraj) {
-        this.kraj = kraj;
-    }
-
-    public boolean isRezervisan() {
-        return rezervisan;
-    }
-
-    public void setRezervisan(boolean rezervisan) {
-        this.rezervisan = rezervisan;
+    public void setCena(Double cena) {
+        this.cena = cena;
     }
 
     public Klinika getKlinika() {
@@ -75,5 +66,13 @@ public class Termin {
 
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
+    }
+
+    public Long getIdKlinike() {
+        return idKlinike;
+    }
+
+    public void setIdKlinike(Long idKlinike) {
+        this.idKlinike = idKlinike;
     }
 }

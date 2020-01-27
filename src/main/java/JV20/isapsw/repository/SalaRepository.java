@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface SalaRepository extends JpaRepository<Sala, Long> {
     //osnovne metode za repo
     Optional<Sala> findById(Long id);
+    Sala findByNaziv(String naziv);
     //Page<Sala> findAll(Pageable pageable);
     List<Sala> findAll();
     void deleteById(Long id);

@@ -13,7 +13,7 @@ public class OperacijaDTO {
     public OperacijaDTO(Operacija operacija){
         this(operacija.getId(),
                 new PacijentDTO(operacija.getPacijent().getId(),operacija.getPacijent().getKorisnickoIme(), operacija.getPacijent().getIme(), operacija.getPacijent().getPrezime(), operacija.getPacijent().getEmail(), operacija.getPacijent().getLozinka(), operacija.getPacijent().getDatumRodjenja().toString()),
-                new LekarDTO(operacija.getLekar().getId(), operacija.getLekar().getIme(), operacija.getLekar().getPrezime(), operacija.getLekar().getDatumRodjenja(), operacija.getLekar().getOcena()),
+                new LekarDTO(operacija.getLekar().getId(), operacija.getLekar().getKorisnickoIme(), operacija.getLekar().getIme(), operacija.getLekar().getPrezime(), operacija.getLekar().getDatumRodjenja(), operacija.getLekar().getEmail() ,operacija.getLekar().getOcena(), operacija.getLekar().isSlobodan()),
                 new TerminDTO(operacija.getTermin().getId(), operacija.getTermin().getPocetak(), operacija.getTermin().getKraj()));
     }
 

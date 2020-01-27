@@ -20,6 +20,10 @@ public class SalaService {
         return salaRepository.findById(id).orElseGet(null);
     }
 
+    public Sala findOneByNaziv(String naziv) {
+        return salaRepository.findByNaziv(naziv);
+    }
+
     public List<Sala> findAll() {
         return salaRepository.findAll();
     }

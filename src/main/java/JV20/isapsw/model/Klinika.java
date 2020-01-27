@@ -1,10 +1,11 @@
 package JV20.isapsw.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Klinika {
@@ -14,9 +15,29 @@ public class Klinika {
 
     private String naziv;
     private String lokacija;
-    private int brLekara;
-    private int brSala;
-    private String imgPath;
+    private String opis;
+    private Double prosecnaOcena;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Lekar> lekari;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Sala> sale;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<TipPregleda> tipoviPregleda;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Termin> slobodniTermini;
+
+    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Pregled> obavljeniPregledi;
+
 
     public Klinika() {}
 
@@ -44,27 +65,59 @@ public class Klinika {
         this.lokacija = lokacija;
     }
 
-    public int getBrLekara() {
-        return brLekara;
+    public Double getProsecnaOcena() {
+        return prosecnaOcena;
     }
 
-    public void setBrLekara(int brLekara) {
-        this.brLekara = brLekara;
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 
-    public int getBrSala() {
-        return brSala;
+    public String getOpis() {
+        return opis;
     }
 
-    public void setBrSala(int brSala) {
-        this.brSala = brSala;
+    public void setOpis(String opis) {
+        this.opis = opis;
     }
 
-    public String getImgPath() {
-        return imgPath;
+    public List<Lekar> getLekari() {
+        return lekari;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setLekari(List<Lekar> lekari) {
+        this.lekari = lekari;
+    }
+
+    public List<Sala> getSale() {
+        return sale;
+    }
+
+    public void setSale(List<Sala> sale) {
+        this.sale = sale;
+    }
+
+    public List<TipPregleda> getTipoviPregleda() {
+        return tipoviPregleda;
+    }
+
+    public void setTipoviPregleda(List<TipPregleda> tipoviPregleda) {
+        this.tipoviPregleda = tipoviPregleda;
+    }
+
+    public List<Termin> getSlobodniTermini() {
+        return slobodniTermini;
+    }
+
+    public void setSlobodniTermini(List<Termin> slobodniTermini) {
+        this.slobodniTermini = slobodniTermini;
+    }
+
+    public List<Pregled> getObavljeniPregledi() {
+        return obavljeniPregledi;
+    }
+
+    public void setObavljeniPregledi(List<Pregled> obavljeniPregledi) {
+        this.obavljeniPregledi = obavljeniPregledi;
     }
 }

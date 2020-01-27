@@ -1,10 +1,12 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.AdministratorKlinickogCentraDTO;
 import JV20.isapsw.dto.KorisnikDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.security.auth.JwtAuthenticationRequest;
 import JV20.isapsw.security.TokenUtils;
+import JV20.isapsw.service.CustomUserDetailsService;
 import JV20.isapsw.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,9 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -49,17 +49,21 @@ public class KorisnikController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+
     //Metoda za login
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException, IOException {
 
         Korisnik korisnik = korisnikService.findOneByUsername(authenticationRequest.getUsername());
-        if(korisnik == null){
+
+        if(korisnik == null || !korisnik.isConfirmed()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
-
         final Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                         authenticationRequest.getPassword()));
@@ -76,16 +80,23 @@ public class KorisnikController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/korisnik/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public Korisnik loadById(@PathVariable Long userId) throws AccessDeniedException {
         return this.korisnikService.findOne(userId);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getKlinikaAdmina/{userId}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Klinika getKlinika(@PathVariable Long userId) throws AccessDeniedException {
+        AdministratorKlinike ak = (AdministratorKlinike) korisnikService.findOne(userId);
+        return ak.getKlinika();
+    }
+
     @RequestMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public Korisnik user() {
+        Korisnik k = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         return this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
@@ -106,5 +117,18 @@ public class KorisnikController {
         }
 
         return null;
+    }
+
+
+    @RequestMapping(value = "/changePass", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
+        userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    static class PasswordChanger {
+        public String oldPassword;
+        public String newPassword;
     }
 }

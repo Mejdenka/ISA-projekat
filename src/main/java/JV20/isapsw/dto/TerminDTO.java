@@ -2,23 +2,33 @@ package JV20.isapsw.dto;
 
 import JV20.isapsw.model.Termin;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TerminDTO {
     private Long id;
-    private Date pocetak;
-    private Date kraj;
+    private String pocetak;
+    private String kraj;
 
     public TerminDTO() {}
 
     public TerminDTO(Termin termin){
-        this(termin.getId(), termin.getPocetak(), termin.getKraj());
+        this.id = termin.getId();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        String strPocetak= formatter.format(termin.getPocetak());
+        String strKraj= formatter.format(termin.getKraj());
+        this.pocetak = strPocetak;
+        this.kraj = strKraj;
     }
 
     public TerminDTO(Long id, Date pocetak, Date kraj) {
         this.id = id;
-        this.pocetak = pocetak;
-        this.kraj = kraj;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        String strPocetak= formatter.format(pocetak);
+        String strKraj= formatter.format(kraj);
+        this.pocetak = strPocetak;
+        this.kraj = strKraj;
+        System.out.println(strPocetak);
     }
 
     public Long getId() {
@@ -29,19 +39,20 @@ public class TerminDTO {
         this.id = id;
     }
 
-    public Date getPocetak() {
+    public String getPocetak() {
         return pocetak;
     }
 
-    public void setPocetak(Date pocetak) {
+    public void setPocetak(String pocetak) {
         this.pocetak = pocetak;
     }
 
-    public Date getKraj() {
+    public String getKraj() {
         return kraj;
     }
 
-    public void setKraj(Date kraj) {
+    public void setKraj(String kraj) {
         this.kraj = kraj;
     }
+
 }

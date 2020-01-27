@@ -210,7 +210,7 @@ function generisiFormuZaNovuSalu(klinika) {
                 }
 
                 var idKlinike = klinika.id;
-
+                console.log(localStorage.getItem('jwt'))
                 $.post({
                     url: 'api/sale/dodajSalu',
                     data: JSON.stringify({naziv, idKlinike}),
@@ -1042,7 +1042,6 @@ function generisiKlinike() {
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
         $.get({
-
             url:'api/klinike/getAll',
             contentType: 'application/json',
             headers: {

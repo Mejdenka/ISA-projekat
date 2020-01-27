@@ -1,6 +1,7 @@
 package JV20.isapsw.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -18,7 +19,8 @@ public class Pregled {
     private Lekar lekar;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     private Sala sala;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -54,7 +54,7 @@ public class LekarController {
         zaIzmenu.setEmail(lekar.getEmail());
         zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
         zaIzmenu.setOcena(lekar.getOcena());
-
+        zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
         lekarService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -69,6 +69,7 @@ public class LekarController {
 
         Lekar lekar = this.lekarService.save(userRequest);
         lekar.setKlinika(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setRadnoVreme(userRequest.getRadnoVreme());
         lekar = this.lekarService.save(lekar);
 
         HttpHeaders headers = new HttpHeaders();

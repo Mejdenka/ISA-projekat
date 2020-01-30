@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class KorisnikService{
         Date date = df.parse(userRequest.getDatumRodjenja());
         u.setDatumRodjenja(date);
         u.setDatumRegistrovanja(timeProvider.now());
+        Timestamp ts=new Timestamp(timeProvider.now().getTime());
+        u.setLastPasswordResetDate(ts);
         u.setEnabled(true);
         u.setConfirmed(false);
 

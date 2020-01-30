@@ -335,6 +335,36 @@ function generisiFormuZaNovogLekara(klinika) {
             content.appendChild(document.createElement("br"));
             content.appendChild(document.createElement("br"));
 
+            var cetvrtiRed = document.createElement("var");
+            cetvrtiRed.classList.add("row", "wrapper--w680");
+            var varPocetak = document.createElement("var");
+            varPocetak.classList.add("col-2", "input-group");
+            var pocetak = document.createTextNode("Početak radnog vremena");
+            varPocetak.appendChild(pocetak);
+            varPocetak.appendChild(document.createElement("br"));
+            var cifraPocetak = document.createElement('input');
+            cifraPocetak.type = 'time';
+            cifraPocetak.id = "pocRadnogVremena";
+            cifraPocetak.classList.add("input--style-4");
+            cifraPocetak.style.height = "40px"
+            cifraPocetak.style.width = "250px"
+            varPocetak.appendChild(cifraPocetak);
+            cetvrtiRed.appendChild(varPocetak);
+            var varKraj = document.createElement("var");
+            varKraj.classList.add("col-2", "input-group");
+            var lozinka2 = document.createTextNode("Ponovite lozinku");
+            varKraj.appendChild(lozinka2);
+            varKraj.appendChild(document.createElement("br"));
+            var cifraKraj = document.createElement('input');
+            cifraKraj.type = 'time';
+            cifraKraj.id = "krRadnogVremena";
+            cifraKraj.classList.add("input--style-4");
+            cifraKraj.style.height = "40px"
+            cifraKraj.style.width = "250px"
+            varKraj.appendChild(cifraKraj);
+            cetvrtiRed.appendChild(varKraj);
+            content.appendChild(cetvrtiRed);
+
             var btnAdd = document.createElement("BUTTON");
             btnAdd.classList.add("btn2", "btn--light-blue");
             btnAdd.innerHTML = "Dodaj";
@@ -346,40 +376,42 @@ function generisiFormuZaNovogLekara(klinika) {
                 var prezime=$('#prezime').val();
                 var email=$('#email').val();
                 var idKlinike = klinika.id;
+                var radnoVreme = $('#pocRadnogVremena').val() + " " +  $('#krRadnogVremena').val();
+
                 if(korisnickoIme === "" || lozinka === "" || lozinka_potvrda === "" || ime === "" || prezime === "" || email === ""){
-                    alert("Nijedno polje ne sme ostati prazno.")
-                    return
+                    alert("Nijedno polje ne sme ostati prazno.");
+                    return;
                 }
 
                 if( lozinka!=lozinka_potvrda){
-                    alert("Lozinke se ne poklapaju!")
-                    return
+                    alert("Lozinke se ne poklapaju!");
+                    return;
                 }
 
                 if(lozinka.length < 5){
-                    alert("Lozinka mora imati više od pet karaktera!")
-                    return
+                    alert("Lozinka mora imati više od pet karaktera!");
+                    return;
                 }
 
                 if(ime.length < 3){
-                    alert("Ime mora imati bar tri karaktera!")
-                    return
+                    alert("Ime mora imati bar tri karaktera!");
+                    return;
                 }
 
                 if(korisnickoIme.length < 5){
-                    alert("Korisnicko ime mora imati bar pet karaktera!")
-                    return
+                    alert("Korisnicko ime mora imati bar pet karaktera!");
+                    return;
                 }
 
                 if(prezime.length < 3){
-                    alert("Prezime mora imati bar tri karaktera!")
-                    return
+                    alert("Prezime mora imati bar tri karaktera!");
+                    return;
 
                 }
 
                 $.post({
                     url: 'api/lekari/dodajLekara',
-                    data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, idKlinike}),
+                    data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, idKlinike, radnoVreme}),
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -1514,7 +1546,6 @@ function prikaziLekareKlinike(klinika) {
                 lekariDiv.innerHTML = "";
                 for(let lekar of lekari)
                 {
-                    console.log(lekar)
                     var btn = document.createElement("BUTTON");
                     btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
                     btn.innerHTML = lekar.ime + " " + lekar.prezime;
@@ -1635,12 +1666,53 @@ function prikazKorisnika(korisnik) {
                 option.text = array[i];
                 selectOcena.appendChild(option);
             }
-            //console.log(JSON.parse(korisnik))
             if(korisnik.ocena != null){
                 varOcena.appendChild(selectOcena);
                 treciRed.appendChild(varOcena)
             }
             content.appendChild(treciRed);
+
+            /*********************************RADNO VRIJEME***************************************************/
+            if(korisnik.radnoVreme != null){
+
+                var pocRadnoVreme = korisnik.radnoVreme.split("-")[0];
+                var krRadnoVreme = korisnik.radnoVreme.split("-")[1];
+
+                var cetvrtiRed = document.createElement("var");
+                cetvrtiRed.classList.add("row", "wrapper--w680");
+                var varPocetak = document.createElement("var");
+                varPocetak.classList.add("col-2", "input-group");
+                var pocetak = document.createTextNode("Početak radnog vremena");
+                varPocetak.appendChild(pocetak);
+                varPocetak.appendChild(document.createElement("br"));
+                var cifraPocetak = document.createElement('input');
+                cifraPocetak.type = 'time';
+                cifraPocetak.id = "pocRadnogVremena";
+                cifraPocetak.classList.add("input--style-4");
+                cifraPocetak.style.height = "40px"
+                cifraPocetak.style.width = "250px"
+                cifraPocetak.value = pocRadnoVreme;
+                varPocetak.appendChild(cifraPocetak);
+                cetvrtiRed.appendChild(varPocetak);
+                var varKraj = document.createElement("var");
+                varKraj.classList.add("col-2", "input-group");
+                var lozinka2 = document.createTextNode("Ponovite lozinku");
+                varKraj.appendChild(lozinka2);
+                varKraj.appendChild(document.createElement("br"));
+                var cifraKraj = document.createElement('input');
+                cifraKraj.type = 'time';
+                cifraKraj.id = "krRadnogVremena";
+                cifraKraj.classList.add("input--style-4");
+                cifraKraj.style.height = "40px"
+                cifraKraj.style.width = "250px"
+                cifraKraj.value = krRadnoVreme;
+                varKraj.appendChild(cifraKraj);
+                cetvrtiRed.appendChild(varKraj);
+
+                content.appendChild(cetvrtiRed);
+            }
+
+            /*************************************************************************************/
 
             if(korisnik.slobodan != null && korisnik.slobodan){
                 console.log("SLOBODAN")
@@ -1668,6 +1740,10 @@ function prikazKorisnika(korisnik) {
                 let datumRodjenja = $('#datumRodjenja').val();
                 let zvjezdice=$('#selectOcena').val();
                 let ocena = null;
+                let poc = $('#pocRadnogVremena').val();
+                let kr = $('#krRadnogVremena').val();
+                let radnoVreme = poc + "-" + kr;
+                console.log(radnoVreme)
                 switch (zvjezdice) {
                     case "★★★★★":
                         ocena = 5;
@@ -1684,7 +1760,7 @@ function prikazKorisnika(korisnik) {
                     case "★":
                         ocena = 1;
                 }
-                if(korisnickoIme == "" || ime == "" || prezime == "" || email == "" || datumRodjenja == ""){
+                if(korisnickoIme == "" || ime == "" || prezime == "" || email == "" || datumRodjenja == "" || poc == "" || kr == ""){
                     alert("Nijedno polje ne sme ostati prazno.")
                     return;
                 }
@@ -1692,7 +1768,7 @@ function prikazKorisnika(korisnik) {
                 console.log(ocena)
                 $.post({
                     url: 'api/lekari/izmenaLekara',
-                    data: JSON.stringify({id, korisnickoIme, ime, prezime, email, datumRodjenja, ocena}),
+                    data: JSON.stringify({id, korisnickoIme, ime, prezime, email, datumRodjenja, ocena, radnoVreme}),
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

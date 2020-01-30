@@ -13,12 +13,14 @@ public class LekarDTO {
     private Date datumRodjenja;
     private Integer ocena;
     private boolean slobodan;
+    private String radnoVreme;
 
     public LekarDTO(Lekar lekar){
-        this(lekar.getId(), lekar.getKorisnickoIme(), lekar.getIme(), lekar.getPrezime(), lekar.getDatumRodjenja(), lekar.getEmail(), lekar.getOcena(), lekar.isSlobodan());
+        this(lekar.getId(), lekar.getKorisnickoIme(), lekar.getIme(), lekar.getPrezime(), lekar.getDatumRodjenja(),
+                lekar.getEmail(), lekar.getOcena(), lekar.isSlobodan(), lekar.getRadnoVreme());
     }
 
-    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer ocena, boolean slobodan) {
+    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer ocena, boolean slobodan, String radnoVreme) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
@@ -27,6 +29,7 @@ public class LekarDTO {
         this.email = email;
         this.ocena = ocena;
         this.slobodan = slobodan;
+        this.radnoVreme = radnoVreme;
     }
 
     public Long getId() {
@@ -59,5 +62,9 @@ public class LekarDTO {
 
     public boolean isSlobodan() {
         return slobodan;
+    }
+
+    public String getRadnoVreme() {
+        return radnoVreme;
     }
 }

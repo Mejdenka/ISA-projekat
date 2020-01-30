@@ -67,7 +67,10 @@ public class SalaController {
         if(s != null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        sala.setKlinika(this.klinikaService.findOne(sala.getIdKlinike()));
+        sala.setKlinikaSale(this.klinikaService.findOne(sala.getIdKlinike()));
+        sala.setObrisana(false);
+        sala.setSlobodna(true);
+        sala.setRezervisana(false);
         s = this.salaService.save(sala);
          return new ResponseEntity<User>( HttpStatus.CREATED);
     }

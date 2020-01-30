@@ -19,11 +19,11 @@ public class Klinika {
     private String opis;
     private Double prosecnaOcena;
 
-    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "klinikaLekara", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Lekar> lekari;
 
-    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "klinikaSale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Sala> sale;
 
@@ -31,13 +31,22 @@ public class Klinika {
     @JsonIgnore
     private List<TipPregleda> tipoviPregleda;
 
-    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "klinikaTermina", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Termin> slobodniTermini;
 
-    @OneToMany(mappedBy = "klinika", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "klinikaPregleda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Pregled> obavljeniPregledi;
+
+    @OneToMany(mappedBy = "klinikaPacijenta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Pacijent> pacijenti;
+
+    @OneToMany(mappedBy = "klinikaMedSestre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<MedicinskaSestra> medicinskeSestre;
+
 
     public Klinika() {}
 
@@ -119,5 +128,21 @@ public class Klinika {
 
     public void setObavljeniPregledi(List<Pregled> obavljeniPregledi) {
         this.obavljeniPregledi = obavljeniPregledi;
+    }
+
+    public List<Pacijent> getPacijenti() {
+        return pacijenti;
+    }
+
+    public void setPacijenti(List<Pacijent> pacijenti) {
+        this.pacijenti = pacijenti;
+    }
+
+    public List<MedicinskaSestra> getMedicinskeSestre() {
+        return medicinskeSestre;
+    }
+
+    public void setMedicinskeSestre(List<MedicinskaSestra> medicinskeSestre) {
+        this.medicinskeSestre = medicinskeSestre;
     }
 }

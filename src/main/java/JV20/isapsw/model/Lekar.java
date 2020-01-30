@@ -25,7 +25,7 @@ public class Lekar extends Korisnik {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Klinika klinika;
+    private Klinika klinikaLekara;
 
     public Lekar() {}
 
@@ -85,12 +85,12 @@ public class Lekar extends Korisnik {
         this.pregledi = pregledi;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Klinika getKlinikaLekara() {
+        return klinikaLekara;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setKlinikaLekara(Klinika klinikaLekara) {
+        this.klinikaLekara = klinikaLekara;
     }
 
     public String getRadnoVreme() {

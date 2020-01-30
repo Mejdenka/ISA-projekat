@@ -13,6 +13,13 @@ $(document).ready(function(){
             ulogovan = user;
             localStorage.setItem('ulogovan', JSON.stringify(ulogovan));
             console.log("IZ LOCAL STORAGE: " + localStorage.getItem('ulogovan'));
+
+            var dobrodoslica = document.createTextNode("Dobro došli " + ulogovan.ime + "!");
+            var span = document.createElement('span');
+            span.style.fontSize = "20px";
+            span.appendChild(dobrodoslica);
+            document.getElementById("content").appendChild(span);
+
             $.ajax
             ({
                 type: "GET",
@@ -31,6 +38,12 @@ $(document).ready(function(){
                             break;
                         case "ROLE_ADMIN_KLINIKE":
                             pocetnaAdminKlinike(ulogovan);
+                            break;
+                        case "ROLE_MEDICINSKA_SESTRA":
+                            pocetnaMedicinskaSestra(ulogovan)
+                            break;
+                        case "ROLE_DOKTOR":
+                            pocetnaLekar(ulogovan)
                             break;
                         default:
                             console.log("Jos nismo napravili pocetne za ostale korisnike :)")
@@ -54,11 +67,7 @@ $(document).ready(function(){
                     div.appendChild(btn);
                     div.appendChild(div1);
                     document.getElementById("navbar").appendChild(div);
-                    var dobrodoslica = document.createTextNode("Dobro došli " + ulogovan.ime + "!");
-                    var span = document.createElement('span');
-                    span.style.fontSize = "20px";
-                    span.appendChild(dobrodoslica);
-                    document.getElementById("content").appendChild(span);
+
                 }
             });
 
@@ -94,6 +103,14 @@ $(document).ready(function(){
         generisiFormuZaNovogAdmina();
     });
     //************************************************************************************************************************
+    //funkcije dugmadi za LEKARA
+    $('body').on('click', '#listaPacijenataBtn', function(e) {
+        generisiListuPacijenata();
+    });
+    $('body').on('click', '#zahtevGOBtn', function(e) {
+        generisiFormuZaGO(ulogovan);
+    });
+    //************************************************************************************************************************
     //funkcije dugmadi za ADMINA KLINIKE
 
     $('body').on('click', '#tipoviPregledaBtn', function(e) {
@@ -119,7 +136,18 @@ $(document).ready(function(){
     //************************************************************************************************************************
     //funkcija profil-dugmeta
     $('body').on('click', '#profilBtn', function(e) {
-        generisiProfil(ulogovan);
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/korisnici/whoami',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function (ulogovan) {
+                generisiProfil(ulogovan);
+            }
+        })
     });
     //funkcija za logOut
     $('body').on('click', '#logOutBtn', function(e) {
@@ -165,6 +193,31 @@ function pocetnaAdminKlinike(ulogovan) {
     }
 
 }
+
+
+function pocetnaMedicinskaSestra(ulogovan) {
+    korisnik = ulogovan;
+    var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
+    var nazivi = [ imeKorisnika];
+
+    for(let naziv of nazivi) {
+        //pravljenje dugmadi
+        var btn = document.createElement("BUTTON");
+        btn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        btn.innerHTML = naziv;
+        document.getElementById("navbar").appendChild(btn);
+        //dodjela specificnih id-jeva dugmadima
+        switch (naziv) {
+
+            case imeKorisnika:
+                btn.id = "profilBtn"
+                break;
+
+        }
+    }
+
+}
+
 function generisiFormuZaNovuSalu(klinika) {
     return function () {
         $("#content").fadeOut(100, function(){
@@ -760,6 +813,49 @@ function pocetnaAdminKlinickogCentra(korisnik) {
                 break;
         }
     }
+}
+
+function pocetnaLekar(korisnik) {
+    var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
+    var nazivi = ["Lista pacijenata", "Zakazi pregled/operaciju", "Radni kalendar", "GO/Odsustvo", imeKorisnika];
+
+    for(let naziv of nazivi) {
+        //pravljenje dugmadi
+        var btn = document.createElement("BUTTON");
+        btn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        btn.innerHTML = naziv;
+        document.getElementById("navbar").appendChild(btn);
+        //dodjela specificnih id-jeva dugmadima
+        switch (naziv) {
+            case "Lista pacijenata":
+                btn.id = "listaPacijenataBtn"
+                break;
+            case "Pregledi":
+                btn.id = "lekarPreglediBtn"
+                break;
+            case "Radni kalendar":
+                btn.id = "kalendarBtn"
+                break;
+            case imeKorisnika:
+                btn.id = "profilBtn"
+                break;
+            case "GO/Odsustvo":
+                btn.id = "zahtevGOBtn"
+                break;
+        }
+    }
+
+    var content = document.getElementById("content");
+    var drugiRed = document.createElement("var");;
+    var zapocniPregledBtn = document.createElement("BUTTON");
+    zapocniPregledBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+    zapocniPregledBtn.innerHTML = "Zapocni pregled";
+    zapocniPregledBtn.style.height = "45px"
+    zapocniPregledBtn.style.width = "565px"
+    zapocniPregledBtn.style.marginTop = "27px"
+    drugiRed.appendChild(zapocniPregledBtn);
+    content.appendChild(drugiRed);
+
 }
 
 function generisiKlinikuAdmina() {
@@ -1823,7 +1919,7 @@ function generisiProfil(korisnik) {
         txtIme.style.height = "40px";
         txtIme.style.width = "250px";
         txtIme.value = korisnik.ime;
-        txtIme.disabled = "true";
+        //txtIme.disabled = "true";
         varIme.appendChild(txtIme);
         prviRed.appendChild(varIme);
         var varPrezime = document.createElement("var");
@@ -1838,7 +1934,7 @@ function generisiProfil(korisnik) {
         txtPrezime.style.height = "40px"
         txtPrezime.style.width = "250px"
         txtPrezime.value = korisnik.prezime;
-        txtPrezime.disabled = "true";
+        //txtPrezime.disabled = "true";
         content.appendChild(txtPrezime);
         varPrezime.appendChild(txtPrezime);
         prviRed.appendChild(varPrezime);
@@ -1858,7 +1954,7 @@ function generisiProfil(korisnik) {
         txtUsername.style.height = "40px"
         txtUsername.style.width = "250px"
         txtUsername.value = korisnik.username;
-        txtUsername.disabled = "true";
+        //txtUsername.disabled = "true";
         varUsername.appendChild(txtUsername);
         drugiRed.appendChild(varUsername);
         var varEmail = document.createElement("var");
@@ -1873,7 +1969,7 @@ function generisiProfil(korisnik) {
         txtEmail.style.height = "40px"
         txtEmail.style.width = "250px"
         txtEmail.value = korisnik.email;
-        txtEmail.disabled = "true";
+        //txtEmail.disabled = "true";
         varEmail.appendChild(txtEmail);
         drugiRed.appendChild(varEmail);
         content.appendChild(drugiRed);
@@ -1893,6 +1989,44 @@ function generisiProfil(korisnik) {
         txtDatumRodjenja.disabled = "true";
         varDatumRodjenja.appendChild(txtDatumRodjenja);
         content.appendChild(varDatumRodjenja);
+
+        var btnIzmene = document.createElement('btn');
+        btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        btnIzmene.innerHTML = "Sacuvaj izmene";
+        btnIzmene.id = "izmeneBtn";
+        btnIzmene.onclick = function(){
+            var ime = $('#ime').val();
+            var prezime = $('#prezime').val();
+            var email = $('#email').val();
+            var korisnickoIme = $('#username').val();
+            var id = korisnik.id;
+            var stariUsername = korisnik.korisnickoIme;
+            $.ajax({
+                url:'api/korisnici/izmenaPodataka',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({id, ime, prezime, email, korisnickoIme}),
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function(korisnik) {
+                    if(korisnik.korisnickoIme != stariUsername){
+                        alert("Pri izmeni korisnickog imena, potrebno je ponovno logovanje.")
+                        logOut();
+                        return;
+                    }
+                    alert("Uspešno izmenjen profil.")
+                    generisiProfil(korisnik);
+                },
+                error: function() {
+                    alert("Greška pri izmeni profila.")
+                }
+            });
+        }
+        content.appendChild(document.createElement("br"));
+        content.appendChild(document.createElement("br"));
+        content.appendChild(btnIzmene);
+
 
         var btnChangePass = document.createElement("BUTTON");
         btnChangePass.classList.add("btn2", "btn--light-blue");
@@ -2314,6 +2448,122 @@ function generisiFormuZaNovogAdmina() {
         });
     }
     content.appendChild(btnAdd);
+    });
+    $("#content").fadeIn(500);
+}
+function generisiListuPacijenata() {
+    $("#content").fadeOut(100, function() {
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/lekari/getPacijenti',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (pacijenti) {
+
+                $("#content").fadeOut(100, function () {
+                    var content = document.getElementById('content')
+                    content.innerHTML = "";
+
+                    var naslov = document.createElement("header");
+                    naslov.innerText = "Pacijenti";
+                    naslov.fontSize = "35px"
+                    content.appendChild(naslov);
+
+                    var table = document.createElement('table');
+                    table.classList.add("tabela");
+                    var tableRef = document.createElement('tbody');
+
+                    for (let pacijent of pacijenti) {
+                        var podaciPacijenta = tableRef.insertRow();
+                        var imePacijenta = podaciPacijenta.insertCell(0);
+                        var imePacijentaText = document.createTextNode(pacijent.ime);
+                        imePacijenta.appendChild(imePacijentaText);
+
+                        var prezimePacijenta = podaciPacijenta.insertCell(1);
+                        var prezimePacijentaText = document.createTextNode(pacijent.prezime);
+                        prezimePacijenta.appendChild(prezimePacijentaText);
+
+                        var datRodjenja = podaciPacijenta.insertCell(2);
+                        var datum = document.createTextNode(pacijent.datumRodjenja);
+                        datRodjenja.appendChild(datum);
+
+                        var email = podaciPacijenta.insertCell(3);
+                        var emailPacijentaText = document.createTextNode(pacijent.email);
+                        email.appendChild(emailPacijentaText);
+
+                    }
+                    table.appendChild(tableRef);
+                    content.appendChild(table);
+                });
+                $("#content").fadeIn(500);
+            }
+        });
+
+    });
+}
+
+function generisiFormuZaGO(ulogovan) {
+
+    $("#content").fadeOut(100, function(){
+
+        var content = document.getElementById('content')
+        content.innerHTML = "";
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var goBtn = document.createElement("button");
+        var goBtn = document.createElement('button');
+        goBtn.classList.add("btn2", "btn--light-blue");
+        goBtn.style.height = "35px"
+        goBtn.style.width = "250px"
+        goBtn.innerHTML = "Godisnji odmor";
+        prviRed.appendChild(goBtn);
+
+        var odsustvoBtn = document.createElement("button");
+        var odsustvoBtn = document.createElement('button');
+        odsustvoBtn.classList.add("btn2", "btn--light-blue");
+        odsustvoBtn.style.height = "35px"
+        odsustvoBtn.style.width = "250px"
+        odsustvoBtn.innerHTML = "Odsustvo";
+        prviRed.appendChild(odsustvoBtn);
+        content.appendChild(prviRed);
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+        var varPocDatum = document.createElement("var");
+        varPocDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Pocetni datum");
+        varPocDatum.style.marginTop = "20px";
+        varPocDatum.appendChild(datumTxt);
+        varPocDatum.appendChild(document.createElement("br"));
+        var datumPocetak = document.createElement('input');
+        datumPocetak.type = 'date';
+        datumPocetak.id = "datumPoc";
+        datumPocetak.classList.add("input--style-4");
+        datumPocetak.style.height = "40px";
+        datumPocetak.style.width = "250px"
+        //datumPocetak.onchange = prihodiKlinike(klinika);
+        varPocDatum.appendChild(datumPocetak);
+        treciRed.appendChild(varPocDatum);
+        var varKrajDatum = document.createElement("var");
+        varKrajDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Krajnji datum");
+        varKrajDatum.style.marginTop = "20px";
+        varKrajDatum.appendChild(datumTxt);
+        varKrajDatum.appendChild(document.createElement("br"));
+        var datumKraj = document.createElement('input');
+        datumKraj.type = 'date';
+        datumKraj.id = "datumKr";
+        datumKraj.classList.add("input--style-4");
+        datumKraj.style.height = "40px";
+        datumKraj.style.width = "250px"
+        //datumKraj.onchange = prihodiKlinike(klinika);
+        varKrajDatum.appendChild(datumKraj);
+        treciRed.appendChild(varKrajDatum);
+        content.appendChild(treciRed);
     });
     $("#content").fadeIn(500);
 }

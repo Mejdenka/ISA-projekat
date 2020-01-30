@@ -29,7 +29,7 @@ public class Sala {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Klinika klinika;
+    private Klinika klinikaSale;
 
     public Sala() {}
 
@@ -89,12 +89,12 @@ public class Sala {
         this.operacije = operacije;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Klinika getKlinikaSale() {
+        return klinikaSale;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setKlinikaSale(Klinika klinikaSale) {
+        this.klinikaSale = klinikaSale;
     }
 
     public Long getIdKlinike() {

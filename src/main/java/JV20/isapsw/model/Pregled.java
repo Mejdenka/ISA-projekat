@@ -24,7 +24,7 @@ public class Pregled {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Klinika klinika;
+    private Klinika klinikaPregleda;
 
     @OneToOne
     private TipPregleda tipPregleda;
@@ -89,11 +89,11 @@ public class Pregled {
         this.sala = sala;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Klinika getKlinikaPregleda() {
+        return klinikaPregleda;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setKlinikaPregleda(Klinika klinikaPregleda) {
+        this.klinikaPregleda = klinikaPregleda;
     }
 }

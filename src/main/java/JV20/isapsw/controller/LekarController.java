@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +69,7 @@ public class LekarController {
         }
 
         Lekar lekar = this.lekarService.save(userRequest);
-        lekar.setKlinika(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
         lekar.setRadnoVreme(userRequest.getRadnoVreme());
         lekar = this.lekarService.save(lekar);
 
@@ -76,4 +77,18 @@ public class LekarController {
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(lekar.getId()).toUri());
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getPacijenti")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<PacijentDTO> getPacijenti() throws AccessDeniedException {
+        Lekar lekar = (Lekar) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<Pacijent> pacijenti = klinikaService.findOne(lekar.getKlinikaLekara().getId()).getPacijenti();
+        List<PacijentDTO> retVal = new ArrayList<>();
+        for(Pacijent p : pacijenti){
+            retVal.add(new PacijentDTO(p));
+        }
+        return retVal;
+    }
+
+
 }

@@ -2,6 +2,7 @@ package JV20.isapsw.controller;
 
 
 import JV20.isapsw.dto.LekarDTO;
+import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.dto.SalaDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.model.*;
@@ -123,6 +124,7 @@ public class KlinikaController {
         return retVal;
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = "/getTipoviPregleda/{klinikaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public List<TipPregleda> getTipoviPregleda(@PathVariable Long klinikaId) throws AccessDeniedException {
@@ -173,7 +175,7 @@ public class KlinikaController {
         t.setPocetak(pocetak);
         t.setKraj(kraj);
         t.setRezervisan(false);
-        t.setKlinika(klinika);
+        t.setKlinikaTermina(klinika);
         klinika.getSlobodniTermini().add(t);
 
         this.klinikaService.save(klinika);

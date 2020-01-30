@@ -10,6 +10,9 @@ INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabl
  datum_rodjenja, confirmed, klinika_id, slobodan, na_godisnjem, ocena, obrisan, radno_vreme) VALUES ('Lekar', 'probaLekar',
  '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Amelie', 'Lens','amelie@example.com', 1, '2017-10-01 18:57:58',
  '1997-10-01 18:57:58', 1, 1, 0, 0, 4, 0, '08:30-16:30');
+INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed) VALUES
+ ('MedicinskaSestra', 'sestra', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Seka', 'Aleksic','sestra@example.com', 1,
+ '2017-10-01 18:57:58', '1997-10-01 18:57:58', 1);
 
 INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena) VALUES ('Klinika 1', 'Janka Veselinovica, 20', 'Prva klinika u centru.', 4.3);
 

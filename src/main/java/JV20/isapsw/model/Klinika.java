@@ -39,7 +39,6 @@ public class Klinika {
     @JsonIgnore
     private List<Pregled> obavljeniPregledi;
 
-
     public Klinika() {}
 
     public Long getId() {

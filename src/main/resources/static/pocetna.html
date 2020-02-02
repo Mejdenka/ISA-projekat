@@ -40,11 +40,25 @@
             <div class="card-body">
                 <div id="content">
 
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="godisnjiOdsustvo" style="display: none">
+    <form id = "godisnjiOdsustvoForma">
+        <div id = "divGo">
+            <input type="checkbox" id="godisnji" name="godisnji" >
+            <label for="godisnji">Godisnji</label>
+        </div>
+        <div id = "divOds">
+            <input type="checkbox" id="odsustvo" name="odsustvo">
+            <label for="odsustvo">Odsustvo</label>
+        </div>
+    </form>
 </div>
 
 <!-- The Modal -->
@@ -113,6 +127,28 @@
 
 </div>
 
+<div id="zdravsteniKartonModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id = "closeZdravsteniKarton" class="close">&times;</span>
+        <div id = "zdravsteniKartonDiv">
+
+        </div>
+    </div>
+
+</div>
+
+<div id="zapocniPregledModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id = "closeZapocniPregled" class="close">&times;</span>
+        <div id = "zapocniPregledDiv">
+
+        </div>
+    </div>
+
+</div>
+
 <div id="slobodanTerminModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content-termin">
@@ -124,6 +160,7 @@
 
 </div>
 
+
 <div id="rejectionModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content-request">
@@ -132,6 +169,9 @@
     </div>
 
 </div>
+
+
+
 
 <!-- Jquery JS-->
 <script src="vendor/jquery/jquery-3.3.1.min.js"></script>

@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,8 +13,11 @@ public class ZdravstveniKarton {
     private Long id;
 
     private Integer broj;
+    private double visina;
+    private double masa;
 
     @OneToOne
+    @JsonIgnore
     private Pacijent pacijent;
     @OneToMany
     private Set<Dijagnoza> dijagnoze;
@@ -66,5 +71,21 @@ public class ZdravstveniKarton {
 
     public void setPregledi(Set<Pregled> pregledi) {
         this.pregledi = pregledi;
+    }
+
+    public double getVisina() {
+        return visina;
+    }
+
+    public void setVisina(double visina) {
+        this.visina = visina;
+    }
+
+    public double getMasa() {
+        return masa;
+    }
+
+    public void setMasa(double masa) {
+        this.masa = masa;
     }
 }

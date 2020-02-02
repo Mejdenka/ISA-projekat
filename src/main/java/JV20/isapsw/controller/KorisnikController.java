@@ -93,10 +93,22 @@ public class KorisnikController {
         return ak.getKlinika();
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/izmenaPodataka")
+    @PreAuthorize("hasRole('USER')")
+    public Korisnik izmenaPodataka(@RequestBody Korisnik korisnik) throws AccessDeniedException {
+        Korisnik k = korisnikService.findOne(korisnik.getId());
+        k.setKorisnickoIme(korisnik.getKorisnickoIme());
+        k.setIme(korisnik.getIme());
+        k.setPrezime(korisnik.getPrezime());
+        k.setEmail(korisnik.getEmail());
+        korisnikService.save(k);
+        return k;
+    }
+
+
     @RequestMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public Korisnik user() {
-        Korisnik k = korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         return this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

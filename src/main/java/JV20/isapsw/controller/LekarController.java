@@ -1,8 +1,6 @@
 package JV20.isapsw.controller;
 
-import JV20.isapsw.common.TimeProvider;
-import JV20.isapsw.dto.LekarDTO;
-import JV20.isapsw.dto.PacijentDTO;
+import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
 import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
@@ -10,25 +8,20 @@ import JV20.isapsw.model.Pacijent;
 import JV20.isapsw.service.KlinikaService;
 import JV20.isapsw.service.KorisnikService;
 import JV20.isapsw.service.LekarService;
-import JV20.isapsw.service.PacijentService;
-import net.bytebuddy.build.BuildLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -54,7 +47,7 @@ public class LekarController {
         zaIzmenu.setEmail(lekar.getEmail());
         zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
         zaIzmenu.setOcena(lekar.getOcena());
-
+        zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
         lekarService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -68,11 +61,87 @@ public class LekarController {
         }
 
         Lekar lekar = this.lekarService.save(userRequest);
-        lekar.setKlinika(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setRadnoVreme(userRequest.getRadnoVreme());
         lekar = this.lekarService.save(lekar);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(lekar.getId()).toUri());
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "/rezervisiGoOds")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public ResponseEntity<?> rezervisiGodisnjiOdmorOdsustvo( @RequestBody GodisnjiOdsustvoTermin godisnjiOdsustvoTermin) throws AccessDeniedException, ParseException {
+        Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(godisnjiOdsustvoTermin.isGodisnji()){
+            godisnjiOdsustvoTermin.setLekarGO(lekar);
+            lekar.getRezervisaniGO().add(godisnjiOdsustvoTermin);
+        } else if(godisnjiOdsustvoTermin.isOdsustvo()){
+            godisnjiOdsustvoTermin.setLekarOds(lekar);
+            lekar.getRezervisanaOdustva().add(godisnjiOdsustvoTermin);
+        }
+        lekarService.save(lekar);
+        return new ResponseEntity<User>( HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getGoOds/{lekarId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<GodisnjiOdsustvoTerminDTO> getGodisnjiOdsustva(@PathVariable("lekarId") Long lekarId) throws AccessDeniedException {
+        Lekar lekar = lekarService.findOne(lekarId);
+        List<GodisnjiOdsustvoTermin> termini = new ArrayList<>();
+        termini.addAll(lekar.getRezervisaniGO());
+        termini.addAll(lekar.getRezervisanaOdustva());
+
+        List<GodisnjiOdsustvoTerminDTO> retVal = new ArrayList<>();
+        for(GodisnjiOdsustvoTermin t : termini){
+            if(!t.isObrisan())
+                retVal.add(new GodisnjiOdsustvoTerminDTO(t));
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteGoOds/{terminId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<GodisnjiOdsustvoTerminDTO> deleteGodisnjiOdsustvo(@PathVariable("terminId") Long terminId) throws AccessDeniedException {
+        Lekar lekar = (Lekar) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        List<GodisnjiOdsustvoTermin> termini = new ArrayList<>();
+        termini.addAll(lekar.getRezervisaniGO());
+        termini.addAll(lekar.getRezervisanaOdustva());
+
+        for(GodisnjiOdsustvoTermin t:termini){
+            if(t.getId() == terminId){
+                t.setObrisan(true);
+            }
+        }
+
+        lekarService.save(lekar);
+
+        termini = new ArrayList<>();
+        termini.addAll(lekar.getRezervisaniGO());
+        termini.addAll(lekar.getRezervisanaOdustva());
+
+        List<GodisnjiOdsustvoTerminDTO> retVal = new ArrayList<>();
+        for(GodisnjiOdsustvoTermin t : termini){
+            if(!t.isObrisan())
+                retVal.add(new GodisnjiOdsustvoTerminDTO(t));
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getPacijenti")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<PacijentDTO> getPacijenti() throws AccessDeniedException {
+        Lekar lekar = (Lekar) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<Pacijent> pacijenti = klinikaService.findOne(lekar.getKlinikaLekara().getId()).getPacijenti();
+        List<PacijentDTO> retVal = new ArrayList<>();
+        for(Pacijent p : pacijenti){
+            retVal.add(new PacijentDTO(p));
+        }
+        return retVal;
+    }
+
+
 }

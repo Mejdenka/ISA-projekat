@@ -1,6 +1,6 @@
 package JV20.isapsw.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +15,15 @@ public class Lekar extends Korisnik {
     private boolean slobodan;
     private boolean naGodisnjem;
     private boolean obrisan = false;
+    private String radnoVreme;
+
+    @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GodisnjiOdsustvoTermin> rezervisaniGO;
+
+    @OneToMany(mappedBy = "lekarOds", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GodisnjiOdsustvoTermin> rezervisanaOdustva;
 
     @OneToMany
     private Set<Operacija> operacije;
@@ -22,8 +31,8 @@ public class Lekar extends Korisnik {
     private Set<Pregled> pregledi;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Klinika klinika;
+    @JsonIgnore
+    private Klinika klinikaLekara;
 
     public Lekar() {}
 
@@ -83,12 +92,35 @@ public class Lekar extends Korisnik {
         this.pregledi = pregledi;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Klinika getKlinikaLekara() {
+        return klinikaLekara;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setKlinikaLekara(Klinika klinikaLekara) {
+        this.klinikaLekara = klinikaLekara;
     }
 
+    public String getRadnoVreme() {
+        return radnoVreme;
+    }
+
+    public void setRadnoVreme(String radnoVreme) {
+        this.radnoVreme = radnoVreme;
+    }
+
+    public Set<GodisnjiOdsustvoTermin> getRezervisaniGO() {
+        return rezervisaniGO;
+    }
+
+    public void setRezervisaniGO(Set<GodisnjiOdsustvoTermin> rezervisaniGO) {
+        this.rezervisaniGO = rezervisaniGO;
+    }
+
+    public Set<GodisnjiOdsustvoTermin> getRezervisanaOdustva() {
+        return rezervisanaOdustva;
+    }
+
+    public void setRezervisanaOdustva(Set<GodisnjiOdsustvoTermin> rezervisanaOdustva) {
+        this.rezervisanaOdustva = rezervisanaOdustva;
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class LekarService {
         lekar.setDatumRegistrovanja(timeProvider.now());
         lekar.setEnabled(true);
         lekar.setConfirmed(true);
+        Timestamp ts=new Timestamp(timeProvider.now().getTime());
+        lekar.setLastPasswordResetDate(ts);
 
         List<Authority> auth = new ArrayList<>();
         auth.add(authService.findByname("ROLE_DOKTOR"));

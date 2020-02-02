@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,11 +11,18 @@ public class Pacijent extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String jbo;
+
     @OneToOne
+    @JsonIgnore
     private ZdravstveniKarton karton;
 
     @OneToMany
     private Set<Recept> recepti;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Klinika klinikaPacijenta;
 
     public Pacijent() {}
 
@@ -40,4 +49,21 @@ public class Pacijent extends Korisnik {
     public void setRecepti(Set<Recept> recepti) {
         this.recepti = recepti;
     }
+
+    public Klinika getKlinikaPacijenta() {
+        return klinikaPacijenta;
+    }
+
+    public void setKlinikaPacijenta(Klinika klinikaPacijenta) {
+        this.klinikaPacijenta = klinikaPacijenta;
+    }
+
+    public String getJbo() {
+        return jbo;
+    }
+
+    public void setJbo(String jbo) {
+        this.jbo = jbo;
+    }
+
 }

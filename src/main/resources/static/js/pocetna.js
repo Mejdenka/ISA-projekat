@@ -2803,8 +2803,10 @@ function zapocniPregled(pacijent) {
                 if(forma.contains(s))
                     forma.removeChild(s);
                 return;
+            } else if(poc.substr(0,10) != kr.substr(0,10)){
+                alert("Datumi se ne poklapaju.");
+                return;
             }
-            console.log(poc + " " + kr)
             forma.appendChild(s);
 
         }
@@ -2820,6 +2822,9 @@ function zapocniPregled(pacijent) {
                 alert("Krajnji datum mora biti veći od početnog.");
                 if(forma.contains(s))
                     forma.removeChild(s);
+                return;
+            } else if(poc.substr(0,10) != kr.substr(0,10)){
+                alert("Datumi se ne poklapaju.");
                 return;
             }
             forma.appendChild(s);

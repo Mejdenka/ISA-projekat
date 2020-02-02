@@ -2509,15 +2509,15 @@ function generisiListuPacijenata() {
                         var emailPacijentaText = document.createTextNode(pacijent.email);
                         email.appendChild(emailPacijentaText);
 
-                        var zapocniPregled = podaciPacijenta.insertCell(4);
-                        var zapocniPregledBtn = document.createElement("BUTTON");
-                        zapocniPregledBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
-                        zapocniPregledBtn.innerText = "Profil";
-                        zapocniPregledBtn.style.color = "white";
-                        zapocniPregledBtn.style.fontSize = "15px"
-                        zapocniPregledBtn.style.height = "30px"
-                        zapocniPregledBtn.onclick = profilPacijenta(pacijent.id);
-                        zapocniPregled.appendChild(zapocniPregledBtn);
+                        var profilPacijenta = podaciPacijenta.insertCell(4);
+                        var profilPacijentaBtn = document.createElement("BUTTON");
+                        profilPacijentaBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                        profilPacijentaBtn.innerText = "Profil";
+                        profilPacijentaBtn.style.color = "white";
+                        profilPacijentaBtn.style.fontSize = "15px"
+                        profilPacijentaBtn.style.height = "30px"
+                        profilPacijentaBtn.onclick = prikaziProfilPacijenta(pacijent.id);
+                        profilPacijenta.appendChild(profilPacijentaBtn);
 
                     }
                     table.appendChild(tableRef);
@@ -2530,7 +2530,7 @@ function generisiListuPacijenata() {
     });
 }
 
-function profilPacijenta(pacijentId) {
+function prikaziProfilPacijenta(pacijentId) {
     return function(){
         $("#content").fadeOut(100, function(){
             $.get({
@@ -2618,7 +2618,7 @@ function profilPacijenta(pacijentId) {
                     var zdarvstveniKartonBtn = document.createElement("BUTTON");
                     zdarvstveniKartonBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     zdarvstveniKartonBtn.innerHTML = "Zdravstveni karton";
-                    zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijentId);
+                    zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijentId, korisnik.ime + " " + korisnik.prezime);
                     varZdrK.appendChild(zdarvstveniKartonBtn);
                     treciRed.appendChild(varZdrK);
                     var varZapocni = document.createElement("var");
@@ -2626,6 +2626,7 @@ function profilPacijenta(pacijentId) {
                     var zapocniBtn = document.createElement("BUTTON");
                     zapocniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     zapocniBtn.innerHTML = "Zapocni pregled";
+                    zapocniBtn.onclick = zapocniPregled(korisnik);
                     varZapocni.appendChild(zapocniBtn);
                     treciRed.appendChild(varZapocni);
                     content.appendChild(treciRed);
@@ -2672,7 +2673,165 @@ function profilPacijenta(pacijentId) {
         $("#content").fadeIn(500);
     }
 }
-function zdravstveniKarton(pacijentId) {
+
+function zapocniPregled(pacijent) {
+    return function () {
+        var modal = document.getElementById("zapocniPregledModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeZapocniPregled");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        var content = document.getElementById("zapocniPregledDiv");
+        content.innerHTML = "";
+
+        var naslov = document.createElement("Header");
+        naslov.innerText = "Pregled za pacijenta: " + pacijent.ime + " " + pacijent.prezime;
+        naslov.style.fontSize = "20px";
+        naslov.style.marginTop = "10px";
+        naslov.style.marginBottom = "10px";
+        content.appendChild(naslov);
+        content.appendChild(document.createElement("br"));
+
+
+        var odaberiNaslov = document.createElement("Header");
+        odaberiNaslov.innerText = "Zakazivanje sljedećeg pregleda/operacije";
+        odaberiNaslov.style.fontSize = "15px";
+        odaberiNaslov.style.marginTop = "10px";
+        odaberiNaslov.style.marginBottom = "10px";
+        content.appendChild(odaberiNaslov);
+
+        /*********************CHECKBOXOVI*************************/
+
+        var forma = document.createElement("form");
+        var divGo = document.createElement("div");
+        divGo.id = "divGo";
+        var goBtn = document.createElement("input");
+        goBtn.type = "checkbox";
+        goBtn.id = "godisnji";
+        var goLabel = document.createElement("label");
+        goLabel.for = "godisnji";
+        goLabel.innerText = "Pregled";
+        divGo.appendChild(goBtn);
+        divGo.appendChild(goLabel);
+        forma.appendChild(divGo);
+        content.appendChild(forma);
+        var divOds = document.createElement("div");
+        divOds.id = "divOds";
+        var odsBtn = document.createElement("input");
+        odsBtn.type = "checkbox";
+        odsBtn.id = "odsustvo";
+        var odsLabel = document.createElement("label");
+        odsLabel.for = "odsustvo";
+        odsLabel.innerText = "Operacija";
+        divOds.appendChild(odsBtn);
+        divOds.appendChild(odsLabel);
+        forma.appendChild(divOds);
+        content.appendChild(forma);
+
+        goBtn.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                odsBtn.checked = false;
+            }
+        })
+        odsBtn.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                goBtn.checked = false;
+            }
+        })
+
+
+
+        var s = document.createElement("input"); //input element, Submit button
+        s.setAttribute('type',"submit");
+        s.setAttribute('value',"Pošalji");
+        s.classList.add("btn2", "btn--light-blue");
+        s.style.height = "35px"
+        s.style.width = "250px"
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+        var varPocDatum = document.createElement("var");
+        varPocDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Vrijeme početka");
+        varPocDatum.style.marginTop = "20px";
+        varPocDatum.appendChild(datumTxt);
+        varPocDatum.appendChild(document.createElement("br"));
+        var datumPocetak = document.createElement('input');
+        datumPocetak.type = 'datetime-local';
+        datumPocetak.id = "datumPoc";
+        datumPocetak.classList.add("input--style-4");
+        datumPocetak.style.height = "40px";
+        datumPocetak.style.width = "270px"
+
+        varPocDatum.appendChild(datumPocetak);
+        treciRed.appendChild(varPocDatum);
+        var varKrajDatum = document.createElement("var");
+        varKrajDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Vrijeme kraja");
+        varKrajDatum.style.marginTop = "20px";
+        varKrajDatum.appendChild(datumTxt);
+        varKrajDatum.appendChild(document.createElement("br"));
+        var datumKraj = document.createElement('input');
+        datumKraj.type = 'datetime-local';
+        datumKraj.id = "datumKr";
+        datumKraj.classList.add("input--style-4");
+        datumKraj.style.height = "40px";
+        datumKraj.style.width = "270px"
+        varKrajDatum.appendChild(datumKraj);
+        treciRed.appendChild(varKrajDatum);
+        forma.appendChild(treciRed);
+
+        datumPocetak.onchange = function(){
+            var poc = $("#datumPoc").val();
+            var kr = $("#datumKr").val();
+            if( poc == "" || kr == ""){
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            } else if(kr < poc){
+                alert("Krajnji datum mora biti veći od početnog.");
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            }
+            console.log(poc + " " + kr)
+            forma.appendChild(s);
+
+        }
+        datumKraj.onchange = function(){
+            var poc = $("#datumPoc").val();
+            var kr = $("#datumKr").val();
+
+            if( poc == "" || kr == ""){
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            } else if(kr < poc){
+                alert("Krajnji datum mora biti veći od početnog.");
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            }
+            forma.appendChild(s);
+
+        }
+        content.appendChild(forma);
+
+
+    }
+}
+
+function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
     return function(){
         $("#content").fadeOut(100, function(){
             $.get({
@@ -2701,6 +2860,13 @@ function zdravstveniKarton(pacijentId) {
                     var content = document.getElementById("zdravsteniKartonDiv");
                     content.innerHTML = "";
 
+                    var naslov = document.createElement("Header");
+                    naslov.innerText = "Zdravstveni karton za pacijenta: " + imeIPrezimePacijenta;
+                    naslov.style.fontSize = "20px";
+                    content.appendChild(naslov);
+                    naslov.style.marginTop = "10px";
+                    naslov.style.marginBottom = "10px";
+                    content.appendChild(document.createElement("br"));
 
                     var treciRed = document.createElement("var");
                     treciRed.classList.add("row", "wrapper--w680");
@@ -2795,8 +2961,6 @@ function generisiFormuZaGO(ulogovan) {
         divOds.appendChild(odsLabel);
         forma.appendChild(divOds);
         content.appendChild(forma);
-        var odsBtn = document.getElementById("odsustvo");
-
 
         goBtn.addEventListener('change', (event) => {
             if (event.target.checked) {

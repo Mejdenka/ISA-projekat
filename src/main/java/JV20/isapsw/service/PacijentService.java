@@ -64,6 +64,9 @@ public class PacijentService {
         pacijent.setDatumRegistrovanja(timeProvider.now());
         pacijent.setEnabled(true);
 
+        //I OVO TREBA NA REGISTRACIJSKOJ FORMI
+        //pacijent.setJbo(userRequest.getJbo);
+
         List<Authority> auth = new ArrayList<>();
         auth.add(authService.findByname("ROLE_PACIJENT"));
         auth.add(authService.findByname("ROLE_USER"));

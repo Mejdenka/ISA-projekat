@@ -11,7 +11,10 @@ public class Pacijent extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String jbo;
+
     @OneToOne
+    @JsonIgnore
     private ZdravstveniKarton karton;
 
     @OneToMany
@@ -54,4 +57,13 @@ public class Pacijent extends Korisnik {
     public void setKlinikaPacijenta(Klinika klinikaPacijenta) {
         this.klinikaPacijenta = klinikaPacijenta;
     }
+
+    public String getJbo() {
+        return jbo;
+    }
+
+    public void setJbo(String jbo) {
+        this.jbo = jbo;
+    }
+
 }

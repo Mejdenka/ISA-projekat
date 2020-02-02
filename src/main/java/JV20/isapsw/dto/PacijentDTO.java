@@ -13,15 +13,16 @@ public class PacijentDTO {
     private String email;
     private String lozinka;
     private String datumRodjenja;
+    private String jbo;
 
     public PacijentDTO() {}
 
     public PacijentDTO(Pacijent pacijent){
         this(pacijent.getId(), pacijent.getKorisnickoIme(), pacijent.getIme(), pacijent.getPrezime(), pacijent.getEmail(),
-                pacijent.getLozinka(),pacijent.getDatumRodjenja().toString());
+                pacijent.getLozinka(),pacijent.getDatumRodjenja().toString(), pacijent.getJbo());
     }
 
-    public PacijentDTO(Long id, String korisnickoIme, String ime, String prezime, String email, String lozinka, String datumRodjenja) {
+    public PacijentDTO(Long id, String korisnickoIme, String ime, String prezime, String email, String lozinka, String datumRodjenja, String jbo) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
@@ -29,6 +30,7 @@ public class PacijentDTO {
         this.email = email;
         this.lozinka = lozinka;
         this.datumRodjenja = datumRodjenja;
+        this.jbo = jbo;
     }
 
     public Long getId() {
@@ -57,6 +59,10 @@ public class PacijentDTO {
 
     public String getLozinka() {
         return lozinka;
+    }
+
+    public String getJbo() {
+        return jbo;
     }
 
 }

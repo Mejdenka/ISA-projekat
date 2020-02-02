@@ -28,7 +28,6 @@ public class TerminDTO {
         String strKraj= formatter.format(kraj);
         this.pocetak = strPocetak;
         this.kraj = strKraj;
-        System.out.println(strPocetak);
     }
 
     public Long getId() {

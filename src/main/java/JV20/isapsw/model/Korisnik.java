@@ -174,7 +174,6 @@ public class Korisnik implements UserDetails{
     public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
-
     public boolean isConfirmed() {
         return confirmed;
     }

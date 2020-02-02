@@ -50,6 +50,19 @@ public class PacijentController {
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/pacijent/{userId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public Pacijent getPacijent(@PathVariable Long userId) throws AccessDeniedException {
+        return this.pacijentService.findOne(userId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/zdravstveniKarton/{userId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public ZdravstveniKarton getZdravstveniKarton(@PathVariable Long userId) throws AccessDeniedException {
+        System.out.println(this.pacijentService.findOne(userId).getKarton().getMasa());
+        return this.pacijentService.findOne(userId).getKarton();
+    }
+
     @RequestMapping("/getRequests")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Pacijent> getRequests() throws AccessDeniedException {

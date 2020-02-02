@@ -1,6 +1,7 @@
 package JV20.isapsw.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -76,4 +77,6 @@ public class Termin {
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
     }
+
+
 }

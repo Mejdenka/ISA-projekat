@@ -152,15 +152,15 @@ public class TokenUtils {
     }
 
     // Funkcija za preuzimanje JWT tokena iz zahteva
-    public String getToken(HttpServletRequest request) {
-        String authHeader = getAuthHeaderFromHeader(request);
+        public String getToken(HttpServletRequest request) {
+            String authHeader = getAuthHeaderFromHeader(request);
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            System.out.println("Token je: "+getAllClaimsFromToken(authHeader.substring(7)));
-            return authHeader.substring(7);
-        }
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                System.out.println("Token je: "+getAllClaimsFromToken(authHeader.substring(7)));
+                return authHeader.substring(7);
+            }
 
-        return null;
+            return null;
     }
 
     public String getAuthHeaderFromHeader(HttpServletRequest request) {

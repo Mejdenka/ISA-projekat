@@ -1,11 +1,11 @@
-INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_pacijenta_id) VALUES ('Pacijent', 'user', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Marko', 'Markovic', 'user@example.com', 1, '2017-10-01 21:58:58', '2000-01-01 18:57:58', 1, 1);
+INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_pacijenta_id, jbo, karton_id) VALUES ('Pacijent', 'user', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Marko', 'Markovic', 'user@example.com', 1, '2017-10-01 21:58:58', '2000-01-01 18:57:58', 1, 1, '1512997186555', 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed) VALUES ('AdministratorKlinickogCentra', 'admin', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Nikola', 'Nikolic','admin@example.com', 1, '2017-10-01 18:57:58', '1997-10-01 18:57:58', 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed) VALUES ('AdministratorKlinickogCentra', 'adminPero', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Pero', 'Peric','pero.peric@example.com', 1, '2017-10-01 18:57:58', '1997-10-01 18:57:58', 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed) VALUES ('AdministratorKlinike', 'adminK', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Jovan', 'Jovanovic','adminKlinike@example.com', 1, '2017-10-01 18:57:58', '1997-10-01 18:57:58', 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_lekara_id, slobodan, na_godisnjem, ocena, obrisan, radno_vreme) VALUES ('Lekar', 'lekar','$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Jovana', 'Jovanovic','lekar@example.com', 1,'2017-10-01 18:57:58', '1997-10-01 18:57:58', 1, 1, 1, 0, 5, 0, '08:00-16:00');
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_lekara_id, slobodan, na_godisnjem, ocena, obrisan, radno_vreme) VALUES ('Lekar', 'probaLekar','$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Amelie', 'Lens','amelie@example.com', 1, '2017-10-01 18:57:58','1997-10-01 18:57:58', 1, 1, 0, 0, 4, 0, '08:30-16:30');
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_med_sestre_id) VALUES('MedicinskaSestra', 'sestra', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Svetlana', 'Micic','sestra@example.com', 1,'2017-10-01 18:57:58', '1997-10-01 18:57:58', 1, 1);
-INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_pacijenta_id) VALUES ('Pacijent', 'pacijent', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Marina', 'Simic', 'userka@example.com', 1, '2017-10-01 21:58:58', '2000-01-01 18:57:58', 1, 1);
+INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_pacijenta_id, jbo, karton_id) VALUES ('Pacijent', 'pacijent', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Marina', 'Simic', 'userka@example.com', 1, '2017-10-01 21:58:58', '2000-01-01 18:57:58', 1, 1, '1512997186666', 2);
 
 INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena) VALUES ('Klinika 1', 'Janka Veselinovica, 20', 'Prva klinika u centru.', 4.3);
 
@@ -21,6 +21,12 @@ INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan) VALU
 
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, trajanje) VALUES (5, 1, 1, 1, 2, 2, 30);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, trajanje) VALUES (5, 1, 1, 1, 1, 1, 30);
+
+INSERT INTO godisnji_odsustvo_termin (godisnji, odsustvo, pocetak, kraj, obrisan, lekargo_id, lekar_ods_id) VALUES
+ (1, 0, '2020-02-14 01:01:00', '2020-02-22 11:11:00', 0, 5, null);
+
+INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa) VALUES ('112', 1, '198.2', '99.0');
+INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa) VALUES ('113', 8, '178.1', '59');
 
 INSERT INTO authority (name) VALUES ('ROLE_USER');
 INSERT INTO authority (name) VALUES ('ROLE_PACIJENT');

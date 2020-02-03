@@ -2,11 +2,9 @@ package JV20.isapsw.controller;
 
 import JV20.isapsw.dto.AdministratorKlinickogCentraDTO;
 import JV20.isapsw.exception.ResourceConflictException;
-import JV20.isapsw.model.AdministratorKlinickogCentra;
-import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.Pacijent;
-import JV20.isapsw.model.UserRequest;
+import JV20.isapsw.model.*;
 import JV20.isapsw.service.AdministratorKlinickogCentraService;
+import JV20.isapsw.service.KlinikaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,9 @@ public class AdministratorKlinickogCentraController {
     @Autowired
     private AdministratorKlinickogCentraService akcService;
 
+    @Autowired
+    private KlinikaService clinicService;
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addAKC(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) throws ParseException {
@@ -40,4 +41,6 @@ public class AdministratorKlinickogCentraController {
 
         return new ResponseEntity<>(new AdministratorKlinickogCentraDTO(akc), HttpStatus.CREATED);
     }
+
+
 }

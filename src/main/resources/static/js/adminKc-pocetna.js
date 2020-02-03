@@ -323,9 +323,107 @@ function pocetnaAdminKlinickogCentra(korisnik) {
 
 function generisiFormuZaNovuKliniku() {
     $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Jos uvijek nije dostupna forma za novu kliniku.");
-        document.getElementById("content").appendChild(textnode);
+        var content = document.getElementById("content");
+        content.innerHTML = "";
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var varNaziv = document.createElement("var");
+        varNaziv.classList.add("col-2", "input-group");
+        var naziv = document.createTextNode("Naziv");
+        varNaziv.appendChild(naziv);
+        varNaziv.appendChild(document.createElement("br"));
+        var txtNaziv = document.createElement('input');
+        txtNaziv.type = 'text';
+        txtNaziv.id = "naziv";
+        txtNaziv.classList.add("input--style-4");
+        txtNaziv.style.height = "40px";
+        txtNaziv.style.width = "250px";
+        varNaziv.appendChild(txtNaziv);
+        prviRed.appendChild(varNaziv);
+        content.appendChild(prviRed);
+
+        var drugiRed = document.createElement("var");
+        drugiRed.classList.add("row", "wrapper--w680")
+        var varLokacija = document.createElement("var");
+        varLokacija.classList.add("col-2", "input-group");
+        var lokacija = document.createTextNode("Lokacija");
+        varLokacija.appendChild(lokacija);
+        varLokacija.appendChild(document.createElement("br"));
+        var txtLokacija = document.createElement('input');
+        txtLokacija.type = 'text';
+        txtLokacija.id = "lokacija";
+        txtLokacija.classList.add("input--style-4");
+        txtLokacija.style.height = "40px";
+        txtLokacija.style.width = "250px";
+        varLokacija.appendChild(txtLokacija);
+        drugiRed.appendChild(varLokacija);
+        content.appendChild(drugiRed);
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680")
+        var varOpis = document.createElement("var");
+        varOpis.classList.add("col-2", "input-group");
+        var opis = document.createTextNode("Opis");
+        varOpis.appendChild(opis);
+        varOpis.appendChild(document.createElement("br"));
+        var txtOpis = document.createElement('input');
+        txtOpis.type = 'text';
+        txtOpis.id = "opis";
+        txtOpis.classList.add("input--style-4");
+        txtOpis.style.height = "80px";
+        txtOpis.style.width = "250px";
+        varOpis.appendChild(txtOpis);
+        treciRed.appendChild(varOpis);
+        content.appendChild(treciRed);
+
+        var btnAdd = document.createElement("BUTTON");
+        btnAdd.classList.add("btn2", "btn--light-blue");
+        btnAdd.innerHTML = "Dodaj kliniku";
+        btnAdd.onclick = function () {
+            var naziv=$('#naziv').val();
+            var lokacija=$('#lokacija').val();
+            var opis=$('#opis').val();
+
+            if(naziv === ""){
+                alert("Morate uneti naziv klinike!");
+                return;
+            } else if (naziv.length < 5) {
+                alert("Naziv klinike mora imati bar pet karaktera!");
+                return;
+            }
+
+            if(lokacija === ""){
+                alert("Morate uneti lokaciju klinike!");
+                return;
+            } else if(lokacija.length < 2){
+                alert("Lokacija klinike mora imati bar dva karaktera!");
+                return;
+            }
+
+            $.post({
+                url: 'api/klinike/dodajKliniku',
+                data: JSON.stringify({naziv, lokacija, opis}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert("Nova klinika je uspešno dodata!");
+
+                },
+                error: function() {
+                    alert("Greška prilikom dodavanja klinike!");
+                }
+            });
+
+
+
+        }
+
+        content.appendChild(btnAdd);
+
+
     });
     $("#content").fadeIn(500);
 }

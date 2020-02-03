@@ -5,9 +5,12 @@ import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.model.Pacijent;
+import JV20.isapsw.service.EmailService;
 import JV20.isapsw.service.KorisnikService;
 import JV20.isapsw.service.PacijentService;
 import net.bytebuddy.build.BuildLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,10 @@ public class PacijentController {
     private PacijentService pacijentService;
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private EmailService emailService;
+
+    private Logger logger = LoggerFactory.getLogger(PacijentController.class);
 
     //signUp metoda sa fronta za registraciju pacijenata iskljucivo
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -81,16 +88,29 @@ public class PacijentController {
     @PreAuthorize("hasRole('ADMIN')")
     public void confirmRequest(@RequestBody String username) {
         Korisnik existUser = this.korisnikService.findOneByUsername(username);
+        System.out.println(existUser.getEmail());
+        try {
+            emailService.sendConfirmedEmail(existUser);
+
+        }catch( Exception e ){
+            logger.info("Greska prilikom slanja emaila: " + e.getMessage());
+        }
 
         existUser.setConfirmed(true);
         korisnikService.save(existUser);
+
     }
 
     @RequestMapping(value = "/rejectRequest", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public void rejectRequest(@RequestBody String username) {
         Korisnik existUser = this.korisnikService.findOneByUsername(username);
+        try {
+            emailService.sendRejectedEmail(existUser);
 
+        }catch( Exception e ){
+            logger.info("Greska prilikom slanja emaila: " + e.getMessage());
+        }
         korisnikService.remove(existUser.getId());
     }
 }

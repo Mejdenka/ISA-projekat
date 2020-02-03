@@ -12,8 +12,9 @@ $(document).ready(function(){
         var prezime=$('#last_name').val();
         var email=$('#email').val();
         var datumRodjenja=$('#birthday').val();
+        var jbo=$('#jbo').val();
 
-        if(korisnickoIme === "" || lozinka === "" || ime === "" || prezime === "" || email === "" || datumRodjenja === ""){
+        if(korisnickoIme === "" || jbo === "" || lozinka === "" || ime === "" || prezime === "" || email === "" || datumRodjenja === ""){
             alert("Nijedno polje ne sme ostati prazno!")
             return
         }
@@ -46,7 +47,7 @@ $(document).ready(function(){
 
         $.post({
             url: 'api/pacijenti/signup',
-            data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja}),
+            data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, datumRodjenja, jbo}),
             contentType: 'application/json',
             success: function() {
                 window.location='afterReg.html';

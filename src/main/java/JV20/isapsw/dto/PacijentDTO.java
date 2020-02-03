@@ -13,7 +13,7 @@ public class PacijentDTO {
     private String email;
     private String lozinka;
     private String datumRodjenja;
-    private String jbo;
+    private Long jbo;
 
     public PacijentDTO() {}
 
@@ -22,7 +22,7 @@ public class PacijentDTO {
                 pacijent.getLozinka(),pacijent.getDatumRodjenja().toString(), pacijent.getJbo());
     }
 
-    public PacijentDTO(Long id, String korisnickoIme, String ime, String prezime, String email, String lozinka, String datumRodjenja, String jbo) {
+    public PacijentDTO(Long id, String korisnickoIme, String ime, String prezime, String email, String lozinka, String datumRodjenja, Long jbo) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
@@ -61,7 +61,7 @@ public class PacijentDTO {
         return lozinka;
     }
 
-    public String getJbo() {
+    public Long getJbo() {
         return jbo;
     }
 

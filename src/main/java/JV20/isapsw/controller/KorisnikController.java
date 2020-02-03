@@ -101,6 +101,7 @@ public class KorisnikController {
         k.setIme(korisnik.getIme());
         k.setPrezime(korisnik.getPrezime());
         k.setEmail(korisnik.getEmail());
+        k.setJbo(korisnik.getJbo());
         korisnikService.save(k);
         return k;
     }

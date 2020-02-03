@@ -1910,7 +1910,7 @@ function generisiProfil(korisnik) {
         var txtIme = document.createElement('input');
         txtIme.type = 'text';
         txtIme.id = "ime";
-        txtIme.classList.add("input--style-4");
+        txtIme.classList.add("input--style-6");
         txtIme.style.height = "40px";
         txtIme.style.width = "250px";
         txtIme.value = korisnik.ime;
@@ -1925,7 +1925,7 @@ function generisiProfil(korisnik) {
         var txtPrezime = document.createElement('input');
         txtPrezime.type = 'text';
         txtPrezime.id = "prezime";
-        txtPrezime.classList.add("input--style-4");
+        txtPrezime.classList.add("input--style-6");
         txtPrezime.style.height = "40px"
         txtPrezime.style.width = "250px"
         txtPrezime.value = korisnik.prezime;
@@ -1945,11 +1945,10 @@ function generisiProfil(korisnik) {
         var txtUsername = document.createElement('input');
         txtUsername.type = 'text';
         txtUsername.id = "username";
-        txtUsername.classList.add("input--style-4");
+        txtUsername.classList.add("input--style-6");
         txtUsername.style.height = "40px"
         txtUsername.style.width = "250px"
         txtUsername.value = korisnik.username;
-        //txtUsername.disabled = "true";
         varUsername.appendChild(txtUsername);
         drugiRed.appendChild(varUsername);
         var varEmail = document.createElement("var");
@@ -1964,11 +1963,13 @@ function generisiProfil(korisnik) {
         txtEmail.style.height = "40px"
         txtEmail.style.width = "250px"
         txtEmail.value = korisnik.email;
-        //txtEmail.disabled = "true";
+        txtEmail.disabled = "true";
         varEmail.appendChild(txtEmail);
         drugiRed.appendChild(varEmail);
         content.appendChild(drugiRed);
 
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
         var varDatumRodjenja = document.createElement("var");
         varDatumRodjenja.classList.add("col-2", "input-group");
         var datumRodjenja = document.createTextNode("Datum rođenja");
@@ -1983,7 +1984,23 @@ function generisiProfil(korisnik) {
         txtDatumRodjenja.value = korisnik.datumRodjenja.substr(0, 10);
         txtDatumRodjenja.disabled = "true";
         varDatumRodjenja.appendChild(txtDatumRodjenja);
-        content.appendChild(varDatumRodjenja);
+        treciRed.appendChild(varDatumRodjenja);
+        var varJBO = document.createElement("var");
+        varJBO.classList.add("col-2", "input-group");
+        var jbo = document.createTextNode("JBZO");
+        varJBO.appendChild(jbo);
+        varJBO.appendChild(document.createElement("br"));
+        var txtJBO = document.createElement('input');
+        txtJBO.type = 'text';
+        txtJBO.id = "jbo";
+        txtJBO.classList.add("input--style-4");
+        txtJBO.style.height = "40px"
+        txtJBO.style.width = "250px"
+        txtJBO.value = korisnik.jbo;
+        txtJBO.disabled = "true";
+        varJBO.appendChild(txtJBO);
+        treciRed.appendChild(varJBO);
+        content.appendChild(treciRed);
 
         var btnIzmene = document.createElement('btn');
         btnIzmene.classList.add("btn", "btn--radius-2", "btn--light-blue");
@@ -1996,11 +2013,12 @@ function generisiProfil(korisnik) {
             var korisnickoIme = $('#username').val();
             var id = korisnik.id;
             var stariUsername = korisnik.korisnickoIme;
+            var jbo = korisnik.jbo;
             $.ajax({
                 url:'api/korisnici/izmenaPodataka',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({id, ime, prezime, email, korisnickoIme}),
+                data: JSON.stringify({id, ime, prezime, email, korisnickoIme, jbo}),
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
@@ -2024,8 +2042,8 @@ function generisiProfil(korisnik) {
 
 
         var btnChangePass = document.createElement("BUTTON");
-        btnChangePass.classList.add("btn2", "btn--light-blue");
-        btnChangePass.innerHTML = "Promijeni lozinku";
+        btnChangePass.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        btnChangePass.innerHTML = "Promeni lozinku";
         btnChangePass.onclick = function(){
             var modal = document.getElementById("requestModal");
             var p = document.getElementById("requestUsername");

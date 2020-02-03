@@ -11,7 +11,7 @@ public class Pacijent extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String jbo;
+    private Long jbo;
 
     @OneToOne
     @JsonIgnore
@@ -66,11 +66,11 @@ public class Pacijent extends Korisnik {
         this.klinikaPacijenta = klinikaPacijenta;
     }
 
-    public String getJbo() {
+    public Long getJbo() {
         return jbo;
     }
 
-    public void setJbo(String jbo) {
+    public void setJbo(Long jbo) {
         this.jbo = jbo;
     }
 

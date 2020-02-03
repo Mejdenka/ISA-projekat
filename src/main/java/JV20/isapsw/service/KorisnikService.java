@@ -64,7 +64,8 @@ public class KorisnikService{
         Date date = df.parse(userRequest.getDatumRodjenja());
         u.setDatumRodjenja(date);
         u.setDatumRegistrovanja(timeProvider.now());
-        Timestamp ts=new Timestamp(timeProvider.now().getTime());
+        u.setJbo(userRequest.getJbo());
+        Timestamp ts = new Timestamp(timeProvider.now().getTime());
         u.setLastPasswordResetDate(ts);
         u.setEnabled(true);
         u.setConfirmed(false);

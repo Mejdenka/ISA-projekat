@@ -12,6 +12,7 @@ public class UserRequest {
     private String korisnickoIme;
     private String lozinka;
     private String email;
+    private Long jbo;
     //Za lekara
     private Long idKlinike;
     private String radnoVreme;
@@ -78,6 +79,14 @@ public class UserRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getJbo() {
+        return jbo;
+    }
+
+    public void setJbo(Long jbo) {
+        this.jbo = jbo;
     }
 
     public Long getIdKlinike() {

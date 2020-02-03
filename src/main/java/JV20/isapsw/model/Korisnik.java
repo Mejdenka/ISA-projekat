@@ -38,6 +38,7 @@ public class Korisnik implements UserDetails{
     private String korisnickoIme;
     private String lozinka;
     private String email;
+    private Long jbo;
     private boolean enabled;
     private boolean confirmed;
     private Timestamp lastPasswordResetDate;
@@ -116,12 +117,20 @@ public class Korisnik implements UserDetails{
         this.lozinka = lozinka;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setJbo(Long jbo) {
+        this.jbo = jbo;
+    }
+
+    public Long getJbo() {
+        return jbo;
     }
 
     public void setAuthorities(List<Authority> authorities) {

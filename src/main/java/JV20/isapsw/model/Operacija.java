@@ -17,6 +17,9 @@ public class Operacija {
     @OneToOne
     private Termin termin;
 
+    private boolean obavljena;
+    private boolean obrisana;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Sala salaOperacije;
@@ -73,5 +76,21 @@ public class Operacija {
 
     public void setKlinikaOperacije(Klinika klinikaOperacije) {
         this.klinikaOperacije = klinikaOperacije;
+    }
+
+    public boolean isObavljena() {
+        return obavljena;
+    }
+
+    public void setObavljena(boolean obavljena) {
+        this.obavljena = obavljena;
+    }
+
+    public boolean isObrisana() {
+        return obrisana;
+    }
+
+    public void setObrisana(boolean obrisana) {
+        this.obrisana = obrisana;
     }
 }

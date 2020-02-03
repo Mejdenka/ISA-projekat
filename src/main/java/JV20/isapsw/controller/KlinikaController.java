@@ -37,6 +37,9 @@ public class KlinikaController {
     @Autowired
     private TerminService terminService;
 
+    @Autowired
+    private SalaService salaService;
+
     @RequestMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
     public List<Klinika> getAll() {
@@ -55,6 +58,20 @@ public class KlinikaController {
         }
         return retVal;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/daLiJeRezervisanaSala/{brojSale}/{datum}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Sala rezervisanaSala(@PathVariable Long brojSale, @PathVariable String datum) throws AccessDeniedException, ParseException {
+        return this.salaService.findIfNotReserved(brojSale, datum);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSala/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Sala getSala(@PathVariable Long brojSale) throws AccessDeniedException {
+        return this.salaService.findOneByBroj(brojSale);
+    }
+
+
 
     /* Mozda je ljepse sa salaDTO... problem je sto nije povezano sa rezervacijama */
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodneSale/{nazivKlinike}")
@@ -116,7 +133,7 @@ public class KlinikaController {
     @RequestMapping(method = RequestMethod.GET, value = "/getPregledi/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public List<Pregled> getPreglediKlinike(@PathVariable Long idKlinike) throws AccessDeniedException {
-        return klinikaService.findOne(idKlinike).getPregledi();
+        return klinikaService.findPregledi(idKlinike);
     }
 
 

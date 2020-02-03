@@ -17,10 +17,17 @@ INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled gla
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 200, 1, 0);
 
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-12 15:50:00', '2020-02-12 16:50:00', 0, 1, 0, 1);
-INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-01-15 12:50:00', '2020-01-15 13:20:00', 0, 1, 0, 8);
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-01-15 12:50:00', '2020-02-15 13:20:00', 0, 1, 0, 8);
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-01-15 12:50:00', '2020-02-13 13:20:00', 0, 1, 0, 8);
 
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen) VALUES (5, 1, 1, 1, 2, 2, 1);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen) VALUES (5, 1, 1, 1, 1, 1, 1);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 3, 1, 1, 2, 2, 1, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 1, 1, 1, 1, 1, 1, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, null, 1, 1, 1, 1, 0, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, null, 1, 8, 1, 1, 0, 0);
+
+INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, 1, 1, 1, 2, 0, 0);
+INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, null, 1, 1, 1, 0, 0);
+
 
 INSERT INTO godisnji_odsustvo_termin (godisnji, odsustvo, pocetak, kraj, obrisan, lekargo_id, lekar_ods_id, odobren) VALUES
  (1, 0, '2020-02-14 01:01:00', '2020-02-22 11:11:00', 0, 5, null, 1);

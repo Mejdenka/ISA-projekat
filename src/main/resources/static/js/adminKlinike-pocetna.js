@@ -2,7 +2,7 @@
 function pocetnaAdminKlinike(ulogovan) {
     korisnik = ulogovan;
     var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
-    var nazivi = ["Vasa klinika", "Dodaj salu", "Dodaj lekara", "Tipovi pregleda", imeKorisnika];
+    var nazivi = ["Vasa klinika", "Zahtevi", "Dodaj lekara", "Tipovi pregleda", imeKorisnika];
 
     for(let naziv of nazivi) {
         //pravljenje dugmadi
@@ -16,9 +16,9 @@ function pocetnaAdminKlinike(ulogovan) {
                 btn.id = "klinikaAdminaBtn"
                 btn.onclick = generisiKlinikuAdmina();
                 break;
-            case "Dodaj salu":
-                btn.id = "dodajSaluBtn"
-                btn.onclick = generisiFormuZaNovuSalu(ulogovan.klinika);
+            case "Zahtevi":
+                btn.id = "zahteviBtn"
+                //btn.onclick = generisiZahteve(ulogovan.klinika);
                 break;
             case "Dodaj lekara":
                 btn.id = "dodajLekaraBtn"
@@ -807,7 +807,8 @@ function ukloniTermin(klinika, terminId) {
     }
 }
 
-function prikaziSaleKlinike(klinika) {
+function prikaziSaleKlinike(klinika, flag) {
+
     return function(){
         $.get({
 
@@ -834,7 +835,13 @@ function prikaziSaleKlinike(klinika) {
                 var saleDiv = document.getElementById("saleDiv");
                 saleDiv.innerHTML = "";
                 var content = saleDiv;
-
+                if(flag == "rezervacija"){
+                    var naslov = document.createElement("HEADER");
+                    naslov.innerText = "Rezervacija sale";
+                    naslov.style.fontSize = "18px";
+                    content.appendChild(naslov);
+                    content.appendChild(document.createElement("br"));
+                }
                 var searchDiv = document.createElement("DIV");
                 searchDiv.align = "center";
                 var search = document.createElement("INPUT");
@@ -844,6 +851,16 @@ function prikaziSaleKlinike(klinika) {
                 search.name = "search";
 
                 searchDiv.appendChild(search);
+
+                var datumPocetak = document.createElement('input');
+                datumPocetak.type = 'date';
+                datumPocetak.id = "datumPoc";
+                datumPocetak.classList.add("input--style-4");
+                datumPocetak.style.height = "40px";
+                datumPocetak.style.width = "190px"
+                searchDiv.appendChild(datumPocetak);
+
+
                 content.append(searchDiv);
                 $('#search').keyup(function(){
                     search_tabela_sala($(this).val());
@@ -858,13 +875,14 @@ function prikaziSaleKlinike(klinika) {
                 if(sale.length > 0){
                     for (let sala of sale) {
                         var podaciSale   = tableRef.insertRow();
-                        var nazivSale = podaciSale.insertCell(0);
+
+                        var brojSale = podaciSale.insertCell(0);
+                        var cifra = document.createTextNode("("+sala.broj+")");
+                        brojSale.appendChild(cifra);
+
+                        var nazivSale = podaciSale.insertCell(1);
                         var nazivSaleText = document.createTextNode(sala.naziv);
                         nazivSale.appendChild(nazivSaleText);
-
-                        var brojSale = podaciSale.insertCell(1);
-                        var cifra = document.createTextNode(sala.broj);
-                        brojSale.appendChild(cifra);
 
                         var izmeni = podaciSale.insertCell(2);
                         var izmeniBtn = document.createElement("BUTTON");
@@ -884,6 +902,11 @@ function prikaziSaleKlinike(klinika) {
                     }
                     table.appendChild(tableRef);
                     content.appendChild(table);
+                    var dodajBtn = document.createElement("BUTTON");
+                    dodajBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    dodajBtn.innerHTML = "Dodaj novu salu";
+                    dodajBtn.onclick = dodajSalu(klinika);
+                    content.appendChild(dodajBtn);
                 } else if (sale.length === 0) {
                     var textnode = document.createTextNode("Ne postoje sale u klinici.");
                     document.getElementById("saleDiv").appendChild(textnode);
@@ -891,6 +914,125 @@ function prikaziSaleKlinike(klinika) {
             }
 
         });
+    }
+}
+
+function search_tabela_sala(value) {
+    $('#tabelaSala tr').each(function () {
+        var found = 'false';
+        $(this).each(function () {
+            if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                found = 'true';
+            }
+        });
+        if (found == 'true') {
+            var poc = $('#datumPoc').val();
+            var red = $(this).text();
+            var brojSale = red[1].split(')');
+
+            if(poc != ""){
+
+                $.get({
+                    url: 'api/klinike/daLiJeRezervisanaSala/' + brojSale+'/'+poc,
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function (sala) {
+                        console.log(sala)
+                        console.log(poc)
+                    }
+                });
+            }
+
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+
+function dodajSalu(klinika) {
+    return function () {
+        var modal = document.getElementById("dodajSaluModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeDodajSalu");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var content = document.getElementById("dodajSaluDiv");
+        content.innerHTML = "";
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var varNaziv = document.createElement("var");
+        varNaziv.classList.add("col-2", "input-group");
+        var naziv = document.createTextNode("Naziv");
+        varNaziv.appendChild(naziv);
+        varNaziv.appendChild(document.createElement("br"));
+        var txtNaziv = document.createElement('input');
+        txtNaziv.type = 'text';
+        txtNaziv.id = "nazivSale";
+        txtNaziv.classList.add("input--style-4");
+        txtNaziv.style.height = "40px";
+        txtNaziv.style.width = "250px";
+        varNaziv.appendChild(txtNaziv);
+        prviRed.appendChild(varNaziv);
+
+        var varDodaj = document.createElement("var");
+        varDodaj.classList.add("col-2", "input-group");
+        varDodaj.appendChild(document.createElement("br"));
+        var btnAdd = document.createElement('button');
+        btnAdd.classList.add("btn2", "btn--light-blue");
+        btnAdd.style.height = "35px"
+        btnAdd.style.width = "250px"
+        btnAdd.innerHTML = "Dodaj salu";
+
+        btnAdd.onclick = function(){
+            var naziv=$('#nazivSale').val();
+
+            if(naziv === ""){
+                alert("Polje ne sme ostati prazno.")
+                return
+            }
+
+            if(naziv.length < 3){
+                alert("Naziv mora imati više od tri karaktera!")
+                return
+            }
+
+            var idKlinike = klinika.id;
+            $.post({
+                url: 'api/sale/dodajSalu',
+                data: JSON.stringify({naziv, idKlinike}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert("Nova sala uspesno dodata.");
+                    modal.style.display = "none";
+
+                },
+                error: function() {
+                    alert("Greška pri dodavanju sale.");
+                    modal.style.display = "none";
+                }
+            });
+        }
+        varDodaj.appendChild(btnAdd);
+        varDodaj.appendChild(document.createElement("br"));
+        prviRed.appendChild(varDodaj);
+        content.appendChild(prviRed);
     }
 }
 
@@ -1402,73 +1544,209 @@ function generisiFormuZaNovogLekara(klinika) {
     }
 }
 
-function generisiFormuZaNovuSalu(klinika) {
-    return function () {
-        $("#content").fadeOut(100, function(){
-            var content = document.getElementById("content");
-            content.innerHTML = "";
+function generisiZahteve() {
+    var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+    $.ajax
+    ({
+        type: "GET",
+        url: 'api/korisnici/getKlinikaAdmina/' + ulogovan.id,
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function (klinika) {
+            $("#content").fadeOut(100, function () {
+                //ZA PREGLEDE**************************************************************************************
+                $.get({
 
-            var prviRed = document.createElement("var");
-            prviRed.classList.add("row", "wrapper--w680");
-            var varNaziv = document.createElement("var");
-            varNaziv.classList.add("col-2", "input-group");
-            var naziv = document.createTextNode("Naziv");
-            varNaziv.appendChild(naziv);
-            varNaziv.appendChild(document.createElement("br"));
-            var txtNaziv = document.createElement('input');
-            txtNaziv.type = 'text';
-            txtNaziv.id = "nazivSale";
-            txtNaziv.classList.add("input--style-4");
-            txtNaziv.style.height = "40px";
-            txtNaziv.style.width = "250px";
-            varNaziv.appendChild(txtNaziv);
-            prviRed.appendChild(varNaziv);
-
-            var varDodaj = document.createElement("var");
-            varDodaj.classList.add("col-2", "input-group");
-            varDodaj.appendChild(document.createElement("br"));
-            var btnAdd = document.createElement('button');
-            btnAdd.classList.add("btn2", "btn--light-blue");
-            btnAdd.style.height = "35px"
-            btnAdd.style.width = "250px"
-            btnAdd.innerHTML = "Dodaj salu";
-
-            btnAdd.onclick = function(){
-                var naziv=$('#nazivSale').val();
-
-                if(naziv === ""){
-                    alert("Polje ne sme ostati prazno.")
-                    return
-                }
-
-                if(naziv.length < 3){
-                    alert("Naziv mora imati više od tri karaktera!")
-                    return
-                }
-
-                var idKlinike = klinika.id;
-                console.log(localStorage.getItem('jwt'))
-                $.post({
-                    url: 'api/sale/dodajSalu',
-                    data: JSON.stringify({naziv, idKlinike}),
+                    url: 'api/adminKlinike/getZahteviZaPreglede/' + klinika.id,
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                     },
-                    success: function() {
-                        alert("Nova sala uspesno dodata.")
-                    },
-                    error: function() {
-                        alert("Greška pri dodavanju sale.")
+                    success: function (pregledi) {
+
+                        var content = document.getElementById("content");
+                        content.innerHTML = "";
+                        var naslov = document.createElement("HEADER");
+                        naslov.innerText = "Pregledi";
+                        naslov.style.fontSize = "18px";
+                        content.appendChild(naslov);
+                        content.appendChild(document.createElement("br"));
+
+                        var table = document.createElement('table');
+                        table.id = "tabelaPregleda";
+                        table.classList.add("tabela");
+
+                        var header = table.createTHead();
+                        var row = header.insertRow(0);
+                        var cell = row.insertCell(0);
+                        var cell1 = row.insertCell(1);
+                        var cell2 = row.insertCell(2);
+                        var cell3 = row.insertCell(3);
+                        cell.innerHTML = "<b>Tip pregleda</b>";
+                        cell1.innerHTML = "<b>Lekar</b>";
+                        cell2.innerHTML = "<b>Pacijent</b>";
+                        cell3.innerHTML = "<b>Termin</b>";
+
+                        var tableRef = document.createElement('tbody');
+                        var idx = 0;
+
+                        if (pregledi.length > 0) {
+                            for (let zahtev of pregledi) {
+                                var podaciZahteva = tableRef.insertRow();
+                                var tipZahteva = podaciZahteva.insertCell(0);
+                                var tipZahtevaText = document.createTextNode(zahtev.tipPregleda.naziv);
+                                tipZahteva.appendChild(tipZahtevaText);
+
+                                var lekar = podaciZahteva.insertCell(1);
+                                var lekarText = document.createTextNode(zahtev.lekar.ime + " " + zahtev.lekar.prezime);
+                                lekar.appendChild(lekarText);
+
+                                var pacijent = podaciZahteva.insertCell(2);
+                                var pacijentText = document.createTextNode(zahtev.pacijent.ime + " " + zahtev.pacijent.prezime);
+                                pacijent.appendChild(pacijentText);
+
+                                var termin = podaciZahteva.insertCell(3);
+                                var terminText = document.createTextNode(zahtev.termin.pocetak + "-" + zahtev.termin.kraj);
+                                termin.appendChild(terminText);
+
+                                var prihvati = podaciZahteva.insertCell(4);
+                                var prihvatiBtn = document.createElement("BUTTON");
+                                prihvatiBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                prihvatiBtn.innerHTML = "&#10003;";
+                                prihvati.onclick = prikaziSaleKlinike(klinika, "rezervacija");
+                                prihvati.appendChild(prihvatiBtn);
+
+                                var ukloni = podaciZahteva.insertCell(5);
+                                var ukloniBtn = document.createElement("BUTTON");
+                                ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                ukloniBtn.innerHTML = "&times;";
+                                ukloniBtn.onclick = ukloniZahtevZaPregled(klinika, zahtev.id);
+                                ukloni.appendChild(ukloniBtn);
+                                idx = idx + 1;
+
+                            }
+                            table.appendChild(tableRef);
+                            content.appendChild(table);
+
+                        } else if (pregledi.length === 0) {
+                            var textnode = document.createTextNode("Ne postoje zahtevi za rezervaciju termina trenutno.");
+                            content.appendChild(textnode);
+                        }
+
+
+                        //ZA OPERACIJE******************************************************************************
+                        $.get({
+
+                            url: 'api/adminKlinike/getZahteviZaOperacije/' + klinika.id,
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function (operacije) {
+
+                                var content = document.getElementById("content");
+                                content.appendChild(document.createElement("br"));
+                                var naslov = document.createElement("HEADER");
+                                naslov.innerText = "Operacije";
+                                naslov.style.fontSize = "18px";
+                                content.appendChild(naslov);
+                                content.appendChild(document.createElement("br"));
+
+                                var table = document.createElement('table');
+                                table.id = "tabelaOperacija";
+                                table.classList.add("tabela");
+
+                                var header = table.createTHead();
+                                var row = header.insertRow(0);
+                                var cell1 = row.insertCell(0);
+                                var cell2 = row.insertCell(1);
+                                var cell3 = row.insertCell(2);
+                                cell1.innerHTML = "<b>Lekar</b>";
+                                cell2.innerHTML = "<b>Pacijent</b>";
+                                cell3.innerHTML = "<b>Termin</b>";
+
+                                var tableRef = document.createElement('tbody');
+                                var idx = 0;
+
+                                if (operacije.length > 0) {
+                                    for (let zahtev of operacije) {
+                                        var podaciZahteva = tableRef.insertRow();
+
+                                        var lekar = podaciZahteva.insertCell(0);
+                                        var lekarText = document.createTextNode(zahtev.lekar.ime + " " + zahtev.lekar.prezime);
+                                        lekar.appendChild(lekarText);
+
+                                        var pacijent = podaciZahteva.insertCell(1);
+                                        var pacijentText = document.createTextNode(zahtev.pacijent.ime + " " + zahtev.pacijent.prezime);
+                                        pacijent.appendChild(pacijentText);
+
+                                        var termin = podaciZahteva.insertCell(2);
+                                        var terminText = document.createTextNode(zahtev.termin.pocetak + "-" + zahtev.termin.kraj);
+                                        termin.appendChild(terminText);
+
+                                        var prihvati = podaciZahteva.insertCell(3);
+                                        var prihvatiBtn = document.createElement("BUTTON");
+                                        prihvatiBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                        prihvatiBtn.innerHTML = "&#10003;";
+                                        prihvati.appendChild(prihvatiBtn);
+
+                                        var ukloni = podaciZahteva.insertCell(4);
+                                        var ukloniBtn = document.createElement("BUTTON");
+                                        ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                                        ukloniBtn.innerHTML = "&times;";
+                                        ukloniBtn.onclick = ukloniZahtevZaOperaciju(klinika, zahtev.id);
+                                        ukloni.appendChild(ukloniBtn);
+                                    }
+                                    table.appendChild(tableRef);
+                                    content.appendChild(table);
+
+                                } else if (operacije.length === 0) {
+                                    var textnode = document.createTextNode("Ne postoje zahtevi za rezervaciju termina trenutno.");
+                                    content.appendChild(textnode);
+                                }
+                            }
+                        });
+
                     }
                 });
-            }
-            varDodaj.appendChild(btnAdd);
-            varDodaj.appendChild(document.createElement("br"));
-            prviRed.appendChild(varDodaj);
-            content.appendChild(prviRed);
 
+
+            });
+            $('#content').fadeIn(500);
+        }
+    });
+}
+
+function ukloniZahtevZaPregled(klinika, zahtevId) {
+    return function () {
+        $.ajax({
+            url:'api/adminKlinike/ukloniZahtevZaPregled/'+klinika.id+'/'+zahtevId,
+            type: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function() {
+                generisiZahteve(klinika);
+            }
         });
-        $("#content").fadeIn(500);
+
+    }
+}
+
+function ukloniZahtevZaOperaciju(klinika, zahtevId) {
+    return function () {
+        $.ajax({
+            url:'api/adminKlinike/ukloniZahtevZaOperaciju/'+klinika.id+'/'+zahtevId,
+            type: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function() {
+                generisiZahteve(klinika);
+            }
+        });
+
     }
 }

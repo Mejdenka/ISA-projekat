@@ -120,6 +120,23 @@ $(document).ready(function(){
         generisiTipovePregleda();
     });
 
+    $('body').on('click', '#zahteviBtn', function(e) {
+        var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/korisnici/getKlinikaAdmina/' + ulogovan.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (klinika) {
+                generisiZahteve(klinika);
+            }
+        });
+
+    });
+
     $('body').on('click', '#slobodniTerminiBtn', function(e) {
             var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
             $.ajax

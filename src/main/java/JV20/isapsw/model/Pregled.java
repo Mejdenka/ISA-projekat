@@ -19,6 +19,7 @@ public class Pregled {
     private Lekar lekar;
 
     private boolean obavljen;
+    private boolean obrisan;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -95,5 +96,13 @@ public class Pregled {
 
     public void setObavljen(boolean obavljen) {
         this.obavljen = obavljen;
+    }
+
+    public boolean isObrisan() {
+        return obrisan;
+    }
+
+    public void setObrisan(boolean obrisan) {
+        this.obrisan = obrisan;
     }
 }

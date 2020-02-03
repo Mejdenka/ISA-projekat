@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -253,5 +254,22 @@ public class KlinikaController {
         zaIzmenu.setOpis(klinika.getOpis());
         klinikaService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "/dodajKliniku")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> dodajKliniku(@RequestBody Klinika klinika) throws AccessDeniedException, ParseException {
+        Klinika k = this.klinikaService.findByNaziv(klinika.getNaziv());
+
+        if(k != null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        klinika.setProsecnaOcena(0.0);
+        this.klinikaService.save(klinika);
+
+
+        return new ResponseEntity<User>( HttpStatus.CREATED);
     }
 }

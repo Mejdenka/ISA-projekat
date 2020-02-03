@@ -1,14 +1,12 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.Pacijent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

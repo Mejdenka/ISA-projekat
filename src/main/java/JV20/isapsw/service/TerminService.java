@@ -1,5 +1,6 @@
 package JV20.isapsw.service;
 
+import JV20.isapsw.model.Klinika;
 import JV20.isapsw.model.Termin;
 import JV20.isapsw.repository.TerminRepository;
 
@@ -29,6 +30,12 @@ public class TerminService {
     }
 
     public Termin save(Termin termin) {
+        return terminRepository.save(termin);
+    }
+
+    public Termin rezervisi(Termin termin, Klinika klinika) {
+        termin.setRezervisan(true);
+        termin.setKlinikaTermina(klinika);
         return terminRepository.save(termin);
     }
 

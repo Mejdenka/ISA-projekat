@@ -6,14 +6,13 @@ import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.dto.SalaDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.model.*;
-import JV20.isapsw.service.KlinikaService;
-import JV20.isapsw.service.TerminService;
-import JV20.isapsw.service.TipPregledaService;
+import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -28,6 +27,9 @@ import java.util.List;
 public class KlinikaController {
     @Autowired
     private KlinikaService klinikaService;
+
+    @Autowired
+    private KorisnikService korisnikService;
 
     @Autowired
     private TipPregledaService tipPregledaService;
@@ -98,10 +100,10 @@ public class KlinikaController {
         return klinikaService.findOne(idKlinike).getSlobodniTermini();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{nazivKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<LekarDTO> getLekari(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Lekar> lekari = klinikaService.findByNaziv(nazivKlinike).getLekari();
+    public List<LekarDTO> getLekari(@PathVariable Long idKlinike) throws AccessDeniedException {
+        List<Lekar> lekari = klinikaService.findOne(idKlinike).getLekari();
         List<LekarDTO> retVal = new ArrayList<>();
         for(Lekar l : lekari){
             if(!l.isObrisan()){
@@ -110,6 +112,14 @@ public class KlinikaController {
         }
         return retVal;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getPregledi/{idKlinike}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<Pregled> getPreglediKlinike(@PathVariable Long idKlinike) throws AccessDeniedException {
+        return klinikaService.findOne(idKlinike).getPregledi();
+    }
+
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniLekari/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -130,6 +140,21 @@ public class KlinikaController {
     public List<TipPregleda> getTipoviPregleda(@PathVariable Long klinikaId) throws AccessDeniedException {
        //if bool zauzeto == true onda ne ubacujes u listu
         List<TipPregleda> tipoviPregleda= klinikaService.findOne(klinikaId).getTipoviPregleda();
+        List<TipPregleda> retVal = new ArrayList<>();
+        for(TipPregleda tp : tipoviPregleda){
+            if(!tp.isObrisan()){
+                retVal.add(tp);
+            }
+        }
+        return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getTipoviPregleda")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<TipPregleda> getTipoviPregledaNoId() throws AccessDeniedException {
+        Lekar lekar =  (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        //if bool zauzeto == true onda ne ubacujes u listu
+        List<TipPregleda> tipoviPregleda= klinikaService.findOne(lekar.getKlinikaLekara().getId()).getTipoviPregleda();
         List<TipPregleda> retVal = new ArrayList<>();
         for(TipPregleda tp : tipoviPregleda){
             if(!tp.isObrisan()){

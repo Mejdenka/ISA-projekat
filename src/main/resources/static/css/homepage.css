@@ -328,8 +328,8 @@ h6 {
     font-size: 15px;
 }
 
-#divGo {display:inline-block;margin-right:10px;}
-#divOds {display:inline-block;}
+.divGo {display:inline-block;margin-right:10px;}
+.divOds {display:inline-block;}
 
 ul {
     list-style-type: none;

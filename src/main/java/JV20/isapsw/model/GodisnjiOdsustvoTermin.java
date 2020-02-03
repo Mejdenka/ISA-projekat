@@ -18,6 +18,7 @@ public class GodisnjiOdsustvoTermin {
     private Date kraj;
 
     private boolean obrisan;
+    private boolean odobren;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -81,6 +82,14 @@ public class GodisnjiOdsustvoTermin {
 
     public void setLekarOds(Lekar lekarOds) {
         this.lekarOds = lekarOds;
+    }
+
+    public boolean isOdobren() {
+        return odobren;
+    }
+
+    public void setOdobren(boolean odobren) {
+        this.odobren = odobren;
     }
 
     public boolean isObrisan() {

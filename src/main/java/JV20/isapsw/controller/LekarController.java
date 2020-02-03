@@ -5,9 +5,7 @@ import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.model.Pacijent;
-import JV20.isapsw.service.KlinikaService;
-import JV20.isapsw.service.KorisnikService;
-import JV20.isapsw.service.LekarService;
+import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +31,14 @@ public class LekarController {
     private KorisnikService korisnikService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private TerminService terminService;
+    @Autowired
+    private OperacijaService operacijaService;
+    @Autowired
+    private PregledService pregledService ;
+    @Autowired
+    private TipPregledaService tipPregledaService ;
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaLekara")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -70,6 +76,30 @@ public class LekarController {
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/napraviTerminZaPregled/{tipPregleda}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Termin termin,  @PathVariable("tipPregleda") String tipPregleda) throws AccessDeniedException, ParseException {
+        Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Klinika klinika = this.klinikaService.findOne(lekar.getKlinikaLekara().getId());
+        TipPregleda tp = tipPregledaService.findOneByNaziv(tipPregleda.replace("%20", " "));
+        Pacijent pacijent = (Pacijent)this.korisnikService.findOne(termin.getPacijentId());
+        Termin noviTermin = this.terminService.rezervisi(termin, klinika);
+        Pregled pregled = this.pregledService.saveNew(noviTermin, pacijent, lekar, tp);
+
+        return new ResponseEntity<User>( HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/napraviTerminZaOperaciju/{pacijentId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public ResponseEntity<?> napraviTerminZaOperaciju( @RequestBody Termin termin, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException, ParseException {
+        Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Klinika klinika = this.klinikaService.findOne(lekar.getKlinikaLekara().getId());
+        Pacijent pacijent = (Pacijent)this.korisnikService.findOne(pacijentId);
+        Termin noviTermin = this.terminService.rezervisi(termin, klinika);
+        Operacija operacija = this.operacijaService.saveNew(noviTermin, pacijent, lekar);
+
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/rezervisiGoOds")
     @PreAuthorize("hasRole('DOKTOR')")

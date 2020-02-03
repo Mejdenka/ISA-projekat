@@ -76,6 +76,8 @@ public class PacijentService {
         return pacijent;
     }
 
+    public Pacijent save(Pacijent pacijent) { return this.pacijentRepository.save(pacijent);}
+
     public void remove(Long id) {
         pacijentRepository.deleteById(id);
     }

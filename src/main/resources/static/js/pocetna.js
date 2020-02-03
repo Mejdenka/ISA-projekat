@@ -2210,7 +2210,6 @@ function infoKorisnik(korisnik)
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
                 success: function() {
-
                     alert('Zahtjev za registraciju prihvacen!');
                     generisiZahteveZaRegistraciju();
                 },

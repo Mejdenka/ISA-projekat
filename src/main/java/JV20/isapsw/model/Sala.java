@@ -15,17 +15,20 @@ public class Sala {
     private Long id;
 
     private String naziv;
+    private Long broj;
     private boolean slobodna;
     private boolean rezervisana;
     private boolean obrisana = false;
     private Long idKlinike;
 
-    @OneToMany
-    private Set<Operacija> operacije;
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Pregled> pregledi;
+
+    @OneToMany(mappedBy = "salaOperacije", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Operacija> operacije;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -103,5 +106,13 @@ public class Sala {
 
     public void setIdKlinike(Long idKlinike) {
         this.idKlinike = idKlinike;
+    }
+
+    public Long getBroj() {
+        return broj;
+    }
+
+    public void setBroj(Long broj) {
+        this.broj = broj;
     }
 }

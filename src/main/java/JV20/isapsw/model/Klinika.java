@@ -37,7 +37,7 @@ public class Klinika {
 
     @OneToMany(mappedBy = "klinikaPregleda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Pregled> obavljeniPregledi;
+    private List<Pregled> pregledi;
 
     @OneToMany(mappedBy = "klinikaPacijenta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -47,6 +47,9 @@ public class Klinika {
     @JsonIgnore
     private List<MedicinskaSestra> medicinskeSestre;
 
+    @OneToMany(mappedBy = "klinikaOperacije", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Operacija> operacije;
 
     public Klinika() {}
 
@@ -122,12 +125,12 @@ public class Klinika {
         this.slobodniTermini = slobodniTermini;
     }
 
-    public List<Pregled> getObavljeniPregledi() {
-        return obavljeniPregledi;
+    public List<Pregled> getPregledi() {
+        return pregledi;
     }
 
-    public void setObavljeniPregledi(List<Pregled> obavljeniPregledi) {
-        this.obavljeniPregledi = obavljeniPregledi;
+    public void setPregledi(List<Pregled> pregledi) {
+        this.pregledi = pregledi;
     }
 
     public List<Pacijent> getPacijenti() {
@@ -144,5 +147,13 @@ public class Klinika {
 
     public void setMedicinskeSestre(List<MedicinskaSestra> medicinskeSestre) {
         this.medicinskeSestre = medicinskeSestre;
+    }
+
+    public List<Operacija> getOperacije() {
+        return operacije;
+    }
+
+    public void setOperacije(List<Operacija> operacije) {
+        this.operacije = operacije;
     }
 }

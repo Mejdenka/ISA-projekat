@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class SalaDTO {
     private Long id;
+    private String naziv;
+    private Long broj;
     private Set<PregledDTO> pregledi;
     private Set<OperacijaDTO> operacije;
 
@@ -27,6 +29,22 @@ public class SalaDTO {
             operacije.add(oDTO);
         }
 
+    }
+
+    public String getNaziv() {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public Long getBroj() {
+        return broj;
+    }
+
+    public void setBroj(Long broj) {
+        this.broj = broj;
     }
 
     public SalaDTO(Long id, Set<PregledDTO> pregledi, Set<OperacijaDTO> operacije){

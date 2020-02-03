@@ -18,6 +18,8 @@ public class Pregled {
     @OneToOne
     private Lekar lekar;
 
+    private boolean obavljen;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Sala sala;
@@ -28,8 +30,6 @@ public class Pregled {
 
     @OneToOne
     private TipPregleda tipPregleda;
-
-    private int trajanje;
 
     public Pregled() {}
 
@@ -65,14 +65,6 @@ public class Pregled {
         this.lekar = lekar;
     }
 
-    public int getTrajanje() {
-        return trajanje;
-    }
-
-    public void setTrajanje(int trajanje) {
-        this.trajanje = trajanje;
-    }
-
     public TipPregleda getTipPregleda() {
         return tipPregleda;
     }
@@ -95,5 +87,13 @@ public class Pregled {
 
     public void setKlinikaPregleda(Klinika klinikaPregleda) {
         this.klinikaPregleda = klinikaPregleda;
+    }
+
+    public boolean isObavljen() {
+        return obavljen;
+    }
+
+    public void setObavljen(boolean obavljen) {
+        this.obavljen = obavljen;
     }
 }

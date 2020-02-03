@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,14 @@ public class Operacija {
     private Lekar lekar;
     @OneToOne
     private Termin termin;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Sala salaOperacije;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Klinika klinikaOperacije;
 
     public Operacija() {}
 
@@ -47,5 +57,21 @@ public class Operacija {
 
     public void setTermin(Termin termin) {
         this.termin = termin;
+    }
+
+    public Sala getSalaOperacije() {
+        return salaOperacije;
+    }
+
+    public void setSalaOperacije(Sala salaOperacije) {
+        this.salaOperacije = salaOperacije;
+    }
+
+    public Klinika getKlinikaOperacije() {
+        return klinikaOperacije;
+    }
+
+    public void setKlinikaOperacije(Klinika klinikaOperacije) {
+        this.klinikaOperacije = klinikaOperacije;
     }
 }

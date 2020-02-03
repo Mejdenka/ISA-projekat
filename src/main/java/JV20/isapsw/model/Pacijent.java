@@ -20,6 +20,14 @@ public class Pacijent extends Korisnik {
     @OneToMany
     private Set<Recept> recepti;
 
+    @OneToMany(mappedBy = "pacijent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Operacija> operacije;
+
+    @OneToMany(mappedBy = "pacijent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Pregled> pregledi;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Klinika klinikaPacijenta;
@@ -66,4 +74,19 @@ public class Pacijent extends Korisnik {
         this.jbo = jbo;
     }
 
+    public Set<Operacija> getOperacije() {
+        return operacije;
+    }
+
+    public void setOperacije(Set<Operacija> operacije) {
+        this.operacije = operacije;
+    }
+
+    public Set<Pregled> getPregledi() {
+        return pregledi;
+    }
+
+    public void setPregledi(Set<Pregled> pregledi) {
+        this.pregledi = pregledi;
+    }
 }

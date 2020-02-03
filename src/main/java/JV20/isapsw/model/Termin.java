@@ -13,6 +13,9 @@ public class Termin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //samo za slanje sa fronta
+    private Long pacijentId;
+
     private Date pocetak;
     private Date kraj;
 
@@ -36,6 +39,14 @@ public class Termin {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPacijentId() {
+        return pacijentId;
+    }
+
+    public void setPacijentId(Long pacijentId) {
+        this.pacijentId = pacijentId;
     }
 
     public Date getPocetak() {

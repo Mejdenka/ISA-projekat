@@ -858,6 +858,7 @@ function prikaziSaleKlinike(klinika, flag) {
                 datumPocetak.classList.add("input--style-4");
                 datumPocetak.style.height = "40px";
                 datumPocetak.style.width = "190px"
+
                 searchDiv.appendChild(datumPocetak);
 
 
@@ -891,7 +892,7 @@ function prikaziSaleKlinike(klinika, flag) {
                         izmeniBtn.onclick = infoSale(sala);
                         izmeni.appendChild(izmeniBtn);
 
-                        var ukloni = podaciSale.insertCell(2);
+                        var ukloni = podaciSale.insertCell(3);
                         var ukloniBtn = document.createElement("BUTTON");
                         ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                         ukloniBtn.innerHTML = "-";
@@ -918,6 +919,14 @@ function prikaziSaleKlinike(klinika, flag) {
 }
 
 function search_tabela_sala(value) {
+
+    //PRVO REFRESH TABELE, BRISANJE DODAVANIH DIGMADI
+    var table = document.getElementById("tabelaSala");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        if(row.cells[4] != null)
+            row.deleteCell(4);
+    }
+
     $('#tabelaSala tr').each(function () {
         var found = 'false';
         $(this).each(function () {
@@ -925,22 +934,53 @@ function search_tabela_sala(value) {
                 found = 'true';
             }
         });
-        if (found == 'true') {
+        if (found === 'true') {
             var poc = $('#datumPoc').val();
             var red = $(this).text();
             var brojSale = red[1].split(')');
+            var redTabele = $(this)[0];
 
-            if(poc != ""){
-
+            if(poc !== ""){
+                console.log(poc)
                 $.get({
                     url: 'api/klinike/daLiJeRezervisanaSala/' + brojSale+'/'+poc,
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                     },
-                    success: function (sala) {
-                        console.log(sala)
-                        console.log(poc)
+                    success: function (s) {
+                        if(s === "SLOBODNA"){
+                            if(!redTabele.contains(document.getElementById("rezervisiBtn" ))){
+                                if(redTabele.contains(document.getElementById("iduciDatumBtn"))){
+                                    //redTabele.cells[4].removeChild(document.getElementById("iduciDatumBtn"));
+                                    redTabele.deleteCell(4);
+                                }
+                                var btn = document.createElement('input');
+                                btn.type = "button";
+                                btn.id = "rezervisiBtn";
+                                btn.value = "Rezervisi";
+                                btn.classList.add("btn2", "btn--light-blue");
+                                //btn.onclick = (function(entry) {return function() {chooseUser(entry);}})(entry);
+                                var btnCell = redTabele.insertCell(4);
+                                btnCell.appendChild(btn);
+                            }
+                        } else {
+                            if(!(redTabele.contains(document.getElementById("iduciDatumBtn")))){
+                                if(redTabele.contains(document.getElementById("rezervisiBtn"))){
+                                    //redTabele.cells[4].removeChild(document.getElementById("iduciDatumBtn"));
+                                    redTabele.deleteCell(4);
+                                }
+                                var btn = document.createElement('input');
+                                btn.type = "button";
+                                btn.id = "iduciDatumBtn";
+                                btn.value = s;
+                                btn.classList.add("btn2", "btn--light-blue");
+                                //btn.onclick = (function(entry) {return function() {chooseUser(entry);}})(entry);
+                                var btnCell =  redTabele.insertCell(4);
+                                btnCell.appendChild(btn);
+                            }
+                        }
+
                     }
                 });
             }

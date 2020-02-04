@@ -61,7 +61,7 @@ public class KlinikaController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/daLiJeRezervisanaSala/{brojSale}/{datum}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public Sala rezervisanaSala(@PathVariable Long brojSale, @PathVariable String datum) throws AccessDeniedException, ParseException {
+    public String rezervisanaSala(@PathVariable Long brojSale, @PathVariable String datum) throws AccessDeniedException, ParseException {
         return this.salaService.findIfNotReserved(brojSale, datum);
     }
 

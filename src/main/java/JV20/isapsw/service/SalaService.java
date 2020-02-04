@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,19 +31,37 @@ public class SalaService {
 
     public Sala findOneByBroj(Long broj){ return salaRepository.findByBroj(broj);}
 
-    public Sala findIfNotReserved(Long broj, String datum) throws ParseException {
+    //pomocna metoda da vidimo da li sala ima rezervisanih pregleda za dati datum
+    public boolean daLiJeZauzeta(Long broj, String datum){
         Sala sala = findOneByBroj(broj);
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for(Pregled p : sala.getPregledi()) {
             String datumPregleda = df.format(p.getTermin().getPocetak());
-            System.out.println(datumPregleda.substring(0, 10));
-            System.out.println(datum);
-            if(datum.equals(datumPregleda.substring(0, 10))){
-                System.out.println("ZAUZETA");
+            if(datum.equals(datumPregleda.substring(0, 10)) && !p.isObavljen() && !p.isObrisan()){
+                System.out.println(datumPregleda.substring(0,10));
+                return true;
             }
         }
+        return false;
+    }
 
-        return sala;
+    public String findIfNotReserved(Long broj, String datum) throws ParseException {
+
+        if(!daLiJeZauzeta(broj, datum))
+            return ("SLOBODNA");
+        else
+        {
+            do
+            {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c = Calendar.getInstance();
+                c.setTime(sdf.parse(datum));
+                c.add(Calendar.DATE, 1);  // number of days to add
+                datum = sdf.format(c.getTime());
+                System.out.println(datum);
+            } while (daLiJeZauzeta(broj, datum));
+            return datum;
+        }
     }
 
     public List<Sala> findAll() {

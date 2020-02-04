@@ -1,10 +1,9 @@
 package JV20.isapsw.service;
 
+import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
 import JV20.isapsw.dto.OperacijaDTO;
 import JV20.isapsw.dto.PregledDTO;
-import JV20.isapsw.model.Klinika;
-import JV20.isapsw.model.Operacija;
-import JV20.isapsw.model.Pregled;
+import JV20.isapsw.model.*;
 import JV20.isapsw.repository.KlinikaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +39,25 @@ public class KlinikaService {
 
     public void remove(Long id) {
         klinikaRepository.deleteById(id);
+    }
+
+    public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(Klinika klinika){
+        List<GodisnjiOdsustvoTerminDTO> retVal = new ArrayList<>();
+        for(Lekar lekar : klinika.getLekari()){
+            if(!lekar.isObrisan()){
+               for(GodisnjiOdsustvoTermin ods : lekar.getRezervisanaOdustva()){
+                   if(!ods.isObrisan()){
+                       retVal.add(new GodisnjiOdsustvoTerminDTO(ods));
+                   }
+               }
+                for(GodisnjiOdsustvoTermin go : lekar.getRezervisaniGO()){
+                    if(!go.isObrisan()){
+                        retVal.add(new GodisnjiOdsustvoTerminDTO(go));
+                    }
+                }
+            }
+        }
+        return retVal;
     }
 
     public List<Pregled> findPregledi(Long id){

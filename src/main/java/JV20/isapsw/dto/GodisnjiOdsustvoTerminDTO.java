@@ -1,6 +1,7 @@
 package JV20.isapsw.dto;
 
 import JV20.isapsw.model.GodisnjiOdsustvoTermin;
+import JV20.isapsw.model.Termin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +14,9 @@ public class GodisnjiOdsustvoTerminDTO {
     private boolean godisnji;
     private boolean odsustvo;
 
+    private LekarDTO lekarGO;
+    private LekarDTO lekarOds;
+
     public GodisnjiOdsustvoTerminDTO() {}
 
     public GodisnjiOdsustvoTerminDTO(GodisnjiOdsustvoTermin godisnjiOdsustvoTermin){
@@ -24,6 +28,10 @@ public class GodisnjiOdsustvoTerminDTO {
         this.kraj = strKraj;
         this.godisnji = godisnjiOdsustvoTermin.isGodisnji();
         this.odsustvo = godisnjiOdsustvoTermin.isOdsustvo();
+        if(godisnjiOdsustvoTermin.getLekarGO() != null)
+            this.lekarGO = new LekarDTO(godisnjiOdsustvoTermin.getLekarGO());
+        if(godisnjiOdsustvoTermin.getLekarOds() != null)
+            this.lekarOds = new LekarDTO(godisnjiOdsustvoTermin.getLekarOds());
     }
 
     public GodisnjiOdsustvoTerminDTO(Long id, Date pocetak, Date kraj, boolean godisnji, boolean odsustvo) {
@@ -75,5 +83,21 @@ public class GodisnjiOdsustvoTerminDTO {
 
     public void setOdsustvo(boolean odsustvo) {
         this.odsustvo = odsustvo;
+    }
+
+    public LekarDTO getLekarGO() {
+        return lekarGO;
+    }
+
+    public void setLekarGO(LekarDTO lekarGO) {
+        this.lekarGO = lekarGO;
+    }
+
+    public LekarDTO getLekarOds() {
+        return lekarOds;
+    }
+
+    public void setLekarOds(LekarDTO lekarOds) {
+        this.lekarOds = lekarOds;
     }
 }

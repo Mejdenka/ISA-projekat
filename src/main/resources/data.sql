@@ -19,12 +19,13 @@ INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled src
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-12 15:50:00', '2020-02-12 16:50:00', 0, 1, 0, 1);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-13 12:50:00', '2020-02-13 13:20:00', 0, 1, 0, 8);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-14 10:30:00', '2020-02-14 16:00:00', 0, 1, 0, 8);
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-10 10:30:00', '2020-02-10 16:00:00', 0, 1, 0, 1);
 
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 3, 1, 1, 2, 2, 0, 0);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 1, 1, 8, 1, 1, 1, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 4, 1, 8, 1, 1, 1, 0);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 3, 1, 1, 1, 1, 0, 0);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 2, 8, 1, 1, 1, 0, 0);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, null, 8, 1, 2, 1, 0, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, 2, 1, 1, 1, 1, 0, 0);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan) VALUES (5, null, 1, 1, 2, 1, 0, 0);
 
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, 3, 1, 1, 3, 0, 0);
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, null, 1, 1, 1, 0, 0);

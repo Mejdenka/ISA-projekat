@@ -1,10 +1,7 @@
 package JV20.isapsw.controller;
 
 
-import JV20.isapsw.dto.LekarDTO;
-import JV20.isapsw.dto.PacijentDTO;
-import JV20.isapsw.dto.SalaDTO;
-import JV20.isapsw.dto.TerminDTO;
+import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +82,13 @@ public class KlinikaController {
             }
         }
         return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllGoOds/{id}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(@PathVariable Long id) throws AccessDeniedException {
+        Klinika klinika = this.klinikaService.findOne(id);
+        return this.klinikaService.getAllGoOds(klinika);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{nazivKlinike}")

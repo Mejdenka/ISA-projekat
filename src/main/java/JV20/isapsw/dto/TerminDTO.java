@@ -9,6 +9,9 @@ public class TerminDTO {
     private Long id;
     private String pocetak;
     private String kraj;
+    //ako na frontu treba u formi yyyy-MM-dd
+    private Date pocetakDate;
+    private Date krajDate;
 
     public TerminDTO() {}
 
@@ -19,6 +22,9 @@ public class TerminDTO {
         String strKraj= formatter.format(termin.getKraj());
         this.pocetak = strPocetak;
         this.kraj = strKraj;
+
+        this.pocetakDate = termin.getPocetak();
+        this.krajDate = termin.getKraj();
     }
 
     public TerminDTO(Long id, Date pocetak, Date kraj) {
@@ -28,6 +34,8 @@ public class TerminDTO {
         String strKraj= formatter.format(kraj);
         this.pocetak = strPocetak;
         this.kraj = strKraj;
+        this.pocetakDate = pocetak;
+        this.krajDate = kraj;
     }
 
     public Long getId() {
@@ -54,4 +62,19 @@ public class TerminDTO {
         this.kraj = kraj;
     }
 
+    public Date getPocetakDate() {
+        return pocetakDate;
+    }
+
+    public void setPocetakDate(Date pocetakDate) {
+        this.pocetakDate = pocetakDate;
+    }
+
+    public Date getKrajDate() {
+        return krajDate;
+    }
+
+    public void setKrajDate(Date krajDate) {
+        this.krajDate = krajDate;
+    }
 }

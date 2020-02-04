@@ -55,8 +55,11 @@ public class KlinikaService {
     public List<PregledDTO> findRezervisanePreglede(Long id){
         List<PregledDTO> retVal = new ArrayList<>();
         for(Pregled p : findOne(id).getPregledi()){
-            if(!p.isObavljen() && !p.isObrisan()){
-                retVal.add(new PregledDTO(p));
+            if(!p.isObavljen() && !p.isObrisan() ){
+                //ako mu nije dodijeljena sala
+                if(p.getSala() == null){
+                    retVal.add(new PregledDTO(p));
+                }
             }
         }
         return retVal;

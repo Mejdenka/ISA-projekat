@@ -1,10 +1,13 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.PregledDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
+import JV20.isapsw.service.PregledService;
 import JV20.isapsw.service.SalaService;
+import JV20.isapsw.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ public class SalaController {
     private SalaService salaService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private PregledService pregledService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/getTermini/{salaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -57,6 +62,14 @@ public class SalaController {
         }
         zaIzmenu.setNaziv(sala.getNaziv());
         salaService.save(zaIzmenu);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregledu/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException {
+        Pregled pregled = this.pregledService.findOne(pregledDTO.getId());
+        this.salaService.dodijeliSaluPregledu(pregled, brojSale);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

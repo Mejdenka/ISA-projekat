@@ -1,5 +1,6 @@
 package JV20.isapsw.service;
 
+import JV20.isapsw.model.Operacija;
 import JV20.isapsw.model.Pregled;
 import JV20.isapsw.model.Sala;
 import JV20.isapsw.repository.SalaRepository;
@@ -38,7 +39,13 @@ public class SalaService {
         for(Pregled p : sala.getPregledi()) {
             String datumPregleda = df.format(p.getTermin().getPocetak());
             if(datum.equals(datumPregleda.substring(0, 10)) && !p.isObavljen() && !p.isObrisan()){
-                System.out.println(datumPregleda.substring(0,10));
+                return true;
+            }
+        }
+        for(Operacija o : sala.getOperacije()){
+            String datumOperacije = df.format(o.getTermin().getKraj());
+            if(datum.equals(datumOperacije.substring(0, 10)) && !o.isObavljena() && !o.isObrisana()){
+                System.out.println(datumOperacije.substring(0,10));
                 return true;
             }
         }

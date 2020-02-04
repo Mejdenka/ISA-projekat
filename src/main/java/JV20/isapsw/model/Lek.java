@@ -12,32 +12,34 @@ public class Lek {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int sifra;
-    private String naziv;
+    private String sifraLeka;
+    private String nazivLeka;
 
     public Lek() {}
 
-    public Long getId() {
-        return id;
+    public Lek(String sifraLeka, String nazivLeka) {
+        this.sifraLeka = sifraLeka;
+        this.nazivLeka = nazivLeka;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Lek(Lek lek){
+        this.sifraLeka = lek.sifraLeka;
+        this.nazivLeka = lek.nazivLeka;
     }
 
-    public int getSifra() {
-        return sifra;
+    public String getSifraLeka() {
+        return sifraLeka;
     }
 
-    public void setSifra(int sifra) {
-        this.sifra = sifra;
+    public void setSifraLeka(String sifraLeka) {
+        this.sifraLeka = sifraLeka;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getNazivLeka() {
+        return nazivLeka;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setNazivLeka(String nazivLeka) {
+        this.nazivLeka = nazivLeka;
     }
 }

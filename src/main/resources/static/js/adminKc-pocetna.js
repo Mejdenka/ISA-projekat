@@ -416,11 +416,7 @@ function generisiFormuZaNovuKliniku() {
                     alert("Greška prilikom dodavanja klinike!");
                 }
             });
-
-
-
         }
-
         content.appendChild(btnAdd);
 
 
@@ -429,12 +425,168 @@ function generisiFormuZaNovuKliniku() {
 }
 
 function generisiFormuZaSifanik() {
-
     $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Jos uvijek nije dostupna forma za sifarnik.");
-        document.getElementById("content").appendChild(textnode);
-    });
+        var content = document.getElementById("content");
+        content.innerHTML = "";
 
+        var textnode = document.createTextNode("- - - Dodaj lek - - -");
+        document.getElementById("content").appendChild(textnode);
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var varSifraLeka = document.createElement("var");
+        varSifraLeka.classList.add("col-2", "input-group");
+        var sifraLeka = document.createTextNode("Sifra leka");
+        varSifraLeka.appendChild(sifraLeka);
+        varSifraLeka.appendChild(document.createElement("br"));
+        var txtSifraLeka = document.createElement('input');
+        txtSifraLeka.type = 'text';
+        txtSifraLeka.id = "sifraLeka";
+        txtSifraLeka.classList.add("input--style-4");
+        txtSifraLeka.style.height = "40px";
+        txtSifraLeka.style.width = "250px";
+        varSifraLeka.appendChild(txtSifraLeka);
+        prviRed.appendChild(varSifraLeka);
+
+        var varNazivLeka = document.createElement("var");
+        varNazivLeka.classList.add("col-2", "input-group");
+        var nazivLeka = document.createTextNode("Naziv leka");
+        varNazivLeka.appendChild(nazivLeka);
+        varNazivLeka.appendChild(document.createElement("br"));
+        var txtNazivLeka = document.createElement('input');
+        txtNazivLeka.type = 'text';
+        txtNazivLeka.id = "nazivLeka";
+        txtNazivLeka.classList.add("input--style-4");
+        txtNazivLeka.style.height = "40px";
+        txtNazivLeka.style.width = "250px";
+        varNazivLeka.appendChild(txtNazivLeka);
+        prviRed.appendChild(varNazivLeka);
+
+        content.appendChild(prviRed);
+
+        var btnDodajLek = document.createElement("BUTTON");
+        btnDodajLek.classList.add("btn2", "btn--light-blue");
+        btnDodajLek.innerHTML = "Dodaj lek";
+        btnDodajLek.onclick = function(){
+            var sifraLeka=$('#sifraLeka').val();
+            var nazivLeka=$('#nazivLeka').val();
+
+            if(sifraLeka === "" && nazivLeka === ""){
+                alert("Da biste uneli lek sifra i naziv leka ne smeju biti prazni!");
+                return;
+            }
+
+            if(sifraLeka === ""){
+                alert("Morate uneti sifru leka!");
+                return;
+            } else if (sifraLeka.length < 3){
+                alert("Sifra leka mora imati bar tri karaktera!");
+                return;
+            }
+
+            if(nazivLeka === ""){
+                alert("Morate uneti naziv leka!");
+                return;
+            } else if (nazivLeka.length < 5) {
+                alert("Naziv leka mora imati bar pet karaktera");
+                return;
+            }
+
+            $.post({
+                url: 'api/lekovi/dodajLek',
+                data: JSON.stringify({sifraLeka, nazivLeka}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert("Novi lek je uspesno dodat!");
+                    return;
+                },
+                error: function() {
+                    alert("Greska prilikom dodavanja leka! Pokusajte ponovo.");
+                    return;
+                }
+            });
+
+
+        }
+
+        content.appendChild(btnDodajLek);
+
+
+        var drugiRed = document.createElement("var");
+        drugiRed.classList.add("row", "wrapper--w680");
+        var textnode = document.createTextNode("- - - Dodaj dijagnozu - - -");
+        drugiRed.appendChild(textnode);
+        content.appendChild(drugiRed);
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+
+        var varSifraDijagnoze = document.createElement("var");
+        varSifraDijagnoze.classList.add("col-2", "input-group");
+        var sifraDijagnoze = document.createTextNode("Sifra dijagnoze");
+        varSifraDijagnoze.appendChild(sifraDijagnoze);
+        varSifraDijagnoze.appendChild(document.createElement("br"));
+        var txtSifraDijagnoze = document.createElement('input');
+        txtSifraDijagnoze.type = 'text';
+        txtSifraDijagnoze.id = "sifraDijagnoze";
+        txtSifraDijagnoze.classList.add("input--style-4");
+        txtSifraDijagnoze.style.height = "40px";
+        txtSifraDijagnoze.style.width = "250px";
+        varSifraDijagnoze.appendChild(txtSifraDijagnoze);
+        treciRed.appendChild(varSifraDijagnoze);
+
+        var varNazivDijagnoze = document.createElement("var");
+        varNazivDijagnoze.classList.add("col-2", "input-group");
+        var nazivDijagnoze = document.createTextNode("Naziv dijagnoze");
+        varNazivDijagnoze.appendChild(nazivDijagnoze);
+        varNazivDijagnoze.appendChild(document.createElement("br"));
+        var txtNazivDijagnoze = document.createElement('input');
+        txtNazivDijagnoze.type = 'text';
+        txtNazivDijagnoze.id = "nazivDijagnoze";
+        txtNazivDijagnoze.classList.add("input--style-4");
+        txtNazivDijagnoze.style.height = "40px";
+        txtNazivDijagnoze.style.width = "250px";
+        varNazivDijagnoze.appendChild(txtNazivDijagnoze);
+        treciRed.appendChild(varNazivDijagnoze);
+
+        content.appendChild(treciRed);
+
+        var btnDodajLek = document.createElement("BUTTON");
+        btnDodajLek.classList.add("btn2", "btn--light-blue");
+        btnDodajLek.innerHTML = "Dodaj dijagnozu";
+        btnDodajLek.onclick = function() {
+            var sifraDijagnoze=$('#sifraDijagnoze').val();
+            var nazivDijagnoze=$('#nazivDijagnoze').val();
+
+            if(sifraDijagnoze === "" && nazivDijagnoze === ""){
+                alert("Da biste uneli dijagnozu sifra i njen naziv ne smeju ostati prazni!");
+                return;
+            }
+
+            if(sifraDijagnoze === ""){
+                alert("Morate uneti sifru dijagnoze!");
+                return;
+            } else if (sifraDijagnoze.length < 2){
+                alert("Sifra dijagnoze mora imati bar dva karaktera!");
+                return;
+            }
+
+            if(nazivDijagnoze === ""){
+                alert("Morate uneti naziv dijagnoze!");
+                return;
+            } else if (nazivDijagnoze.length < 3){
+                alert("Naziv dijagnoze mora imati barem tri karaktera!");
+                return;
+            }
+        }
+
+        content.appendChild(btnDodajLek);
+
+
+    });
     $("#content").fadeIn(500);
+
 }

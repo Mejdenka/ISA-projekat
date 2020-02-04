@@ -986,7 +986,7 @@ function search_tabela_sala(value, flag, zahtev) {
                                     btn.id = "iduciDatumBtn";
                                     btn.value = s;
                                     btn.classList.add("btn2", "btn--light-blue");
-                                    //btn.onclick = (function(entry) {return function() {chooseUser(entry);}})(entry);
+                                    btn.onclick = zakaziSaluZaPregledIduciTermin(zahtev, brojSale, s);
                                     var btnCell =  redTabele.insertCell(4);
                                     btnCell.appendChild(btn);
                                 }
@@ -1002,6 +1002,69 @@ function search_tabela_sala(value, flag, zahtev) {
             $(this).hide();
         }
     });
+}
+function zakaziSaluZaPregledIduciTermin(pregled, brojSale, s) {
+    return function () {
+        var modal = document.getElementById("rezervacijaSaleModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeRezervacijaSale");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var content = document.getElementById("rezervacijaSaleDiv");
+        content.innerHTML = "";
+        var naslov = document.createElement("HEADER");
+        s = s + " 08:00:00";
+        naslov.innerText = "Rezervisati salu " + brojSale +" za " + s + "?";
+        naslov.style.fontSize = "15px";
+        content.appendChild(naslov);
+        content.appendChild(document.createElement("br"));
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var btnDa = document.createElement('input');
+        btnDa.type = "button";
+        btnDa.id = "btnDa";
+        btnDa.value = "Da";
+        btnDa.onclick = function () {
+            $.post({
+                url: 'api/sale/dodijeliSaluPregleduIduciTermin/' + brojSale +'/'+pregled.id,
+                data: s,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function () {
+                    alert("Sala rezervisana.");
+                    modal.style.display = "none";
+                    document.getElementById("saleModal").style.display = "none";
+                    generisiZahteve();
+                }
+            });
+        };
+        btnDa.style.marginBottom = "10px";
+        btnDa.classList.add("btn", "btn--light-blue");
+        var btnNe = document.createElement('input');
+        btnNe.type = "button";
+        btnNe.id = "btnNe";
+        btnNe.value = "Ne";
+        btnNe.onclick = function(){
+            modal.style.display = "none";
+            content.innerHTML = "";
+        }
+        btnNe.classList.add("btn2", "btn--light-blue");
+        prviRed.appendChild(btnDa);
+        prviRed.appendChild(btnNe);
+        content.appendChild(prviRed);
+    }
 }
 
 function zakaziSaluZaPregled(pregled, brojSale) {

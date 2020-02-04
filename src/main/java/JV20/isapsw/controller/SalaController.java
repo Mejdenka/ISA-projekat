@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -72,6 +73,16 @@ public class SalaController {
         this.salaService.dodijeliSaluPregledu(pregled, brojSale);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregleduIduciTermin/{brojSale}/{idPregleda}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluPregleduIduciTermin(@RequestBody String s, @PathVariable Long brojSale,
+                                                             @PathVariable Long idPregleda) throws AccessDeniedException, ParseException {
+        Pregled pregled = this.pregledService.findOne(idPregleda);
+        this.salaService.dodijeliSaluPregleduIduciTermin(pregled, brojSale, s);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodajSalu")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")

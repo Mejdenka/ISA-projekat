@@ -24,6 +24,8 @@ public class SalaService {
     private SalaRepository salaRepository;
     @Autowired
     private PregledService pregledService;
+    @Autowired
+    private TerminService terminService;
 
     public Sala findOne(Long id) {
         return salaRepository.findById(id).orElseGet(null);
@@ -38,6 +40,28 @@ public class SalaService {
     public void dodijeliSaluPregledu(Pregled pregled, Long brojSale){
         Sala sala = findOneByBroj(brojSale);
         pregled.setSala(sala);
+        sala.getPregledi().add(pregled);
+        pregledService.save(pregled);
+        save(sala);
+    }
+
+    public void dodijeliSaluPregleduIduciTermin(Pregled pregled, Long brojSale, String datumStr) throws ParseException {
+        Sala sala = findOneByBroj(brojSale);
+        Date datumPocetka = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(datumStr);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datumPocetka);
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        Date datumKraja = calendar.getTime();
+
+        pregled.setSala(sala);
+        Termin termin = new Termin();
+        termin.setRezervisan(true);
+        termin.setPocetak(datumPocetka);
+        termin.setKraj(datumKraja);
+        termin.setPacijentId(pregled.getPacijent().getId());
+        termin.setKlinikaTermina(pregled.getKlinikaPregleda());
+        terminService.save(termin);
+        pregled.setTermin(termin);
         sala.getPregledi().add(pregled);
         pregledService.save(pregled);
         save(sala);

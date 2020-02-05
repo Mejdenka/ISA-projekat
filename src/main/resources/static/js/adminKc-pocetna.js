@@ -581,6 +581,24 @@ function generisiFormuZaSifanik() {
                 alert("Naziv dijagnoze mora imati barem tri karaktera!");
                 return;
             }
+
+            $.post({
+                url: 'api/dijagnoze/dodajDijagnozu',
+                data: JSON.stringify({sifraDijagnoze, nazivDijagnoze}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert("Nova dijagnoza je uspesno dodata.");
+                    return;
+                },
+                error: function() {
+                    alert("Greska prilikom dodavanja dijagnoze! Pokusajte ponovo.");
+                    return;
+                }
+
+            });
         }
 
         content.appendChild(btnDodajLek);

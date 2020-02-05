@@ -1,6 +1,7 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.model.Dijagnoza;
+import JV20.isapsw.model.Lek;
 import JV20.isapsw.repository.DijagnozaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,6 @@ public class DijagnozaService {
     public void remove(Long id) {
         dijagnozaRepository.deleteById(id);
     }
+
+    public Dijagnoza findBySifraDijagnoze(String sifraDijagnoze) {return dijagnozaRepository.findBySifraDijagnoze(sifraDijagnoze);}
 }

@@ -12,8 +12,8 @@ public class Dijagnoza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer sifra;
-    private String naziv;
+    private String sifraDijagnoze;
+    private String nazivDijagnoze;
 
     public Dijagnoza() {}
 
@@ -25,19 +25,19 @@ public class Dijagnoza {
         this.id = id;
     }
 
-    public Integer getSifra() {
-        return sifra;
+    public String getSifraDijagnoze() {
+        return sifraDijagnoze;
     }
 
-    public void setSifra(int sifra) {
-        this.sifra = sifra;
+    public void setSifraDijagnoze(String sifraDijagnoze) {
+        this.sifraDijagnoze = sifraDijagnoze;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getNazivDijagnoze() {
+        return nazivDijagnoze;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setNaziv(String nazivDijagnoze) {
+        this.nazivDijagnoze = nazivDijagnoze;
     }
 }

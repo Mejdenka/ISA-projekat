@@ -13,4 +13,5 @@ public interface DijagnozaRepository extends JpaRepository<Dijagnoza, Long> {
     //Page<Dijagnoza> findAll(Pageable pageable);
     List<Dijagnoza> findAll();
     void deleteById(Long id);
+    Dijagnoza findBySifraDijagnoze(String sifraDijagnoze);
 }

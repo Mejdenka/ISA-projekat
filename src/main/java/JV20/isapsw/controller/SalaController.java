@@ -68,7 +68,7 @@ public class SalaController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregledu/{brojSale}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException {
+    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException, InterruptedException {
         Pregled pregled = this.pregledService.findOne(pregledDTO.getId());
         this.salaService.dodijeliSaluPregledu(pregled, brojSale);
         return new ResponseEntity<>(HttpStatus.OK);

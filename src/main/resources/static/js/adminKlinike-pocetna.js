@@ -860,7 +860,6 @@ function prikaziSaleKlinike(klinika, flag, zahtev) {
                     datumPocetak.classList.add("input--style-4");
                     datumPocetak.style.height = "40px";
                     datumPocetak.style.width = "190px";
-                    console.log(zahtev.termin.pocetakDate);
                     datumPocetak.value = zahtev.termin.pocetakDate.substr(0,10);
                     searchDiv.appendChild(search);
                     searchDiv.appendChild(datumPocetak);

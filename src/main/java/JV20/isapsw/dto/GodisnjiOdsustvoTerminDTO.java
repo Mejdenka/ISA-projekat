@@ -13,9 +13,15 @@ public class GodisnjiOdsustvoTerminDTO {
 
     private boolean godisnji;
     private boolean odsustvo;
+    private boolean odobren;
 
     private LekarDTO lekarGO;
     private LekarDTO lekarOds;
+    private MedicinskaSestraDTO medSestraGo;
+    private MedicinskaSestraDTO medSestraOds;
+
+    //za slanje maile kupi poruku sa fronta samo
+    private String razlogOdbijanja;
 
     public GodisnjiOdsustvoTerminDTO() {}
 
@@ -28,21 +34,24 @@ public class GodisnjiOdsustvoTerminDTO {
         this.kraj = strKraj;
         this.godisnji = godisnjiOdsustvoTermin.isGodisnji();
         this.odsustvo = godisnjiOdsustvoTermin.isOdsustvo();
+        this.odobren = godisnjiOdsustvoTermin.isOdobren();
         if(godisnjiOdsustvoTermin.getLekarGO() != null)
             this.lekarGO = new LekarDTO(godisnjiOdsustvoTermin.getLekarGO());
         if(godisnjiOdsustvoTermin.getLekarOds() != null)
             this.lekarOds = new LekarDTO(godisnjiOdsustvoTermin.getLekarOds());
+        if(godisnjiOdsustvoTermin.getMedSestraGo() != null)
+            this.medSestraGo = new MedicinskaSestraDTO(godisnjiOdsustvoTermin.getMedSestraGo());
+        if(godisnjiOdsustvoTermin.getMedSestraOds() != null)
+            this.medSestraOds = new MedicinskaSestraDTO(godisnjiOdsustvoTermin.getMedSestraOds());
     }
 
-    public GodisnjiOdsustvoTerminDTO(Long id, Date pocetak, Date kraj, boolean godisnji, boolean odsustvo) {
+    public GodisnjiOdsustvoTerminDTO(Long id, String pocetak, String kraj, boolean godisnji, boolean odsustvo, boolean odobren) {
         this.id = id;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-        String strPocetak= formatter.format(pocetak);
-        String strKraj= formatter.format(kraj);
-        this.pocetak = strPocetak;
-        this.kraj = strKraj;
+        this.pocetak = pocetak;
+        this.kraj = kraj;
         this.godisnji = godisnji;
         this.odsustvo = odsustvo;
+        this.odobren = odobren;
     }
 
     public Long getId() {
@@ -99,5 +108,37 @@ public class GodisnjiOdsustvoTerminDTO {
 
     public void setLekarOds(LekarDTO lekarOds) {
         this.lekarOds = lekarOds;
+    }
+
+    public MedicinskaSestraDTO getMedSestraGo() {
+        return medSestraGo;
+    }
+
+    public void setMedSestraGo(MedicinskaSestraDTO medSestraGo) {
+        this.medSestraGo = medSestraGo;
+    }
+
+    public MedicinskaSestraDTO getMedSestraOds() {
+        return medSestraOds;
+    }
+
+    public void setMedSestraOds(MedicinskaSestraDTO medSestraOds) {
+        this.medSestraOds = medSestraOds;
+    }
+
+    public boolean isOdobren() {
+        return odobren;
+    }
+
+    public void setOdobren(boolean odobren) {
+        this.odobren = odobren;
+    }
+
+    public String getRazlogOdbijanja() {
+        return razlogOdbijanja;
+    }
+
+    public void setRazlogOdbijanja(String razlogOdbijanja) {
+        this.razlogOdbijanja = razlogOdbijanja;
     }
 }

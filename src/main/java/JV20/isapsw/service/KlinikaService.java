@@ -43,20 +43,37 @@ public class KlinikaService {
 
     public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(Klinika klinika){
         List<GodisnjiOdsustvoTerminDTO> retVal = new ArrayList<>();
+        //prikaz neodobrenih zahtjeva
         for(Lekar lekar : klinika.getLekari()){
             if(!lekar.isObrisan()){
                for(GodisnjiOdsustvoTermin ods : lekar.getRezervisanaOdustva()){
-                   if(!ods.isObrisan()){
+                   if(!ods.isObrisan() && !ods.isOdobren()){
                        retVal.add(new GodisnjiOdsustvoTerminDTO(ods));
                    }
                }
                 for(GodisnjiOdsustvoTermin go : lekar.getRezervisaniGO()){
-                    if(!go.isObrisan()){
+                    if(!go.isObrisan() && !go.isOdobren()){
                         retVal.add(new GodisnjiOdsustvoTerminDTO(go));
                     }
                 }
             }
         }
+
+        for(MedicinskaSestra medicinskaSestra : klinika.getMedicinskeSestre()){
+            if(!medicinskaSestra.isObrisan()){
+                for(GodisnjiOdsustvoTermin ods : medicinskaSestra.getRezervisanaOdustva()){
+                    if(!ods.isObrisan() && !ods.isOdobren()){
+                        retVal.add(new GodisnjiOdsustvoTerminDTO(ods));
+                    }
+                }
+                for(GodisnjiOdsustvoTermin go : medicinskaSestra.getRezervisaniGO()){
+                    if(!go.isObrisan() && !go.isOdobren()){
+                        retVal.add(new GodisnjiOdsustvoTerminDTO(go));
+                    }
+                }
+            }
+        }
+
         return retVal;
     }
 

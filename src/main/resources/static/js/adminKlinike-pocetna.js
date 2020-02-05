@@ -985,6 +985,10 @@ function search_tabela_sala(value, flag, zahtev) {
                                     var btn = document.createElement('input');
                                     btn.type = "button";
                                     btn.id = "iduciDatumBtn";
+                                    if(document.getElementById("saleDiv").contains(document.getElementById("rezervisiBtn"))){
+                                        btn.disabled = "true";
+                                        btn.style.backgroundColor = "gray";
+                                    }
                                     btn.value = s;
                                     btn.classList.add("btn2", "btn--light-blue");
                                     btn.onclick = zakaziSaluZaPregledIduciTermin(zahtev, brojSale, s);
@@ -1921,7 +1925,6 @@ function generisiZahteveZaGoOds() {
         },
         success: function (klinika) {
             $("#content").fadeOut(100, function () {
-                //ZA PREGLEDE**************************************************************************************
                 $.get({
 
                     url: 'api/klinike/getAllGoOds/' + klinika.id,
@@ -1968,19 +1971,27 @@ function generisiZahteveZaGoOds() {
                                 var podaciZahteva = tableRef.insertRow();
 
                                 var tipZahteva = podaciZahteva.insertCell(0);
-                                var lekar = podaciZahteva.insertCell(1);
+                                var korisnikVar = podaciZahteva.insertCell(1);
 
                                 if(zahtev.godisnji === true){
                                     var tipZahtevaText = document.createTextNode("Godisnji odmor");
-                                    var lekarText = document.createTextNode(zahtev.lekarGO.ime + " " + zahtev.lekarGO.prezime);
+                                    if(zahtev.medSestraGo != null){
+                                        var korisnikText = document.createTextNode(zahtev.medSestraGo.ime + " " + zahtev.medSestraGo.prezime);
+                                    } else {
+                                        var korisnikText = document.createTextNode(zahtev.lekarGO.ime + " " + zahtev.lekarGO.prezime);
+                                    }
                                     tipZahteva.appendChild(tipZahtevaText);
-                                    lekar.appendChild(lekarText);
+                                    korisnikVar.appendChild(korisnikText);
 
-                                } else if (zahtev.odsustvo === false){
+                                } else if (zahtev.odsustvo === true){
                                     var tipZahtevaText = document.createTextNode("Odsustvo");
-                                    var lekarText = document.createTextNode(zahtev.lekarOds.ime + " " + zahtev.lekarOds.prezime);
+                                    if(zahtev.medSestraOds != null){
+                                        var korisnikText = document.createTextNode(zahtev.medSestraOds.ime + " " + zahtev.medSestraOds.prezime);
+                                    } else {
+                                        var korisnikText = document.createTextNode(zahtev.lekarOds.ime + " " + zahtev.lekarOds.prezime);
+                                    }
                                     tipZahteva.appendChild(tipZahtevaText);
-                                    lekar.appendChild(lekarText);
+                                    korisnikVar.appendChild(korisnikText);
 
                                 }
 
@@ -1996,14 +2007,14 @@ function generisiZahteveZaGoOds() {
                                 var prihvatiBtn = document.createElement("BUTTON");
                                 prihvatiBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                                 prihvatiBtn.innerHTML = "&#10003;";
-                                //prihvati.onclick = prikaziSaleKlinike(klinika, "rezervacija", zahtev);
+                                prihvati.onclick = prihvatiOdbijGoOds(zahtev, true);
                                 prihvati.appendChild(prihvatiBtn);
 
                                 var ukloni = podaciZahteva.insertCell(5);
                                 var ukloniBtn = document.createElement("BUTTON");
                                 ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                                 ukloniBtn.innerHTML = "&times;";
-                                //ukloniBtn.onclick = ukloniZahtevZaPregled(klinika, zahtev.id);
+                                ukloniBtn.onclick = prihvatiOdbijGoOds(zahtev, false);
                                 ukloni.appendChild(ukloniBtn);
                                 idx = idx + 1;
 
@@ -2022,6 +2033,98 @@ function generisiZahteveZaGoOds() {
             $('#content').fadeIn(500);
         }
     });
+}
+
+function prihvatiOdbijGoOds(zahtev, odobren) {
+    return function () {
+
+            var modal = document.getElementById("zahtevZaGoOdsModal");
+            modal.style.display = "block";
+
+            var span = document.getElementById("closeZahtevZaGoOds");
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            var content = document.getElementById("zahtevZaGoOdsDiv");
+            content.innerHTML = "";
+        if(!odobren){
+
+            var naslov = document.createElement("HEADER");
+            naslov.innerText = "Razlog odbijanja zahteva";
+            naslov.style.fontSize = "18px";
+            content.appendChild(naslov);
+            content.appendChild(document.createElement("br"));
+            var varRazlog = document.createElement("var");
+            varRazlog.classList.add("col-2", "input-group");
+            var tf = document.createElement('input');
+            tf.type = 'text';
+            tf.id = 'razlogOdbijanja';
+            tf.classList.add("input--style-4");
+            tf.style.height = "80px";
+            varRazlog.append(tf);
+            content.appendChild(varRazlog);
+            var btnDa = document.createElement('input');
+            btnDa.type = "button";
+            btnDa.id = "posaljiBtn";
+            btnDa.classList.add("btn", "btn--radius-2", "btn--light-blue");
+            btnDa.value = "Posalji";
+            content.appendChild(btnDa);
+            btnDa.onclick = obradiZahtevGoOds(zahtev, odobren);
+        } else {
+            var naslov = document.createElement("HEADER");
+            naslov.innerText = "Prihvatiti zahtev?";
+            naslov.style.fontSize = "18px";
+            content.appendChild(naslov);
+            content.appendChild(document.createElement("br"));
+
+            var btnDa = document.createElement('input');
+            btnDa.type = "button";
+            btnDa.id = "posaljiBtn";
+            btnDa.classList.add("btn", "btn--radius-2", "btn--light-blue");
+            btnDa.value = "Da";
+            content.appendChild(btnDa);
+            btnDa.onclick = obradiZahtevGoOds(zahtev, odobren);
+        }
+
+
+    }
+}
+
+function obradiZahtevGoOds(zahtev, odobren) {
+
+    return function(){
+
+        var razlogOdbijanja = "";
+        if(!odobren){
+            razlogOdbijanja = $('#razlogOdbijanja').val();
+        }
+
+        let id = zahtev.id;
+        let pocetak = zahtev.pocetak;
+        let kraj = zahtev.kraj;
+
+        $.post({
+            url: 'api/adminKlinike/posaljiGoOds',
+            data: JSON.stringify({id, pocetak, kraj, odobren, razlogOdbijanja}),
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function () {
+                alert("Uspešno obrađen zahtev.");
+                document.getElementById("zahtevZaGoOdsModal").style.display = "none";
+                generisiZahteveZaGoOds();
+            }
+        });
+    }
 }
 
 function ukloniZahtevZaPregled(klinika, zahtevId) {

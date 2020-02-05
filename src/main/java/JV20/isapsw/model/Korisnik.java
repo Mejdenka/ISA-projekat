@@ -42,6 +42,8 @@ public class Korisnik implements UserDetails{
     private boolean enabled;
     private boolean confirmed;
     private Timestamp lastPasswordResetDate;
+    private boolean obrisan = false;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "korisnik_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -189,5 +191,13 @@ public class Korisnik implements UserDetails{
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public boolean isObrisan() {
+        return obrisan;
+    }
+
+    public void setObrisan(boolean obrisan) {
+        this.obrisan = obrisan;
     }
 }

@@ -28,6 +28,14 @@ public class GodisnjiOdsustvoTermin {
     @JsonIgnore
     private Lekar lekarOds;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private MedicinskaSestra medSestraGo;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private MedicinskaSestra medSestraOds;
+
     public Long getId() {
         return id;
     }
@@ -98,5 +106,21 @@ public class GodisnjiOdsustvoTermin {
 
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
+    }
+
+    public MedicinskaSestra getMedSestraGo() {
+        return medSestraGo;
+    }
+
+    public void setMedSestraGo(MedicinskaSestra medSestraGo) {
+        this.medSestraGo = medSestraGo;
+    }
+
+    public MedicinskaSestra getMedSestraOds() {
+        return medSestraOds;
+    }
+
+    public void setMedSestraOds(MedicinskaSestra medSestraOds) {
+        this.medSestraOds = medSestraOds;
     }
 }

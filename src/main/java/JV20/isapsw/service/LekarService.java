@@ -1,6 +1,7 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.common.TimeProvider;
+import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
 import JV20.isapsw.model.*;
 import JV20.isapsw.repository.KlinikaRepository;
 import JV20.isapsw.repository.LekarRepository;
@@ -70,6 +71,7 @@ public class LekarService {
     public Lekar save(Lekar lekar) {
         return  this.lekarRepository.save(lekar);
     }
+
     public void remove(Long id) {
         lekarRepository.deleteById(id);
     }

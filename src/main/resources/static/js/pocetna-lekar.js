@@ -605,22 +605,6 @@ function search_table(value) {
     });
 }
 
-function search_tabela_sala(value) {
-    $('#tabelaSala tr').each(function () {
-        var found = 'false';
-        $(this).each(function () {
-            if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-                found = 'true';
-            }
-        });
-        if (found == 'true') {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-}
-
 function generisiFormuZaGO(ulogovan) {
 
     $("#content").fadeOut(100, function(){

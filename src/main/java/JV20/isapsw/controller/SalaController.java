@@ -1,10 +1,13 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.PregledDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
+import JV20.isapsw.service.PregledService;
 import JV20.isapsw.service.SalaService;
+import JV20.isapsw.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -26,6 +30,8 @@ public class SalaController {
     private SalaService salaService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private PregledService pregledService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/getTermini/{salaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -59,6 +65,24 @@ public class SalaController {
         salaService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregledu/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException {
+        Pregled pregled = this.pregledService.findOne(pregledDTO.getId());
+        this.salaService.dodijeliSaluPregledu(pregled, brojSale);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregleduIduciTermin/{brojSale}/{idPregleda}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluPregleduIduciTermin(@RequestBody String s, @PathVariable Long brojSale,
+                                                             @PathVariable Long idPregleda) throws AccessDeniedException, ParseException {
+        Pregled pregled = this.pregledService.findOne(idPregleda);
+        this.salaService.dodijeliSaluPregleduIduciTermin(pregled, brojSale, s);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodajSalu")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")

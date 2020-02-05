@@ -1,10 +1,7 @@
 package JV20.isapsw.controller;
 
 
-import JV20.isapsw.dto.LekarDTO;
-import JV20.isapsw.dto.PacijentDTO;
-import JV20.isapsw.dto.SalaDTO;
-import JV20.isapsw.dto.TerminDTO;
+import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,9 @@ public class KlinikaController {
     @Autowired
     private TerminService terminService;
 
+    @Autowired
+    private SalaService salaService;
+
     @RequestMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
     public List<Klinika> getAll() {
@@ -57,6 +57,20 @@ public class KlinikaController {
         return retVal;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/daLiJeRezervisanaSala/{brojSale}/{datum}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public String rezervisanaSala(@PathVariable Long brojSale, @PathVariable String datum) throws AccessDeniedException, ParseException {
+        return this.salaService.findIfNotReserved(brojSale, datum);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSala/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Sala getSala(@PathVariable Long brojSale) throws AccessDeniedException {
+        return this.salaService.findOneByBroj(brojSale);
+    }
+
+
+
     /* Mozda je ljepse sa salaDTO... problem je sto nije povezano sa rezervacijama */
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodneSale/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -69,6 +83,13 @@ public class KlinikaController {
             }
         }
         return retVal;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllGoOds/{id}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(@PathVariable Long id) throws AccessDeniedException {
+        Klinika klinika = this.klinikaService.findOne(id);
+        return this.klinikaService.getAllGoOds(klinika);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{nazivKlinike}")
@@ -117,7 +138,7 @@ public class KlinikaController {
     @RequestMapping(method = RequestMethod.GET, value = "/getPregledi/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public List<Pregled> getPreglediKlinike(@PathVariable Long idKlinike) throws AccessDeniedException {
-        return klinikaService.findOne(idKlinike).getPregledi();
+        return klinikaService.findPregledi(idKlinike);
     }
 
 

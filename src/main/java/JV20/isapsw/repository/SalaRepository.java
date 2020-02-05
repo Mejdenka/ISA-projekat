@@ -12,7 +12,7 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
     //osnovne metode za repo
     Optional<Sala> findById(Long id);
     Sala findByNaziv(String naziv);
-    //Page<Sala> findAll(Pageable pageable);
+    Sala findByBroj(Long broj);
     List<Sala> findAll();
     void deleteById(Long id);
     Sala save(Sala sala);

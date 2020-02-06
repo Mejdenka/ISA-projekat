@@ -33,7 +33,7 @@ public class KlinikaController {
     private TipPregledaService tipPregledaService;
 
     @Autowired
-    private TerminService terminService;
+    private LokacijaService lokacijaService;
 
     @Autowired
     private SalaService salaService;
@@ -287,6 +287,7 @@ public class KlinikaController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        this.lokacijaService.save(klinika.getLokacijaNaMapi());
         klinika.setProsecnaOcena(0.0);
         this.klinikaService.save(klinika);
 

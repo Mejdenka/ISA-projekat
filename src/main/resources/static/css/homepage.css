@@ -331,7 +331,10 @@ h6 {
 .divGo {display:inline-block;margin-right:10px;}
 .divOds {display:inline-block;}
 
-
+.map {
+    height: 500px;
+    width: 100%;
+}
 ul {
     list-style-type: none;
 }

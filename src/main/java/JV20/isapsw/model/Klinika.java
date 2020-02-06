@@ -19,6 +19,9 @@ public class Klinika {
     private String opis;
     private Double prosecnaOcena;
 
+    @OneToOne
+    private Lokacija lokacijaNaMapi;
+
     @OneToMany(mappedBy = "klinikaLekara", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Lekar> lekari;
@@ -155,5 +158,13 @@ public class Klinika {
 
     public void setOperacije(List<Operacija> operacije) {
         this.operacije = operacije;
+    }
+
+    public Lokacija getLokacijaNaMapi() {
+        return lokacijaNaMapi;
+    }
+
+    public void setLokacijaNaMapi(Lokacija lokacijaNaMapi) {
+        this.lokacijaNaMapi = lokacijaNaMapi;
     }
 }

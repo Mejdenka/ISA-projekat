@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     let token = JSON.parse(localStorage.getItem('jwt'))
     var ulogovan = null;
     $.ajax

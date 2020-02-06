@@ -36,6 +36,14 @@ public class Sala {
 
     public Sala() {}
 
+    public Sala(Long id, String naziv, Long broj, boolean slobodna, boolean rezervisana) {
+        this.id = id;
+        this.naziv = naziv;
+        this.broj = broj;
+        this.slobodna = slobodna;
+        this.rezervisana = rezervisana;
+    }
+
     public Long getId() {
         return id;
     }

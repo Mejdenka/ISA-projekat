@@ -11,7 +11,10 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +25,14 @@ public class KlinikaService {
     private PregledService pregledService ;
     @Autowired
     private OperacijaService operacijaService ;
+    @Autowired
+    private TerminService terminService;
+    @Autowired
+    private TipPregledaService tipPregledaService;
+    @Autowired
+    private SalaService salaService ;
+    @Autowired
+    private LekarService lekarService ;
 
     public Klinika findOne(Long id) {
         return klinikaRepository.findById(id).orElseGet(null);
@@ -39,6 +50,47 @@ public class KlinikaService {
 
     public void remove(Long id) {
         klinikaRepository.deleteById(id);
+    }
+
+    public void dodajPregled(PregledDTO pregledDTO) throws ParseException {
+        Klinika klinika = findOne(pregledDTO.getKlinikaPregleda().getId());
+        Termin t = new Termin();
+
+        SimpleDateFormat formatter;
+        formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date pocetak = formatter.parse(pregledDTO.getTermin().getPocetak());
+        Date kraj = formatter.parse(pregledDTO.getTermin().getKraj());
+
+        t.setPocetak(pocetak);
+        t.setKraj(kraj);
+        t.setRezervisan(false);
+        t.setKlinikaTermina(klinika);
+        this.terminService.save(t);
+
+        klinika.getSlobodniTermini().add(t);
+
+        Lekar lekar = lekarService.findOne(pregledDTO.getLekar().getId());
+        Sala sala = salaService.findOne(pregledDTO.getSala().getId());
+
+        Pregled pregled = new Pregled();
+        pregled.setTermin(t);
+        pregled.setKlinikaPregleda(klinika);
+        pregled.setTipPregleda(tipPregledaService.findOne(pregledDTO.getTipPregleda().getId()));
+        pregled.setSala(sala);
+        pregled.setObrisan(false);
+        pregled.setLekar(lekar);
+        pregled.setObavljen(false);
+        pregledService.save(pregled);
+
+        lekar.getPregledi().add(pregled);
+        lekarService.save(lekar);
+
+        sala.getPregledi().add(pregled);
+        salaService.save(sala);
+
+        klinika.getPregledi().add(pregled);
+        save(klinika);
+
     }
 
     public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(Klinika klinika){

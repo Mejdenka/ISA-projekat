@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/api/dijagnoze")
@@ -35,6 +36,12 @@ public class DijagnozaController {
         this.dijagnozaService.save(dijagnoza);
 
         return new ResponseEntity<User>( HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/getDijagnoze")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<Dijagnoza> getDijagnoze() throws AccessDeniedException {
+        return dijagnozaService.findAll();
     }
 
 

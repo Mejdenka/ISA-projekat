@@ -287,10 +287,125 @@ function zapocniPregled(pacijent) {
         content.appendChild(naslov);
         content.appendChild(document.createElement("br"));
 
+        var red = document.createElement("var");
+        red.classList.add("row", "wrapper--w680");
+        var varDijagnoza = document.createElement("var");
+        varDijagnoza.classList.add("col-2", "input-group");
+        var dijagnoza = document.createTextNode("Dijagnoza");
+        varDijagnoza.appendChild(dijagnoza);
+        varDijagnoza.appendChild(document.createElement("br"));
+        var txtDijagnoza = document.createElement('select');
+        txtDijagnoza.type = 'select';
+        txtDijagnoza.id = "dijagnoza";
+        txtDijagnoza.classList.add("input--style-4");
+        txtDijagnoza.style.height = "40px";
+        txtDijagnoza.style.width = "250px";
+        $.get({
+            url:'api/dijagnoze/getDijagnoze',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(dijagnoze)
+            {
+                for(let dij of dijagnoze){
+                    var option = document.createElement('option');
+                    option.value=dij.nazivDijagnoze;
+                    option.innerHTML=dij.nazivDijagnoze;
+                    txtDijagnoza.appendChild(option);
+                }
+            }
+        });
+        varDijagnoza.appendChild(txtDijagnoza);
+        red.appendChild(varDijagnoza);
+
+        var varLek = document.createElement("var");
+        varLek.classList.add("col-2", "input-group");
+        var lek = document.createTextNode("Terapija");
+        varLek.appendChild(lek);
+        varLek.appendChild(document.createElement("br"));
+        var txtLek = document.createElement('select');
+        txtLek.id = "lek";
+        txtLek.classList.add("input--style-4");
+        txtLek.style.height = "40px";
+        txtLek.style.width = "250px";
+        $.get({
+            url:'api/lekovi/getLekovi',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(lekovi)
+            {
+                for(let lekic of lekovi){
+                    var option = document.createElement('option');
+                    option.value=lekic.nazivLeka;
+                    option.innerHTML=lekic.nazivLeka;
+                    txtLek.appendChild(option);
+                }
+            }
+        });
+        varLek.appendChild(txtLek);
+
+        red.appendChild(varLek);
+
+        content.appendChild(red);
+
+        var red1 = document.createElement("var");
+        red1.classList.add("row", "wrapper--w680");
+        var varIzvestaj = document.createElement("var");
+        varIzvestaj.classList.add("col-2", "input-group");
+        var izvestaj = document.createTextNode("Izvestaj o pregledu");
+        varIzvestaj.appendChild(izvestaj);
+        varIzvestaj.appendChild(document.createElement("br"));
+        var txtIzvestaj = document.createElement('input');
+        txtIzvestaj.type = 'text';
+        txtIzvestaj.id = "izvestaj";
+        txtIzvestaj.classList.add("input--style-4");
+        txtIzvestaj.style.height = "120px";
+        txtIzvestaj.style.width = "580px";
+        varIzvestaj.appendChild(txtIzvestaj);
+        red1.appendChild(varIzvestaj);
+
+        red1.appendChild(varIzvestaj);
+        content.appendChild(red1);
+
+
+        var red2 = document.createElement("var");
+        red2.classList.add("row", "wrapper--w680");
+        var izdajReceptBtn = document.createElement("BUTTON");
+        izdajReceptBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        izdajReceptBtn.innerHTML = "Prepisi recept";
+        izdajReceptBtn.onclick = function(){
+            var dijagnoza = $('#dijagnoza').val();
+            var lek = $('#lek').val();
+            var izvestaj = $('#izvestaj').val();
+
+            $.post({
+                url: 'api/recepti/izdajRecept',
+                data: JSON.stringify({dijagnoza, lek, izvestaj}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function(){
+                    alert('Uspesno ste izdali recept.');
+                    return;
+                },
+                error: function(){
+                    alert('Greska prilikom prepisivanja recepta! Pokusajte ponovo.');
+                    return;
+                }
+
+            });
+
+        }
+        red2.appendChild(izdajReceptBtn);
+        content.appendChild(red2);
 
         var odaberiNaslov = document.createElement("Header");
         odaberiNaslov.innerText = "Zakazivanje sljedećeg pregleda/operacije";
-        odaberiNaslov.style.fontSize = "15px";
+        odaberiNaslov.style.fontSize = "20px";
         odaberiNaslov.style.marginTop = "10px";
         odaberiNaslov.style.marginBottom = "10px";
         content.appendChild(odaberiNaslov);
@@ -388,7 +503,7 @@ function zapocniPregled(pacijent) {
         treciRed.classList.add("row", "wrapper--w680");
         var varPocDatum = document.createElement("var");
         varPocDatum.classList.add("col-2", "input-group");
-        var datumTxt = document.createTextNode("Vrijeme početka");
+        var datumTxt = document.createTextNode("Vreme početka");
         varPocDatum.style.marginTop = "20px";
         varPocDatum.appendChild(datumTxt);
         varPocDatum.appendChild(document.createElement("br"));
@@ -403,7 +518,7 @@ function zapocniPregled(pacijent) {
         treciRed.appendChild(varPocDatum);
         var varKrajDatum = document.createElement("var");
         varKrajDatum.classList.add("col-2", "input-group");
-        var datumTxt = document.createTextNode("Vrijeme kraja");
+        var datumTxt = document.createTextNode("Vreme kraja");
         varKrajDatum.style.marginTop = "20px";
         varKrajDatum.appendChild(datumTxt);
         varKrajDatum.appendChild(document.createElement("br"));
@@ -506,6 +621,14 @@ function zapocniPregled(pacijent) {
                 }
             });
         }
+
+        var poslednjiRed = document.createElement("var");
+        poslednjiRed.classList.add("row", "wrapper--w680");
+        var zakaziBtn = document.createElement("BUTTON");
+        zakaziBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+        zakaziBtn.innerHTML = "Zakazi";
+        poslednjiRed.appendChild(zakaziBtn);
+        content.appendChild(poslednjiRed);
 
     }
 }

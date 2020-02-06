@@ -64,3 +64,15 @@ INSERT INTO korisnik_authority (user_id, authority_id) VALUES (8, 1);
 INSERT INTO korisnik_authority (user_id, authority_id) VALUES (8, 2);
 
 INSERT INTO admin_klinike_klinika (klinika_id, admin_id) VALUES (1, 4);
+
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (1, 'Brufen 500mg', 'Brf5', 0);
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (2, 'Brufen 600mg', 'Brf6', 0);
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (3, 'Cefaleksin', 'Cef1', 0);
+
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (1, 'Mononukleoza', 'Mn1t');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (2, 'Kandida', 'Sml1');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (3, 'Hemoroidi', 'Hrm1');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (4, 'Trihineloza', 'Th1');
+
+
+

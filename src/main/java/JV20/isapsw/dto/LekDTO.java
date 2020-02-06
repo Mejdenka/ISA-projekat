@@ -3,31 +3,19 @@ package JV20.isapsw.dto;
 import JV20.isapsw.model.Lek;
 
 public class LekDTO {
-    private Long id;
-    private Integer sifra;
-    private String naziv;
+    private String sifraLeka;
+    private String nazivLeka;
 
     public LekDTO() {}
 
     public LekDTO(Lek lek) {
-        this(lek.getId(), lek.getSifra(), lek.getNaziv());
+        this(lek.getSifraLeka(), lek.getNazivLeka());
     }
 
-    public LekDTO(Long id, Integer sifra, String naziv) {
-        this.id = id;
-        this.sifra = sifra;
-        this.naziv = naziv;
+    public LekDTO(String sifraLeka, String nazivLeka) {
+        this.sifraLeka = sifraLeka;
+        this.nazivLeka = nazivLeka;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public Integer getSifra() {
-        return sifra;
-    }
-
-    public String getNaziv() {
-        return naziv;
-    }
 }

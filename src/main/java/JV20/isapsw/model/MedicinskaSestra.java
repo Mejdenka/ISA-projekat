@@ -3,6 +3,7 @@ package JV20.isapsw.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class MedicinskaSestra extends Korisnik {
@@ -14,6 +15,15 @@ public class MedicinskaSestra extends Korisnik {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Klinika klinikaMedSestre;
+
+    @OneToMany(mappedBy = "medSestraGo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GodisnjiOdsustvoTermin> rezervisaniGO;
+
+    @OneToMany(mappedBy = "medSestraOds", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GodisnjiOdsustvoTermin> rezervisanaOdustva;
+
 
     public MedicinskaSestra() {}
 
@@ -31,6 +41,22 @@ public class MedicinskaSestra extends Korisnik {
 
     public void setKlinikaMedSestre(Klinika klinikaMedSestre) {
         this.klinikaMedSestre = klinikaMedSestre;
+    }
+
+    public Set<GodisnjiOdsustvoTermin> getRezervisaniGO() {
+        return rezervisaniGO;
+    }
+
+    public void setRezervisaniGO(Set<GodisnjiOdsustvoTermin> rezervisaniGO) {
+        this.rezervisaniGO = rezervisaniGO;
+    }
+
+    public Set<GodisnjiOdsustvoTermin> getRezervisanaOdustva() {
+        return rezervisanaOdustva;
+    }
+
+    public void setRezervisanaOdustva(Set<GodisnjiOdsustvoTermin> rezervisanaOdustva) {
+        this.rezervisanaOdustva = rezervisanaOdustva;
     }
 }
 

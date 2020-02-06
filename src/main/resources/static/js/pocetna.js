@@ -120,6 +120,10 @@ $(document).ready(function(){
         generisiTipovePregleda();
     });
 
+    $('body').on('click', '#zahteviBtn', function(e) {
+        generisiZahteve();
+    });
+
     $('body').on('click', '#slobodniTerminiBtn', function(e) {
             var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
             $.ajax
@@ -135,6 +139,10 @@ $(document).ready(function(){
                 }
             });
 
+    });
+
+    $('body').on('click', '#zahteviZaGoOdsBtn', function(e) {
+        generisiZahteveZaGoOds();
     });
     //************************************************************************************************************************
     //funkcija profil-dugmeta

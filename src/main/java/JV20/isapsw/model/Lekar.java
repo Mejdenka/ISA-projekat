@@ -17,7 +17,6 @@ public class Lekar extends Korisnik {
     private Integer ocena;
     private boolean slobodan;
     private boolean naGodisnjem;
-    private boolean obrisan = false;
     private String radnoVreme;
 
     @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -69,14 +68,6 @@ public class Lekar extends Korisnik {
 
     public void setNaGodisnjem(boolean naGodisnjem) {
         this.naGodisnjem = naGodisnjem;
-    }
-
-    public boolean isObrisan() {
-        return obrisan;
-    }
-
-    public void setObrisan(boolean obrisan) {
-        this.obrisan = obrisan;
     }
 
     public Set<Operacija> getOperacije() {

@@ -28,6 +28,10 @@ public class LekService {
         return lekRepository.findAll(page);
     }
 
+    public Lek findBySifraLeka(String sifraLeka) {return lekRepository.findBySifraLeka(sifraLeka);}
+
+    public Lek findByNazivLeka(String nazivLeka) {return lekRepository.findByNazivLeka(nazivLeka);}
+
     public Lek save(Lek lek) {
         return lekRepository.save(lek);
     }

@@ -64,9 +64,8 @@ public class PacijentController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/zdravstveniKarton/{userId}")
-    @PreAuthorize("hasRole('DOKTOR')")
+    @PreAuthorize("hasRole('USER')")
     public ZdravstveniKarton getZdravstveniKarton(@PathVariable Long userId) throws AccessDeniedException {
-        System.out.println(this.pacijentService.findOne(userId).getKarton().getMasa());
         return this.pacijentService.findOne(userId).getKarton();
     }
 
@@ -88,7 +87,6 @@ public class PacijentController {
     @PreAuthorize("hasRole('ADMIN')")
     public void confirmRequest(@RequestBody String username) {
         Korisnik existUser = this.korisnikService.findOneByUsername(username);
-        System.out.println(existUser.getEmail());
         try {
             emailService.sendConfirmedEmail(existUser);
 

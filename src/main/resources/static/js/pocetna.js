@@ -80,13 +80,13 @@ $(document).ready(function(){
     //************************************************************************************************************************
     //funkcije dugmadi za PACIJENTA
     $('body').on('click', '#klinikeBtn', function(e) {
-        generisiKlinike();
+        generisiKlinike([]);
     });
     $('body').on('click', '#istorijaBtn', function(e) {
         generisiIstoriju()
     });
     $('body').on('click', '#zdravstveniKartonBtn', function(e) {
-        generisiZdravstveniKarton();
+        generisiZdravstveniKarton(ulogovan);
     });
     //************************************************************************************************************************
     //funkcije dugmadi za ADMINA KLINICKOG CENTRA
@@ -1795,23 +1795,6 @@ function prikazKorisnika(korisnik) {
         });
         $("#content").fadeIn(500);
     }
-}
-function generisiIstoriju() {
-    $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Jos uvijek nije dostupna istorija.");
-        document.getElementById("content").appendChild(textnode);
-    });
-    $("#content").fadeIn(500);
-}
-
-function generisiZdravstveniKarton() {
-    $("#content").fadeOut(100, function(){
-        document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Jos uvijek nije dostupan zdravstveni karton.");
-        document.getElementById("content").appendChild(textnode);
-    });
-    $("#content").fadeIn(500);
 }
 
 function generisiProfil(korisnik) {

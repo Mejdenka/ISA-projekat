@@ -120,7 +120,11 @@ public class KlinikaController {
         return klinikaService.findOne(idKlinike).getPregledi();
     }
 
-
+    @RequestMapping(method = RequestMethod.GET, value = "/getKlinike/{tip}/{datum}/{lokacija}/{ocjena}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Klinika> getKlinike(@PathVariable String tip, @PathVariable String datum, @PathVariable String lokacija, @PathVariable String ocjena) throws AccessDeniedException {
+        return klinikaService.findAllBy(tip, datum, lokacija, ocjena);
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniLekari/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -249,7 +253,6 @@ public class KlinikaController {
         Klinika zaIzmenu = klinikaService.findOne(klinika.getId());
         //ovdje setovati novu kliniku i sacuvati u bazi
         zaIzmenu.setNaziv(klinika.getNaziv());
-        System.out.println(zaIzmenu.getLokacija() + zaIzmenu.getNaziv());
         zaIzmenu.setLokacija(klinika.getLokacija());
         zaIzmenu.setOpis(klinika.getOpis());
         klinikaService.save(zaIzmenu);

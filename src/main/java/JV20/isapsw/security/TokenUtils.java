@@ -156,7 +156,6 @@ public class TokenUtils {
             String authHeader = getAuthHeaderFromHeader(request);
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                System.out.println("Token je: "+getAllClaimsFromToken(authHeader.substring(7)));
                 return authHeader.substring(7);
             }
 

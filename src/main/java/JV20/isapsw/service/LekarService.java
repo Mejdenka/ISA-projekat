@@ -31,6 +31,9 @@ public class LekarService {
     @Autowired
     private AuthorityService authService;
 
+    @Autowired
+    private KlinikaService klinikaService;
+
     public Lekar findOne(Long id) {
         return lekarRepository.findById(id).orElseGet(null);
     }
@@ -41,6 +44,37 @@ public class LekarService {
 
     public Page<Lekar> findAll(Pageable page) {
         return lekarRepository.findAll(page);
+    }
+
+    public Lekar izmenaLekara(Lekar lekar, Lekar zaIzmenu) {
+        Klinika klinika = klinikaService.findOne(zaIzmenu.getKlinikaLekara().getId());
+        //AKO IMA PREGLEDA ZAKAZANIH KOD TOG LJEKARA
+        for(Pregled pregled : klinika.getPregledi()){
+            if(!pregled.isObrisan() && !pregled.isObavljen() && pregled.getLekar().getId().equals(zaIzmenu.getId())){
+                return null;
+            }
+        }
+        zaIzmenu.setKorisnickoIme(lekar.getKorisnickoIme());
+        zaIzmenu.setIme(lekar.getIme());
+        zaIzmenu.setPrezime(lekar.getPrezime());
+        zaIzmenu.setEmail(lekar.getEmail());
+        zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
+        zaIzmenu.setOcena(lekar.getOcena());
+        zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
+        return save(zaIzmenu);
+    }
+
+    public Lekar obrisiLekara(Long lekarId) {
+        Lekar lekar = findOne(lekarId);
+        Klinika klinika = klinikaService.findOne(lekar.getKlinikaLekara().getId());
+        //AKO IMA PREGLEDA ZAKAZANIH KOD TOG LJEKARA
+        for(Pregled pregled : klinika.getPregledi()){
+            if(!pregled.isObrisan() && !pregled.isObavljen() && pregled.getLekar().getId().equals(lekarId)){
+                return null;
+            }
+        }
+        lekar.setObrisan(true);
+        return save(lekar);
     }
 
     public Lekar save(UserRequest userRequest) throws ParseException {

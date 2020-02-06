@@ -48,23 +48,20 @@ public class LekarController {
         return new LekarDTO(this.lekarService.findOne(idLekara));
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/obrisiLekara/{lekarId}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public Lekar obrisiLekara(@PathVariable Long lekarId) throws AccessDeniedException {
+        return this.lekarService.obrisiLekara(lekarId);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaLekara")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> izmenaLekara(@RequestBody Lekar lekar) throws AccessDeniedException {
+    public Lekar izmenaLekara(@RequestBody Lekar lekar) throws AccessDeniedException {
         Lekar zaIzmenu = this.lekarService.findOne(lekar.getId());
         if(zaIzmenu == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return null;
         }
-        zaIzmenu.setKorisnickoIme(lekar.getKorisnickoIme());
-        zaIzmenu.setIme(lekar.getIme());
-        zaIzmenu.setPrezime(lekar.getPrezime());
-        zaIzmenu.setEmail(lekar.getEmail());
-        zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
-        zaIzmenu.setOcena(lekar.getOcena());
-        zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
-        lekarService.save(zaIzmenu);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return lekarService.izmenaLekara(lekar, zaIzmenu);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodajLekara")

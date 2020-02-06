@@ -235,7 +235,7 @@ function prikaziMapu(lokacija) {
             ],
             view: new ol.View({
                 center: ol.proj.fromLonLat([lon, lat]),
-                zoom: 16
+                zoom: 18
             })
         });
 
@@ -1608,7 +1608,7 @@ function generisiTipovePregleda() {
                                 nazivPregleda.appendChild(nazivPregledaText);
 
                                 var cenaPregleda = podaciPregleda.insertCell(1);
-                                var cenaPregledaText = document.createTextNode(tipPregleda.cena);
+                                var cenaPregledaText = document.createTextNode(tipPregleda.cena + " $");
                                 cenaPregleda.appendChild(cenaPregledaText);
 
                                 var izmeni = podaciPregleda.insertCell(2);
@@ -1720,9 +1720,14 @@ function izmeniTipPregleda(tipPregleda) {
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
-                success: function() {
-                    modal.style.display = "none";
-                    generisiTipovePregleda();
+                success: function(klinika) {
+                    if(klinika.id == null){
+                        alert("Nemoguće izmeniti tip pregleda dok postoje pregledi tog tipa zakazani u klinici.");
+                        return;
+                    } else {
+                        modal.style.display = "none";
+                        generisiTipovePregleda();
+                    }
                 }
             });
         }
@@ -1740,8 +1745,13 @@ function ukloniTipPregleda(klinikaId, tipPregledaId) {
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
             },
-            success: function() {
-                generisiTipovePregleda();
+            success: function(klinika) {
+                if(klinika.id == null){
+                    alert("Nemoguće obrisati tip pregleda dok postoje pregledi tog tipa zakazani u klinici.");
+                    return;
+                } else {
+                    generisiTipovePregleda();
+                }
             }
         });
     }

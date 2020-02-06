@@ -1811,24 +1811,41 @@ function prikazKorisnika(korisnik) {
                 content.appendChild(cetvrtiRed);
             }
 
-            /*************************************************************************************/
-
-            if(korisnik.slobodan != null && korisnik.slobodan){
-                console.log("SLOBODAN")
-            } else if(!korisnik.slobodan){
-                selectOcena.disabled = "true";
-                txtDatumRodjenja.disabled = "true";
-                txtEmail.disabled = "true";
-                txtUsername.disabled = "true";
-                txtPrezime.disabled = "true";
-                txtIme.disabled = "true";
-                selectOcena.disabled = "true";
-            }
-            //***************************************************************************************
-
             var sacuvajIzmjeneBtn = document.createElement("BUTTON");
             sacuvajIzmjeneBtn.classList.add("btn2", "btn--light-blue");
             sacuvajIzmjeneBtn.innerHTML = "Sacuvaj izmene";
+
+            var obrisiBtn = document.createElement("BUTTON");
+            obrisiBtn.classList.add("btn2", "btn--light-blue");
+            obrisiBtn.innerHTML = "Obrisi korisnika";
+            obrisiBtn.onclick = function () {
+                $.ajax({
+                    url: 'api/lekari/obrisiLekara/'+korisnik.id,
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function(obrisan) {
+                        if(obrisan.id == null){
+                            alert("Lekar ima zakazane preglede. Ne možete ga obrisati.");
+                            return;
+                        }
+                        alert("Uspesno obrisan korisnik.");
+                        window.location = "pocetna.html";
+                    },
+                    error: function() {
+                        alert("Greska pri brisanju korisnika.");
+                        window.location = "pocetna.html";
+
+                    }
+                });
+            };
+
+            //AKO JE LEKAR (ima ocjenu)
+            if(korisnik.ocena != null){
+               content.appendChild(obrisiBtn);
+            }
 
             sacuvajIzmjeneBtn.onclick = function(){
                 let id = korisnik.id;
@@ -1864,7 +1881,6 @@ function prikazKorisnika(korisnik) {
                     return;
                 }
 
-                console.log(ocena)
                 $.post({
                     url: 'api/lekari/izmenaLekara',
                     data: JSON.stringify({id, korisnickoIme, ime, prezime, email, datumRodjenja, ocena, radnoVreme}),
@@ -1872,11 +1888,15 @@ function prikazKorisnika(korisnik) {
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                     },
-                    success: function() {
-                        alert("Uspesno izmenjen lekar.")
+                    success: function(lekar) {
+                        if(lekar.id == null){
+                            alert("Lekar ima zakazane preglede. Ne možete izvršiti izmenu.");
+                            return;
+                        }
+                        alert("Uspesno izmenjen lekar.");
                     },
                     error: function() {
-                        alert("Greska pri izmeni lekara.")
+                        alert("Greska pri izmeni lekara.");
                     }
                 });
             }

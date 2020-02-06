@@ -21,7 +21,7 @@ public class Pregled {
     private boolean obavljen;
     private boolean obrisan;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Sala sala;
 

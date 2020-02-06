@@ -667,12 +667,12 @@ function infoSale(sala)
 function generisiSlobodneTermine(klinika) {
     $.get({
 
-        url: 'api/klinike/getSlobodniTermini/' + klinika.naziv,
+        url: 'api/klinike/getSlobodniTermini/' + klinika.id,
         contentType: 'application/json',
         headers: {
             'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
         },
-        success: function (termini) {
+        success: function (pregledi) {
             $("#content").fadeOut(100, function () {
                 var content = document.getElementById("content")
                 content.innerHTML = "";
@@ -681,21 +681,29 @@ function generisiSlobodneTermine(klinika) {
                 table.classList.add("tabela");
                 var tableRef = document.createElement('tbody');
 
-                for (let termin of termini) {
+                for (let pregled of pregledi) {
                     var podaciTermina = tableRef.insertRow();
                     var pocetakTermina = podaciTermina.insertCell(0);
-                    var pocetakTerminaText = document.createTextNode(termin.pocetak);
+                    var pocetakTerminaText = document.createTextNode(pregled.termin.pocetak);
                     pocetakTermina.appendChild(pocetakTerminaText);
 
                     var krajTermina = podaciTermina.insertCell(1);
-                    var krajTerminaText = document.createTextNode(termin.kraj);
+                    var krajTerminaText = document.createTextNode(pregled.termin.kraj);
                     krajTermina.appendChild(krajTerminaText);
 
-                    var ukloni = podaciTermina.insertCell(2);
+                    var lekarTermina = podaciTermina.insertCell(2);
+                    var lekarText = document.createTextNode(pregled.lekar.ime +" "+ pregled.lekar.prezime);
+                    lekarTermina.appendChild(lekarText);
+
+                    var salaTermina = podaciTermina.insertCell(3);
+                    var salaText = document.createTextNode("(" + pregled.sala.broj + ") " + pregled.sala.naziv );
+                    salaTermina.appendChild(salaText);
+
+                    var ukloni = podaciTermina.insertCell(4);
                     var ukloniBtn = document.createElement("BUTTON");
                     ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     ukloniBtn.innerHTML = "-";
-                    ukloniBtn.onclick = ukloniTermin(klinika, termin.id);
+                    ukloniBtn.onclick = ukloniTermin(klinika, pregled.id);
                     ukloni.appendChild(ukloniBtn);
 
                 }
@@ -909,8 +917,8 @@ function dodajSlobodanTermin(klinika) {
 
         okBtn.onclick = function(){
             datum = $('#datum').val();
-            pocetak =  $('#pocetak').val();
-            kraj =  $('#kraj').val();
+            pocetakSatnica =  $('#pocetak').val();
+            krajSatnica =  $('#kraj').val();
             trajanje =  $('#trajanje').val();
 
             if(pocetak == "" || kraj == "" || datum == "" || trajanje == ""){
@@ -918,41 +926,63 @@ function dodajSlobodanTermin(klinika) {
                 return;
             }
 
-            pocetak = datum + " "  + pocetak +":00";
-            kraj = datum + " "  + kraj +":00";
+            pocetak = datum + " "  + pocetakSatnica +":00";
+            kraj = datum + " "  + krajSatnica +":00";
 
-            termin = {
-                "pocetak": pocetak,
-                "kraj": kraj
-            };
 
-            lekar = {
-                "id": $('#lekariCbx').val()
-            };
-            sala = {
-                "id": $('#saleCbx').val()
-            };
-            tipPregleda = {
-                "id": $('#tipoviPregledaCbx').val()
-            };
-            klinikaPregleda = {
-                "id": klinika.id
-            };
+            $.get({
 
-            $.ajax({
-                url:'api/klinike/dodajSlobodanPregled',
-                type: 'POST',
+                url: 'api/lekari/getLekar/' + $('#lekariCbx').val(),
                 contentType: 'application/json',
-                data: JSON.stringify({termin, lekar, sala, tipPregleda, klinikaPregleda}),
-
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
-                success: function() {
-                    modal.style.display = "none";
-                    generisiSlobodneTermine(klinika);
+                success: function (lekarDTO) {
+                    let pocetakRada = (lekarDTO.radnoVreme).substr(0,5);
+                    let krajRada = (lekarDTO.radnoVreme).substr(6,11);
+                    console.log(krajRada);
+
+                    if(pocetakSatnica < pocetakRada || krajSatnica > krajRada){
+                        alert("Zakažite termin u granicama radnog vremena lekara ("+ lekarDTO.radnoVreme +").");
+                        return;
+                    }
+
+                    termin = {
+                        "pocetak": pocetak,
+                        "kraj": kraj
+                    };
+
+                    lekar = {
+                        "id": $('#lekariCbx').val()
+                    };
+
+                    sala = {
+                        "id": $('#saleCbx').val()
+                    };
+                    tipPregleda = {
+                        "id": $('#tipoviPregledaCbx').val()
+                    };
+                    klinikaPregleda = {
+                        "id": klinika.id
+                    };
+
+                    $.ajax({
+                        url:'api/klinike/dodajSlobodanPregled',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({termin, lekar, sala, tipPregleda, klinikaPregleda}),
+
+                        headers: {
+                            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                        },
+                        success: function() {
+                            modal.style.display = "none";
+                            generisiSlobodneTermine(klinika);
+                        }
+                    });
                 }
             });
+
         }
 
 
@@ -962,7 +992,7 @@ function dodajSlobodanTermin(klinika) {
 function ukloniTermin(klinika, terminId) {
     return function(){
         $.ajax({
-            url:'api/klinike/deleteTermin/'+klinika.id+'/'+terminId,
+            url:'api/klinike/deleteTerminZaPregled/'+klinika.id+'/'+terminId,
             type: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

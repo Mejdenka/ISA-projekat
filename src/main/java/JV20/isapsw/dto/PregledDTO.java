@@ -36,6 +36,15 @@ public class PregledDTO {
         this.sala = sala;
     }
 
+    public PregledDTO(Long id, TerminDTO termin, LekarDTO lekar, TipPregleda tipPregleda, Klinika klinikaPregleda, Sala sala) {
+        this.id = id;
+        this.termin = termin;
+        this.lekar = lekar;
+        this.tipPregleda = tipPregleda;
+        this.klinikaPregleda = klinikaPregleda;
+        this.sala = sala;
+    }
+
     public Long getId() {
         return id;
     }

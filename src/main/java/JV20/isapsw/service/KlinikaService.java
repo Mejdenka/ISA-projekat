@@ -1,8 +1,6 @@
 package JV20.isapsw.service;
 
-import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
-import JV20.isapsw.dto.OperacijaDTO;
-import JV20.isapsw.dto.PregledDTO;
+import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.repository.KlinikaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +89,31 @@ public class KlinikaService {
         klinika.getPregledi().add(pregled);
         save(klinika);
 
+    }
+
+    public List<PregledDTO> pronadjiSlobodnePreglede(Klinika klinika) {
+        List<PregledDTO> pregledi = new ArrayList<>();
+
+        for(Pregled p : klinika.getPregledi()){
+            if(p.getPacijent() == null && !p.isObrisan()){
+                pregledi.add(new PregledDTO(p.getId(), new TerminDTO(p.getTermin()),
+                        new LekarDTO (p.getLekar()), p.getTipPregleda(), p.getKlinikaPregleda(), p.getSala()));
+             }
+        }
+
+        return pregledi;
+    }
+
+    public void obrisiTerminZaPregled(Klinika klinika, Long idTermina) {
+        List<PregledDTO> pregledi = new ArrayList<>();
+
+        for(Pregled p : klinika.getPregledi()){
+            if(p.getId().equals(idTermina)){
+                p.setObrisan(true);
+                pregledService.save(p);
+            }
+        }
+        save(klinika);
     }
 
     public List<GodisnjiOdsustvoTerminDTO> getAllGoOds(Klinika klinika){

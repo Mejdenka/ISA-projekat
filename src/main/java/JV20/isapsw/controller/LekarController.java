@@ -1,6 +1,7 @@
 package JV20.isapsw.controller;
 
 import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
+import JV20.isapsw.dto.LekarDTO;
 import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
@@ -39,6 +40,14 @@ public class LekarController {
     private PregledService pregledService ;
     @Autowired
     private TipPregledaService tipPregledaService ;
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getLekar/{idLekara}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public LekarDTO getLekar(@PathVariable Long idLekara) throws AccessDeniedException {
+        return new LekarDTO(this.lekarService.findOne(idLekara));
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaLekara")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")

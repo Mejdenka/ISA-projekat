@@ -877,27 +877,47 @@ function dodajSlobodanTermin(klinika) {
                 for (var i = 0; i < array.length; i++) {
                     var option = document.createElement("option");
                     option.value = array[i].id ;
-                    option.text = array[i].naziv;
+                    option.text = array[i].naziv + " (" + array[i].cena +" $ )";
                     tipoviPregledaCbx.appendChild(option);
-                    varTipoviPregleda.appendChild(tipoviPregledaCbx);
-                    cetvrtiRed.appendChild(varTipoviPregleda);
+
                 }
+                var varCijena = document.createElement("var");
+                varCijena.classList.add("col-2", "input-group");
+                var trajanjeTxt = document.createTextNode("Cena");
+                varCijena.appendChild(trajanjeTxt);
+                varCijena.appendChild(document.createElement("br"));
+                var cijena = document.createElement('input');
+                cijena.id = "cijena";
+                cijena.type = "text";
+
+
+                tipoviPregledaCbx.onchange = function (){
+                    let selectedTp =  $('#tipoviPregledaCbx').val();
+                    for(let tp of array){
+                        if(tp.id == selectedTp){
+                            cijena.value = tp.cena;
+                        }
+                    }
+                }
+
+                varTipoviPregleda.appendChild(tipoviPregledaCbx);
+                cetvrtiRed.appendChild(varTipoviPregleda);
+
+                let selectedTp =  $('#tipoviPregledaCbx').val();
+                for(let tp of array){
+                    if(tp.id == selectedTp){
+                        cijena.value = tp.cena;
+                    }
+                }
+                cijena.classList.add("input--style-4");
+                cijena.style.height = "40px";
+                cijena.style.width = "250px";
+                cijena.disabled = "true";
+
+                varCijena.appendChild(cijena);
+                cetvrtiRed.appendChild(varCijena)
             }
         });
-
-        var varTrajanje = document.createElement("var");
-        varTrajanje.classList.add("col-2", "input-group");
-        var trajanjeTxt = document.createTextNode("Trajanje");
-        varTrajanje.appendChild(trajanjeTxt);
-        varTrajanje.appendChild(document.createElement("br"));
-        var trajanje = document.createElement('input');
-        trajanje.id = "trajanje";
-        trajanje.type = "text";
-        trajanje.classList.add("input--style-4");
-        trajanje.style.height = "40px";
-        trajanje.style.width = "250px";
-        varTrajanje.appendChild(trajanje);
-        cetvrtiRed.appendChild(varTrajanje)
 
         content.appendChild(cetvrtiRed);
 
@@ -919,9 +939,8 @@ function dodajSlobodanTermin(klinika) {
             datum = $('#datum').val();
             pocetakSatnica =  $('#pocetak').val();
             krajSatnica =  $('#kraj').val();
-            trajanje =  $('#trajanje').val();
 
-            if(pocetak == "" || kraj == "" || datum == "" || trajanje == ""){
+            if(pocetak == "" || kraj == "" || datum == ""){
                 alert("Popunite sva polja!");
                 return;
             }
@@ -940,7 +959,6 @@ function dodajSlobodanTermin(klinika) {
                 success: function (lekarDTO) {
                     let pocetakRada = (lekarDTO.radnoVreme).substr(0,5);
                     let krajRada = (lekarDTO.radnoVreme).substr(6,11);
-                    console.log(krajRada);
 
                     if(pocetakSatnica < pocetakRada || krajSatnica > krajRada){
                         alert("Zakažite termin u granicama radnog vremena lekara ("+ lekarDTO.radnoVreme +").");

@@ -24,8 +24,6 @@ public class MedicinskaSestra extends Korisnik {
     @JsonIgnore
     private Set<GodisnjiOdsustvoTermin> rezervisanaOdustva;
 
-    private boolean promijenjenaLozinka;
-
     public MedicinskaSestra() {}
 
     public Long getId() {
@@ -60,12 +58,5 @@ public class MedicinskaSestra extends Korisnik {
         this.rezervisanaOdustva = rezervisanaOdustva;
     }
 
-    public boolean isPromijenjenaLozinka() {
-        return promijenjenaLozinka;
-    }
-
-    public void setPromijenjenaLozinka(boolean promijenjenaLozinka) {
-        this.promijenjenaLozinka = promijenjenaLozinka;
-    }
 }
 

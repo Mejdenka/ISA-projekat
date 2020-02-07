@@ -38,19 +38,29 @@ $(document).ready(function(){
                             pocetnaAdminKlinickogCentra(ulogovan);
                             break;
                         case "ROLE_ADMIN_KLINIKE":
-                            pocetnaAdminKlinike(ulogovan);
-                            break;
+                            if(!ulogovan.promijenjenaLozinka){
+                                promijeniLozinku(ulogovan);
+                                break;
+                            } else {
+                                pocetnaAdminKlinike(ulogovan);
+                                break;
+                            }
                         case "ROLE_MEDICINSKA_SESTRA":
                             if(!ulogovan.promijenjenaLozinka){
                                 promijeniLozinku(ulogovan);
                                 break;
-                            }else {
+                            } else {
                                 pocetnaMedicinskaSestra(ulogovan)
                                 break;
                             }
                         case "ROLE_DOKTOR":
-                            pocetnaLekar(ulogovan)
-                            break;
+                            if(!ulogovan.promijenjenaLozinka){
+                                promijeniLozinku(ulogovan);
+                                break;
+                            } else {
+                                pocetnaLekar(ulogovan);
+                                break;
+                            }
                         default:
                             console.log("Jos nismo napravili pocetne za ostale korisnike :)")
                     }
@@ -225,21 +235,23 @@ function promijeniLozinku(ulogovan) {
             return;
         }
 
-        oldPassword = "";
         var newPassword = txtNovaLozinka.value;
 
         $.post({
-            url: 'api/korisnici/changePass',
+            url: 'api/korisnici/changePassFirstTime',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
             },
-            data: JSON.stringify({oldPassword, newPassword}),
+            data: JSON.stringify({newPassword}),
             contentType: 'application/json',
-            success: function() {
+            success: function(ulogovan) {
                 alert("Lozinka uspješno promijenjena.")
+                modal.style.display = "none";
+                localStorage.setItem('ulogovan', JSON.stringify(ulogovan));
+                alert("Potrebno je ponovno logovanje.");
+                logOut();
             }
         });
-        modal.style.display = "none";
     }
     p.append(btnPromijeni);
 }

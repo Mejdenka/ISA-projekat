@@ -102,6 +102,10 @@ public class LekarService {
         auth.add(authService.findByname("ROLE_USER"));
         lekar.setAuthorities(auth);
 
+        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setRadnoVreme(userRequest.getRadnoVreme());
+        lekar.setPromijenjenaLozinka(false);
+
         lekar = this.lekarRepository.save(lekar);
         return lekar;
     }

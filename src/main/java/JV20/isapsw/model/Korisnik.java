@@ -43,6 +43,8 @@ public class Korisnik implements UserDetails{
     private boolean confirmed;
     private Timestamp lastPasswordResetDate;
     private boolean obrisan = false;
+    //Da ne pita svakoga prvi put za promjenu lozike
+    private boolean promijenjenaLozinka = true;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "korisnik_authority",
@@ -199,5 +201,13 @@ public class Korisnik implements UserDetails{
 
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
+    }
+
+    public boolean isPromijenjenaLozinka() {
+        return promijenjenaLozinka;
+    }
+
+    public void setPromijenjenaLozinka(boolean promijenjenaLozinka) {
+        this.promijenjenaLozinka = promijenjenaLozinka;
     }
 }

@@ -139,6 +139,11 @@ public class KorisnikController {
         userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @RequestMapping(value = "/changePassFirstTime", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('USER')")
+    public Korisnik changePassFirstTime(@RequestBody PasswordChanger passwordChanger) {
+       return userDetailsService.changePasswordFirstTime(passwordChanger.newPassword);
+    }
 
     static class PasswordChanger {
         public String oldPassword;

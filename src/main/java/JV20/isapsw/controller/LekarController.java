@@ -78,9 +78,6 @@ public class LekarController {
         }
 
         Lekar lekar = this.lekarService.save(userRequest);
-        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
-        lekar.setRadnoVreme(userRequest.getRadnoVreme());
-        lekar = this.lekarService.save(lekar);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(lekar.getId()).toUri());

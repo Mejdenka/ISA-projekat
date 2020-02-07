@@ -19,7 +19,7 @@ INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 100, 1, 0);
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 200, 1, 0);
 
-INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-07 16:20:00', '2020-02-07 16:50:00', 1, 1, 0, 1);
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-07 18:20:00', '2020-02-07 18:50:00', 1, 1, 0, 1);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-13 12:50:00', '2020-02-13 13:20:00', 1, 1, 0, 8);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-14 10:30:00', '2020-02-14 16:00:00', 1, 1, 0, 8);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-10 10:30:00', '2020-02-10 16:00:00', 1, 1, 0, 1);
@@ -66,3 +66,15 @@ INSERT INTO korisnik_authority (user_id, authority_id) VALUES (7, 1);
 INSERT INTO korisnik_authority (user_id, authority_id) VALUES (7, 4);
 INSERT INTO korisnik_authority (user_id, authority_id) VALUES (8, 1);
 INSERT INTO korisnik_authority (user_id, authority_id) VALUES (8, 2);
+
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (1, 'Brufen 500mg', 'Brf5', 0);
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (2, 'Brufen 600mg', 'Brf6', 0);
+INSERT INTO lek(id, naziv_leka, sifra_leka, obrisan) VALUES (3, 'Cefaleksin', 'Cef1', 0);
+
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (1, 'Mononukleoza', 'Mn1t');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (2, 'Kandida', 'Sml1');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (3, 'Hemoroidi', 'Hrm1');
+INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (4, 'Trihineloza', 'Th1');
+
+
+

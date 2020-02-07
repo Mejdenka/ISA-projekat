@@ -62,7 +62,7 @@ public class PacijentController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/pacijent/{userId}")
-    @PreAuthorize("hasRole('DOKTOR')")
+    @PreAuthorize("hasRole('USER')")
     public Pacijent getPacijent(@PathVariable Long userId) throws AccessDeniedException {
         return this.pacijentService.findOne(userId);
     }

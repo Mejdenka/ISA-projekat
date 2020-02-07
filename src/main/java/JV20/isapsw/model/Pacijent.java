@@ -89,4 +89,6 @@ public class Pacijent extends Korisnik {
     public void setPregledi(Set<Pregled> pregledi) {
         this.pregledi = pregledi;
     }
+
+
 }

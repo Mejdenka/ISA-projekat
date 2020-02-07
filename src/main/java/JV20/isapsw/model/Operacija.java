@@ -13,6 +13,7 @@ public class Operacija {
     @OneToOne
     private Pacijent pacijent;
     @OneToOne
+    @JsonIgnore
     private Lekar lekar;
     @OneToOne
     private Termin termin;

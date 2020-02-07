@@ -14,6 +14,7 @@ public class Lek {
 
     private String sifraLeka;
     private String nazivLeka;
+    private boolean obrisan;
 
     public Lek() {}
 
@@ -41,5 +42,13 @@ public class Lek {
 
     public void setNazivLeka(String nazivLeka) {
         this.nazivLeka = nazivLeka;
+    }
+
+    public boolean isObrisan() {
+        return obrisan;
+    }
+
+    public void setObrisan(boolean obrisan) {
+        this.obrisan = obrisan;
     }
 }

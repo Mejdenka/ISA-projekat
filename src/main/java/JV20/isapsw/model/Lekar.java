@@ -29,6 +29,7 @@ public class Lekar extends Korisnik {
     private Set<GodisnjiOdsustvoTermin> rezervisanaOdustva;
 
     @OneToMany
+    @JsonIgnore
     private Set<Operacija> operacije;
     @OneToMany(mappedBy = "lekarPregleda", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore

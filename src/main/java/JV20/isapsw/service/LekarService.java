@@ -57,6 +57,7 @@ public class LekarService {
         lekar.setDatumRegistrovanja(timeProvider.now());
         lekar.setEnabled(true);
         lekar.setConfirmed(true);
+        lekar.setTipPregleda(userRequest.getTipPregleda());
         Timestamp ts=new Timestamp(timeProvider.now().getTime());
         lekar.setLastPasswordResetDate(ts);
 

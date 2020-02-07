@@ -17,6 +17,7 @@ public class Lekar extends Korisnik {
     private Integer ocena;
     private boolean slobodan;
     private boolean naGodisnjem;
+    private TipPregleda tipPregleda;
     private String radnoVreme;
 
     @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -116,5 +117,13 @@ public class Lekar extends Korisnik {
 
     public void setRezervisanaOdustva(Set<GodisnjiOdsustvoTermin> rezervisanaOdustva) {
         this.rezervisanaOdustva = rezervisanaOdustva;
+    }
+
+    public TipPregleda getTipPregleda() {
+        return tipPregleda;
+    }
+
+    public void setTipPregleda(TipPregleda tipPregleda) {
+        this.tipPregleda = tipPregleda;
     }
 }

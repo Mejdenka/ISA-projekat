@@ -16,6 +16,7 @@ public class UserRequest {
     //Za lekara
     private Long idKlinike;
     private String radnoVreme;
+    private TipPregleda tipPregleda;
 
     public Long getId() {
         return id;
@@ -104,4 +105,7 @@ public class UserRequest {
     public void setRadnoVreme(String radnoVreme) {
         this.radnoVreme = radnoVreme;
     }
+
+    public TipPregleda getTipPregleda() { return tipPregleda; }
+    public void setTipPregleda(TipPregleda tipPregleda) { this.tipPregleda = tipPregleda; }
 }

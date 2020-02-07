@@ -1,6 +1,7 @@
 package JV20.isapsw.dto;
 
 import JV20.isapsw.model.Lekar;
+import JV20.isapsw.model.TipPregleda;
 
 import java.util.Date;
 
@@ -14,13 +15,14 @@ public class LekarDTO {
     private Integer ocena;
     private boolean slobodan;
     private String radnoVreme;
+    private TipPregleda tipPregleda;
 
     public LekarDTO(Lekar lekar){
         this(lekar.getId(), lekar.getKorisnickoIme(), lekar.getIme(), lekar.getPrezime(), lekar.getDatumRodjenja(),
-                lekar.getEmail(), lekar.getOcena(), lekar.isSlobodan(), lekar.getRadnoVreme());
+                lekar.getEmail(), lekar.getOcena(), lekar.isSlobodan(), lekar.getRadnoVreme(), lekar.getTipPregleda());
     }
 
-    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer ocena, boolean slobodan, String radnoVreme) {
+    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer ocena, boolean slobodan, String radnoVreme, TipPregleda tipPregleda) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
@@ -30,6 +32,7 @@ public class LekarDTO {
         this.ocena = ocena;
         this.slobodan = slobodan;
         this.radnoVreme = radnoVreme;
+        this.tipPregleda = tipPregleda;
     }
 
     public Long getId() {
@@ -67,4 +70,6 @@ public class LekarDTO {
     public String getRadnoVreme() {
         return radnoVreme;
     }
+
+    public TipPregleda getTipPregleda() { return tipPregleda; }
 }

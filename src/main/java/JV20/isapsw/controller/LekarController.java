@@ -54,6 +54,7 @@ public class LekarController {
         zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
         zaIzmenu.setOcena(lekar.getOcena());
         zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
+        zaIzmenu.setTipPregleda(lekar.getTipPregleda());
         lekarService.save(zaIzmenu);
         return new ResponseEntity<>(HttpStatus.OK);
     }

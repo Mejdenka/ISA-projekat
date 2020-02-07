@@ -16,7 +16,7 @@ public class PregledDTO {
         this(pregled.getId(),
                 new TerminDTO(pregled.getTermin().getId(), pregled.getTermin().getPocetak(), pregled.getTermin().getKraj()),
                 new PacijentDTO(pregled.getPacijent().getId(),pregled.getPacijent().getKorisnickoIme(), pregled.getPacijent().getIme(), pregled.getPacijent().getPrezime(), pregled.getPacijent().getEmail(), pregled.getPacijent().getLozinka(), pregled.getPacijent().getDatumRodjenja().toString(), pregled.getPacijent().getJbo()),
-                new LekarDTO(pregled.getLekar().getId(), pregled.getLekar().getKorisnickoIme(), pregled.getLekar().getIme(), pregled.getLekar().getPrezime(), pregled.getLekar().getDatumRodjenja(), pregled.getLekar().getEmail(), pregled.getLekar().getOcena(), pregled.getLekar().isSlobodan(), pregled.getLekar().getRadnoVreme()),
+                new LekarDTO(pregled.getLekar().getId(), pregled.getLekar().getKorisnickoIme(), pregled.getLekar().getIme(), pregled.getLekar().getPrezime(), pregled.getLekar().getDatumRodjenja(), pregled.getLekar().getEmail(), pregled.getLekar().getOcena(), pregled.getLekar().isSlobodan(), pregled.getLekar().getRadnoVreme(), pregled.getLekar().getTipPregleda()),
                 pregled.getTipPregleda());
     }
 

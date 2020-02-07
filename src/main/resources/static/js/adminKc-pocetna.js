@@ -341,10 +341,7 @@ function generisiFormuZaNovuKliniku() {
         txtNaziv.style.width = "250px";
         varNaziv.appendChild(txtNaziv);
         prviRed.appendChild(varNaziv);
-        content.appendChild(prviRed);
 
-        var drugiRed = document.createElement("var");
-        drugiRed.classList.add("row", "wrapper--w680")
         var varLokacija = document.createElement("var");
         varLokacija.classList.add("col-2", "input-group");
         var lokacija = document.createTextNode("Lokacija");
@@ -357,7 +354,44 @@ function generisiFormuZaNovuKliniku() {
         txtLokacija.style.height = "40px";
         txtLokacija.style.width = "250px";
         varLokacija.appendChild(txtLokacija);
-        drugiRed.appendChild(varLokacija);
+        prviRed.appendChild(varLokacija);
+
+        content.appendChild(prviRed);
+
+        var drugiRed = document.createElement("var");
+        drugiRed.classList.add("row", "wrapper--w680")
+
+
+        var varDuzina = document.createElement("var");
+        varDuzina.classList.add("col-2", "input-group");
+        var duzina = document.createTextNode("Geografska duzina (opcionalno)");
+        varDuzina.appendChild(duzina);
+        varDuzina.appendChild(document.createElement("br"));
+        var txtDuzina = document.createElement('input');
+        txtDuzina.type = 'number';
+        txtDuzina.setAttribute("step", "0.1");
+        txtDuzina.id = "duzina";
+        txtDuzina.classList.add("input--style-4");
+        txtDuzina.style.height = "40px";
+        txtDuzina.style.width = "150px";
+        varDuzina.appendChild(txtDuzina);
+        drugiRed.appendChild(varDuzina);
+        content.appendChild(drugiRed);
+
+        var varSirina = document.createElement("var");
+        varSirina.classList.add("col-2", "input-group");
+        var sirina = document.createTextNode("Geografska sirina (opcionalno)");
+        varSirina.appendChild(sirina);
+        varSirina.appendChild(document.createElement("br"));
+        var txtSirina = document.createElement('input');
+        txtSirina.type = 'number';
+        txtSirina.setAttribute("step", "0.1");
+        txtSirina.id = "sirina";
+        txtSirina.classList.add("input--style-4");
+        txtSirina.style.height = "40px";
+        txtSirina.style.width = "150px";
+        varSirina.appendChild(txtSirina);
+        drugiRed.appendChild(varSirina);
         content.appendChild(drugiRed);
 
         var treciRed = document.createElement("var");
@@ -385,6 +419,12 @@ function generisiFormuZaNovuKliniku() {
             var lokacija=$('#lokacija').val();
             var opis=$('#opis').val();
 
+            var lokacijaNaMapi = {
+                "brojUlice" : lokacija,
+                "lon" : $('#duzina').val(),
+                "lat" : $('#sirina').val()
+            }
+
             if(naziv === ""){
                 alert("Morate uneti naziv klinike!");
                 return;
@@ -403,7 +443,7 @@ function generisiFormuZaNovuKliniku() {
 
             $.post({
                 url: 'api/klinike/dodajKliniku',
-                data: JSON.stringify({naziv, lokacija, opis}),
+                data: JSON.stringify({naziv, lokacija, opis, lokacijaNaMapi}),
                 contentType: 'application/json',
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

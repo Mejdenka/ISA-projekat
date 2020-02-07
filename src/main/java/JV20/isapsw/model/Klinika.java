@@ -56,6 +56,13 @@ public class Klinika {
 
     public Klinika() {}
 
+    public Klinika(Long id, String naziv, String lokacija, String opis) {
+        this.id = id;
+        this.naziv = naziv;
+        this.lokacija = lokacija;
+        this.opis = opis;
+    }
+
     public Long getId() {
         return id;
     }

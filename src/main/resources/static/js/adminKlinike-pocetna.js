@@ -343,7 +343,7 @@ function prikaziIzvestajPoslovanja(klinika) {
             var varPrihodi = document.createElement("var");
             varPrihodi.classList.add("col-2", "input-group");
             var prihodi = document.createElement('input');
-            prihodi.type = 'number';
+            prihodi.type = 'text';
             prihodi.disabled = true;
             prihodi.id = "prihodi";
             prihodi.classList.add("input--style-4");
@@ -396,7 +396,7 @@ function prihodiKlinike(klinika) {
                     }
                 }
                 var polje = $("#prihodi");
-                polje.val(prihodi);
+                polje.val(prihodi + " $");
             }
         });
 
@@ -667,12 +667,12 @@ function infoSale(sala)
 function generisiSlobodneTermine(klinika) {
     $.get({
 
-        url: 'api/klinike/getSlobodniTermini/' + klinika.naziv,
+        url: 'api/klinike/getSlobodniTermini/' + klinika.id,
         contentType: 'application/json',
         headers: {
             'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
         },
-        success: function (termini) {
+        success: function (pregledi) {
             $("#content").fadeOut(100, function () {
                 var content = document.getElementById("content")
                 content.innerHTML = "";
@@ -681,21 +681,29 @@ function generisiSlobodneTermine(klinika) {
                 table.classList.add("tabela");
                 var tableRef = document.createElement('tbody');
 
-                for (let termin of termini) {
+                for (let pregled of pregledi) {
                     var podaciTermina = tableRef.insertRow();
                     var pocetakTermina = podaciTermina.insertCell(0);
-                    var pocetakTerminaText = document.createTextNode(termin.pocetak);
+                    var pocetakTerminaText = document.createTextNode(pregled.termin.pocetak);
                     pocetakTermina.appendChild(pocetakTerminaText);
 
                     var krajTermina = podaciTermina.insertCell(1);
-                    var krajTerminaText = document.createTextNode(termin.kraj);
+                    var krajTerminaText = document.createTextNode(pregled.termin.kraj);
                     krajTermina.appendChild(krajTerminaText);
 
-                    var ukloni = podaciTermina.insertCell(2);
+                    var lekarTermina = podaciTermina.insertCell(2);
+                    var lekarText = document.createTextNode(pregled.lekar.ime +" "+ pregled.lekar.prezime);
+                    lekarTermina.appendChild(lekarText);
+
+                    var salaTermina = podaciTermina.insertCell(3);
+                    var salaText = document.createTextNode("(" + pregled.sala.broj + ") " + pregled.sala.naziv );
+                    salaTermina.appendChild(salaText);
+
+                    var ukloni = podaciTermina.insertCell(4);
                     var ukloniBtn = document.createElement("BUTTON");
                     ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     ukloniBtn.innerHTML = "-";
-                    ukloniBtn.onclick = ukloniTermin(klinika, termin.id);
+                    ukloniBtn.onclick = ukloniTermin(klinika, pregled.id);
                     ukloni.appendChild(ukloniBtn);
 
                 }
@@ -783,6 +791,136 @@ function dodajSlobodanTermin(klinika) {
 
         content.appendChild(prviRed);
 
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+        var varLekari = document.createElement("var");
+        varLekari.classList.add("col-2", "input-group");
+        var lekariTxt = document.createTextNode("Odaberite lekara");
+        varLekari.appendChild(lekariTxt);
+        varLekari.appendChild(document.createElement("br"));
+        var lekariCbx = document.createElement('select');
+        lekariCbx.id = "lekariCbx";
+        lekariCbx.classList.add("input--style-4");
+        lekariCbx.style.height = "40px";
+        lekariCbx.style.width = "250px"
+
+        $.get({
+            url: 'api/klinike/getLekari/' + klinika.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (array) {
+                for (var i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = array[i].id ;
+                    option.text = array[i].ime + " " + array[i].prezime;
+                    lekariCbx.appendChild(option);
+                    varLekari.appendChild(lekariCbx);
+                    treciRed.appendChild(varLekari);
+                }
+            }
+        });
+
+        var varSale = document.createElement("var");
+        varSale.classList.add("col-2", "input-group");
+        var lekariTxt = document.createTextNode("Odaberite salu");
+        varSale.appendChild(lekariTxt);
+        varSale.appendChild(document.createElement("br"));
+        var saleCbx = document.createElement('select');
+        saleCbx.id = "saleCbx";
+        saleCbx.classList.add("input--style-4");
+        saleCbx.style.height = "40px";
+        saleCbx.style.width = "250px"
+
+        $.get({
+            url: 'api/klinike/getSale/' + klinika.naziv,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (array) {
+                for (var i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = array[i].id ;
+                    option.text = array[i].naziv + " , broj: " + array[i].broj;
+                    saleCbx.appendChild(option);
+                    varSale.appendChild(saleCbx);
+                    treciRed.appendChild(varSale);
+                }
+            }
+        });
+
+        content.appendChild(treciRed);
+
+        var cetvrtiRed = document.createElement("var");
+        cetvrtiRed.classList.add("row", "wrapper--w680");
+        var varTipoviPregleda = document.createElement("var");
+        varTipoviPregleda.classList.add("col-2", "input-group");
+        var tipoviPregledaTxt = document.createTextNode("Tip pregleda");
+        varTipoviPregleda.appendChild(tipoviPregledaTxt);
+        varTipoviPregleda.appendChild(document.createElement("br"));
+        var tipoviPregledaCbx = document.createElement('select');
+        tipoviPregledaCbx.id = "tipoviPregledaCbx";
+        tipoviPregledaCbx.classList.add("input--style-4");
+        tipoviPregledaCbx.style.height = "40px";
+        tipoviPregledaCbx.style.width = "250px"
+
+        $.get({
+            url: 'api/klinike/getTipoviPregleda/' + klinika.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (array) {
+                for (var i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = array[i].id ;
+                    option.text = array[i].naziv + " (" + array[i].cena +" $ )";
+                    tipoviPregledaCbx.appendChild(option);
+
+                }
+                var varCijena = document.createElement("var");
+                varCijena.classList.add("col-2", "input-group");
+                var trajanjeTxt = document.createTextNode("Cena");
+                varCijena.appendChild(trajanjeTxt);
+                varCijena.appendChild(document.createElement("br"));
+                var cijena = document.createElement('input');
+                cijena.id = "cijena";
+                cijena.type = "text";
+
+
+                tipoviPregledaCbx.onchange = function (){
+                    let selectedTp =  $('#tipoviPregledaCbx').val();
+                    for(let tp of array){
+                        if(tp.id == selectedTp){
+                            cijena.value = tp.cena;
+                        }
+                    }
+                }
+
+                varTipoviPregleda.appendChild(tipoviPregledaCbx);
+                cetvrtiRed.appendChild(varTipoviPregleda);
+
+                let selectedTp =  $('#tipoviPregledaCbx').val();
+                for(let tp of array){
+                    if(tp.id == selectedTp){
+                        cijena.value = tp.cena;
+                    }
+                }
+                cijena.classList.add("input--style-4");
+                cijena.style.height = "40px";
+                cijena.style.width = "250px";
+                cijena.disabled = "true";
+
+                varCijena.appendChild(cijena);
+                cetvrtiRed.appendChild(varCijena)
+            }
+        });
+
+        content.appendChild(cetvrtiRed);
+
         var drugiRed = document.createElement("var");
         drugiRed.classList.add("row", "wrapper--w680");
 
@@ -799,32 +937,70 @@ function dodajSlobodanTermin(klinika) {
 
         okBtn.onclick = function(){
             datum = $('#datum').val();
-            pocetak =  $('#pocetak').val();
-            kraj =  $('#kraj').val();
+            pocetakSatnica =  $('#pocetak').val();
+            krajSatnica =  $('#kraj').val();
 
             if(pocetak == "" || kraj == "" || datum == ""){
                 alert("Popunite sva polja!");
                 return;
             }
 
-            pocetak = datum + " "  + pocetak +":00";
-            kraj = datum + " "  + kraj +":00";
+            pocetak = datum + " "  + pocetakSatnica +":00";
+            kraj = datum + " "  + krajSatnica +":00";
 
 
-            $.ajax({
-                url:'api/klinike/'+klinika.id+'/dodajSlobodanTermin',
-                type: 'POST',
+            $.get({
+
+                url: 'api/lekari/getLekar/' + $('#lekariCbx').val(),
                 contentType: 'application/json',
-                data: JSON.stringify({pocetak, kraj}),
-
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
-                success: function() {
-                    modal.style.display = "none";
-                    generisiSlobodneTermine(klinika);
+                success: function (lekarDTO) {
+                    let pocetakRada = (lekarDTO.radnoVreme).substr(0,5);
+                    let krajRada = (lekarDTO.radnoVreme).substr(6,11);
+
+                    if(pocetakSatnica < pocetakRada || krajSatnica > krajRada){
+                        alert("Zakažite termin u granicama radnog vremena lekara ("+ lekarDTO.radnoVreme +").");
+                        return;
+                    }
+
+                    termin = {
+                        "pocetak": pocetak,
+                        "kraj": kraj
+                    };
+
+                    lekar = {
+                        "id": $('#lekariCbx').val()
+                    };
+
+                    sala = {
+                        "id": $('#saleCbx').val()
+                    };
+                    tipPregleda = {
+                        "id": $('#tipoviPregledaCbx').val()
+                    };
+                    klinikaPregleda = {
+                        "id": klinika.id
+                    };
+
+                    $.ajax({
+                        url:'api/klinike/dodajSlobodanPregled',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({termin, lekar, sala, tipPregleda, klinikaPregleda}),
+
+                        headers: {
+                            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                        },
+                        success: function() {
+                            modal.style.display = "none";
+                            generisiSlobodneTermine(klinika);
+                        }
+                    });
                 }
             });
+
         }
 
 
@@ -834,7 +1010,7 @@ function dodajSlobodanTermin(klinika) {
 function ukloniTermin(klinika, terminId) {
     return function(){
         $.ajax({
-            url:'api/klinike/deleteTermin/'+klinika.id+'/'+terminId,
+            url:'api/klinike/deleteTerminZaPregled/'+klinika.id+'/'+terminId,
             type: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

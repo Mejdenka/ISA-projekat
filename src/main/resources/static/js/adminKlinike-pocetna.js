@@ -235,7 +235,7 @@ function prikaziMapu(lokacija) {
             ],
             view: new ol.View({
                 center: ol.proj.fromLonLat([lon, lat]),
-                zoom: 16
+                zoom: 18
             })
         });
 
@@ -699,7 +699,11 @@ function generisiSlobodneTermine(klinika) {
                     var salaText = document.createTextNode("(" + pregled.sala.broj + ") " + pregled.sala.naziv );
                     salaTermina.appendChild(salaText);
 
-                    var ukloni = podaciTermina.insertCell(4);
+                    var tpTermina = podaciTermina.insertCell(4);
+                    var tpText = document.createTextNode(pregled.tipPregleda.naziv);
+                    tpTermina.appendChild(tpText);
+
+                    var ukloni = podaciTermina.insertCell(5);
                     var ukloniBtn = document.createElement("BUTTON");
                     ukloniBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                     ukloniBtn.innerHTML = "-";
@@ -835,7 +839,7 @@ function dodajSlobodanTermin(klinika) {
         saleCbx.style.width = "250px"
 
         $.get({
-            url: 'api/klinike/getSale/' + klinika.naziv,
+            url: 'api/klinike/getSale/' + klinika.id,
             contentType: 'application/json',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -1026,7 +1030,7 @@ function prikaziSaleKlinike(klinika, flag, zahtev) {
     return function(){
         $.get({
 
-            url: 'api/klinike/getSale/' + klinika.naziv,
+            url: 'api/klinike/getSale/' + klinika.id,
             contentType: 'application/json',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -1384,11 +1388,23 @@ function dodajSalu(klinika) {
         txtNaziv.style.height = "40px";
         txtNaziv.style.width = "250px";
         varNaziv.appendChild(txtNaziv);
-        prviRed.appendChild(varNaziv);
 
-        var varDodaj = document.createElement("var");
-        varDodaj.classList.add("col-2", "input-group");
-        varDodaj.appendChild(document.createElement("br"));
+        var varBroj = document.createElement("var");
+        varBroj.classList.add("col-2", "input-group");
+        var broj = document.createTextNode("Broj");
+        varBroj.appendChild(broj);
+        varBroj.appendChild(document.createElement("br"));
+        var cifra = document.createElement('input');
+        cifra.type = 'number';
+        cifra.id = "brojSale";
+        cifra.classList.add("input--style-4");
+        cifra.style.height = "40px";
+        cifra.style.width = "250px";
+        varBroj.appendChild(cifra);
+
+        prviRed.appendChild(varNaziv);
+        prviRed.appendChild(varBroj);
+
         var btnAdd = document.createElement('button');
         btnAdd.classList.add("btn2", "btn--light-blue");
         btnAdd.style.height = "35px"
@@ -1397,10 +1413,11 @@ function dodajSalu(klinika) {
 
         btnAdd.onclick = function(){
             var naziv=$('#nazivSale').val();
+            var broj=$('#brojSale').val();
 
-            if(naziv === ""){
-                alert("Polje ne sme ostati prazno.")
-                return
+            if(naziv === "" || broj ===""){
+                alert("Popunite sva polja.")
+                return;
             }
 
             if(naziv.length < 3){
@@ -1411,7 +1428,7 @@ function dodajSalu(klinika) {
             var idKlinike = klinika.id;
             $.post({
                 url: 'api/sale/dodajSalu',
-                data: JSON.stringify({naziv, idKlinike}),
+                data: JSON.stringify({naziv, broj, idKlinike}),
                 contentType: 'application/json',
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -1419,6 +1436,7 @@ function dodajSalu(klinika) {
                 success: function() {
                     alert("Nova sala uspesno dodata.");
                     modal.style.display = "none";
+                    document.getElementById("saleModal").style.display = "none";
 
                 },
                 error: function() {
@@ -1426,11 +1444,10 @@ function dodajSalu(klinika) {
                     modal.style.display = "none";
                 }
             });
-        }
-        varDodaj.appendChild(btnAdd);
-        varDodaj.appendChild(document.createElement("br"));
-        prviRed.appendChild(varDodaj);
+        };
+
         content.appendChild(prviRed);
+        content.appendChild(btnAdd);
     }
 }
 
@@ -1608,7 +1625,7 @@ function generisiTipovePregleda() {
                                 nazivPregleda.appendChild(nazivPregledaText);
 
                                 var cenaPregleda = podaciPregleda.insertCell(1);
-                                var cenaPregledaText = document.createTextNode(tipPregleda.cena);
+                                var cenaPregledaText = document.createTextNode(tipPregleda.cena + " $");
                                 cenaPregleda.appendChild(cenaPregledaText);
 
                                 var izmeni = podaciPregleda.insertCell(2);
@@ -1720,9 +1737,14 @@ function izmeniTipPregleda(tipPregleda) {
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
                 },
-                success: function() {
-                    modal.style.display = "none";
-                    generisiTipovePregleda();
+                success: function(klinika) {
+                    if(klinika.id == null){
+                        alert("Nemoguće izmeniti tip pregleda dok postoje pregledi tog tipa zakazani u klinici.");
+                        return;
+                    } else {
+                        modal.style.display = "none";
+                        generisiTipovePregleda();
+                    }
                 }
             });
         }
@@ -1740,8 +1762,13 @@ function ukloniTipPregleda(klinikaId, tipPregledaId) {
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
             },
-            success: function() {
-                generisiTipovePregleda();
+            success: function(klinika) {
+                if(klinika.id == null){
+                    alert("Nemoguće obrisati tip pregleda dok postoje pregledi tog tipa zakazani u klinici.");
+                    return;
+                } else {
+                    generisiTipovePregleda();
+                }
             }
         });
     }

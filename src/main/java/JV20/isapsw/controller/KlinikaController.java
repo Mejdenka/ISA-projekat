@@ -45,10 +45,10 @@ public class KlinikaController {
         return this.klinikaService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{nazivKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<Sala> getSale(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
+    public List<Sala> getSale(@PathVariable Long idKlinike) throws AccessDeniedException {
+        List<Sala> sale = klinikaService.findOne(idKlinike).getSale();
         List<Sala> retVal = new ArrayList<>();
         for(Sala s : sale){
             if(!s.isObrisana()){
@@ -206,36 +206,15 @@ public class KlinikaController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmeniTipPregleda")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<TipPregleda> izmeniTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
-        //if bool zauzeto == true onda ne ubacujes u listu
-        TipPregleda tp = this.tipPregledaService.findOne(tipPregleda.getId());
-        Klinika klinika = tp.getKlinika();
-
-        tp.setNaziv(tipPregleda.getNaziv());
-        tp.setCena(tipPregleda.getCena());
-
-        tipPregledaService.save(tp);
-        klinikaService.save(klinika);
-
-        return klinika.getTipoviPregleda();
+    public Klinika izmeniTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
+        return klinikaService.izmeniTipPregleda(tipPregleda);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteTipPregleda/{klinikaId}/{tipPregledaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<TipPregleda> deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
+    public Klinika deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
         //if bool zauzeto == true onda ne ubacujes u listu
-        Klinika klinika = this.klinikaService.findOne(klinikaId);
-
-        for(TipPregleda tp : klinika.getTipoviPregleda()){
-            //ako ne postoji rezervisan pregled po tim tipom obrisi
-            if(tp.getId().equals(tipPregledaId)){
-                tp.setObrisan(true);
-            }
-        }
-
-        klinikaService.save(klinika);
-
-        return this.klinikaService.findOne(klinikaId).getTipoviPregleda();
+        return this.klinikaService.deleteTipPregleda(tipPregledaId, klinikaId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaKlinike")

@@ -1,8 +1,7 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
-import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.Pregled;
+import JV20.isapsw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -10,6 +9,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -67,6 +68,51 @@ public class EmailService {
                 +" - " + pregled.getTermin().getKraj()+  " za pacijenta "+ pregled.getPacijent().getIme() +" " +pregled.getPacijent().getPrezime() +
                 " i za lekara "+ pregled.getLekar().getIme()  +" " +pregled.getLekar().getPrezime() +".\n\nNaša mala klinika");
         javaMailSender.send(mail);
+
+        System.out.println("Email poslat!");
+    }
+
+    @Async
+    public void sendPregledLekara(Pregled pregled, Klinika klinika) throws MailException, InterruptedException {
+
+        //Simulacija duze aktivnosti da bi se uocila razlika
+        Thread.sleep(1000);
+        System.out.println("Slanje emaila...");
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        for(AdministratorKlinike a : klinika.getAdminiKlinike()){
+            mail.setTo(a.getEmail());
+            mail.setFrom(env.getProperty("spring.mail.username"));
+            mail.setSubject("Naša mala klinika - Zakazan pregled");
+            mail.setText("Pozdrav,\n\npregled je rezervisan za " + pregled.getTermin().getPocetak()
+                    +" - " + pregled.getTermin().getKraj()+  " za pacijenta "+ pregled.getPacijent().getIme() +" " +pregled.getPacijent().getPrezime() +
+                    " i za lekara "+ pregled.getLekar().getIme()  +" " +pregled.getLekar().getPrezime() +".\nČeka se na Vaše odobrenje." +
+                    "\n\nNaša mala klinika");
+            javaMailSender.send(mail);
+        }
+
+        System.out.println("Email poslat!");
+    }
+
+
+    @Async
+    public void sendOperacijaLekara(Operacija operacija, Klinika klinika) throws MailException, InterruptedException {
+
+        //Simulacija duze aktivnosti da bi se uocila razlika
+        Thread.sleep(1000);
+        System.out.println("Slanje emaila...");
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        for(AdministratorKlinike a : klinika.getAdminiKlinike()){
+            mail.setTo(a.getEmail());
+            mail.setFrom(env.getProperty("spring.mail.username"));
+            mail.setSubject("Naša mala klinika - Zakazana operacija");
+            mail.setText("Pozdrav,\n\noperacija je rezervisana za " + operacija.getTermin().getPocetak()
+                    +" - " + operacija.getTermin().getKraj()+  " za pacijenta "+ operacija.getPacijent().getIme() +" " +operacija.getPacijent().getPrezime() +
+                    " i za lekara "+ operacija.getLekar().getIme()  +" " +operacija.getLekar().getPrezime() +".\nČeka se na Vaše odobrenje." +
+                    "\n\nNaša mala klinika");
+            javaMailSender.send(mail);
+        }
 
         System.out.println("Email poslat!");
     }

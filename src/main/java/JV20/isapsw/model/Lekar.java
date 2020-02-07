@@ -17,6 +17,7 @@ public class Lekar extends Korisnik {
     private Integer ocena;
     private boolean slobodan;
     private boolean naGodisnjem;
+    private boolean trajePregled;
     private String radnoVreme;
 
     @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -29,7 +30,8 @@ public class Lekar extends Korisnik {
 
     @OneToMany
     private Set<Operacija> operacije;
-    @OneToMany
+    @OneToMany(mappedBy = "lekarPregleda", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Pregled> pregledi;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -52,6 +54,14 @@ public class Lekar extends Korisnik {
 
     public void setOcena(Integer ocena) {
         this.ocena = ocena;
+    }
+
+    public boolean isTrajePregled() {
+        return trajePregled;
+    }
+
+    public void setTrajePregled(boolean trajePregled) {
+        this.trajePregled = trajePregled;
     }
 
     public boolean isSlobodan() {

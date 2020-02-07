@@ -115,6 +115,41 @@ public class KlinikaService {
         klinikaRepository.deleteById(id);
     }
 
+    public Klinika deleteTipPregleda(Long tipPregledaId, Long klinikaId) {
+        Klinika klinika = findOne(klinikaId);
+        //AKO POSTOJE PREGLEDI ZAKAZANI U KLINICI SA OVIM TIPOM PREGLEDA
+        for(Pregled pregled : klinika.getPregledi()){
+            if(pregled.getTipPregleda().getId().equals(tipPregledaId) && !pregled.isObavljen() && !pregled.isObrisan()){
+                return null;
+            }
+        }
+
+        TipPregleda tipPregleda = tipPregledaService.findOne(tipPregledaId);
+        tipPregleda.setObrisan(true);
+        tipPregledaService.save(tipPregleda);
+        save(klinika);
+        return klinika;
+    }
+
+    public Klinika izmeniTipPregleda(TipPregleda tipPregleda) {
+        TipPregleda tp = this.tipPregledaService.findOne(tipPregleda.getId());
+        Klinika klinika = tp.getKlinika();
+
+        //AKO POSTOJE PREGLEDI ZAKAZANI U KLINICI SA OVIM TIPOM PREGLEDA
+        for(Pregled pregled : klinika.getPregledi()){
+            if(pregled.getTipPregleda().getId().equals(tipPregleda.getId()) && !pregled.isObavljen() && !pregled.isObrisan()){
+                return null;
+            }
+        }
+
+        tp.setNaziv(tipPregleda.getNaziv());
+        tp.setCena(tipPregleda.getCena());
+
+        tipPregledaService.save(tp);
+        return save(klinika);
+    }
+
+
     public void dodajPregled(PregledDTO pregledDTO) throws ParseException {
         Klinika klinika = findOne(pregledDTO.getKlinikaPregleda().getId());
         Termin t = new Termin();
@@ -142,6 +177,8 @@ public class KlinikaService {
         pregled.setSala(sala);
         pregled.setObrisan(false);
         pregled.setLekar(lekar);
+        //ovaj seter je za listu pregleda u lekaru za laksu pretragu
+        pregled.setLekarPregleda(lekar);
         pregled.setObavljen(false);
         pregledService.save(pregled);
 
@@ -233,7 +270,10 @@ public class KlinikaService {
             if(!p.isObavljen() && !p.isObrisan() ){
                 //ako mu nije dodijeljena sala
                 if(p.getSala() == null){
-                    retVal.add(new PregledDTO(p));
+                    PregledDTO pregledDTO = new PregledDTO(p.getId(),new TerminDTO(p.getTermin()),new LekarDTO(p.getLekar()),
+                            new PacijentDTO(p.getPacijent()), p.getTipPregleda(), p.getKlinikaPregleda());
+
+                    retVal.add(pregledDTO);
                 }
             }
         }

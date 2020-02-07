@@ -58,6 +58,12 @@ public class Klinika {
     @JsonIgnore
     private List<Operacija> operacije;
 
+    @OneToMany(mappedBy = "klinikaRecept", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Recept> recepti;
+
+
+
     public Klinika() {}
 
     public Klinika(Long id, String naziv, String lokacija, String opis) {
@@ -170,6 +176,14 @@ public class Klinika {
     public void setOperacije(List<Operacija> operacije) {
         this.operacije = operacije;
     }
+
+ overa_recepta_izmena_izvestaja
+    public List<Recept> getRecepti() {
+        return recepti;
+    }
+
+    public void setRecepti(List<Recept> recepti) {
+        this.recepti = recepti;
 
     public Lokacija getLokacijaNaMapi() {
         return lokacijaNaMapi;

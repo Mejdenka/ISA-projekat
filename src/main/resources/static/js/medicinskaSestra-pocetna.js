@@ -1,5 +1,6 @@
 
 function pocetnaMedicinskaSestra(ulogovan) {
+
     korisnik = ulogovan;
     var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
     var nazivi = [imeKorisnika];

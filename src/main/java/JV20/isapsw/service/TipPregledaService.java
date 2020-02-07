@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +25,19 @@ public class TipPregledaService {
 
     public List<TipPregleda> findAll() {
         return tipPregledaRepository.findAll();
+    }
+
+    public List<String> findDistinct() {
+        List<String> distinct = new ArrayList<>();
+
+        for (TipPregleda tp : tipPregledaRepository.findAll())
+        {
+            if (!distinct.contains(tp.getNaziv())){
+                   distinct.add(tp.getNaziv());
+            }
+        }
+
+        return distinct;
     }
 
     public Page<TipPregleda> findAll(Pageable page) {

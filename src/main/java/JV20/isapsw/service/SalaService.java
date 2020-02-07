@@ -1,9 +1,6 @@
 package JV20.isapsw.service;
 
-import JV20.isapsw.model.Operacija;
-import JV20.isapsw.model.Pregled;
-import JV20.isapsw.model.Sala;
-import JV20.isapsw.model.Termin;
+import JV20.isapsw.model.*;
 import JV20.isapsw.repository.SalaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +23,10 @@ public class SalaService {
     private PregledService pregledService;
     @Autowired
     private TerminService terminService;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private KlinikaService klinikaService;
 
     public Sala findOne(Long id) {
         return salaRepository.findById(id).orElseGet(null);
@@ -37,12 +38,25 @@ public class SalaService {
 
     public Sala findOneByBroj(Long broj){ return salaRepository.findByBroj(broj);}
 
-    public void dodijeliSaluPregledu(Pregled pregled, Long brojSale){
+
+
+
+    public void saveNew(Sala sala) {
+        sala.setKlinikaSale(this.klinikaService.findOne(sala.getIdKlinike()));
+        sala.setObrisana(false);
+        sala.setSlobodna(true);
+        sala.setRezervisana(false);
+        save(sala);
+    }
+
+        public void dodijeliSaluPregledu(Pregled pregled, Long brojSale) throws InterruptedException {
         Sala sala = findOneByBroj(brojSale);
         pregled.setSala(sala);
         sala.getPregledi().add(pregled);
         pregledService.save(pregled);
         save(sala);
+
+        emailService.sendPregledEmail(pregled, brojSale);
     }
 
     public void dodijeliSaluPregleduIduciTermin(Pregled pregled, Long brojSale, String datumStr) throws ParseException {

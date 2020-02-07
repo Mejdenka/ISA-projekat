@@ -9,11 +9,8 @@ public class AdministratorKlinike extends Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinTable(name = "adminKlinike_klinika",
-            joinColumns = @JoinColumn(name = "admin_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "klinika_id", referencedColumnName = "id"))
-    private Klinika klinika;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Klinika klinikaAdmina;
 
     public AdministratorKlinike() {}
 
@@ -25,11 +22,11 @@ public class AdministratorKlinike extends Korisnik {
         this.id = id;
     }
 
-    public Klinika getKlinika() {
-        return klinika;
+    public Klinika getKlinikaAdmina() {
+        return klinikaAdmina;
     }
 
-    public void setKlinika(Klinika klinika) {
-        this.klinika = klinika;
+    public void setKlinikaAdmina(Klinika klinikaAdmina) {
+        this.klinikaAdmina = klinikaAdmina;
     }
 }

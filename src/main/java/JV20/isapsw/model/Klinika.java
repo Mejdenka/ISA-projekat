@@ -19,6 +19,13 @@ public class Klinika {
     private String opis;
     private Double prosecnaOcena;
 
+    @OneToOne
+    private Lokacija lokacijaNaMapi;
+
+    @OneToMany(mappedBy = "klinikaAdmina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<AdministratorKlinike> adminiKlinike;
+
     @OneToMany(mappedBy = "klinikaLekara", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Lekar> lekari;
@@ -58,6 +65,13 @@ public class Klinika {
 
 
     public Klinika() {}
+
+    public Klinika(Long id, String naziv, String lokacija, String opis) {
+        this.id = id;
+        this.naziv = naziv;
+        this.lokacija = lokacija;
+        this.opis = opis;
+    }
 
     public Long getId() {
         return id;
@@ -163,11 +177,27 @@ public class Klinika {
         this.operacije = operacije;
     }
 
+ overa_recepta_izmena_izvestaja
     public List<Recept> getRecepti() {
         return recepti;
     }
 
     public void setRecepti(List<Recept> recepti) {
         this.recepti = recepti;
+
+    public Lokacija getLokacijaNaMapi() {
+        return lokacijaNaMapi;
+    }
+
+    public void setLokacijaNaMapi(Lokacija lokacijaNaMapi) {
+        this.lokacijaNaMapi = lokacijaNaMapi;
+    }
+
+    public List<AdministratorKlinike> getAdminiKlinike() {
+        return adminiKlinike;
+    }
+
+    public void setAdminiKlinike(List<AdministratorKlinike> adminiKlinike) {
+        this.adminiKlinike = adminiKlinike;
     }
 }

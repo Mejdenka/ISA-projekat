@@ -7,6 +7,7 @@ import JV20.isapsw.model.*;
 import JV20.isapsw.model.Pacijent;
 import JV20.isapsw.service.EmailService;
 import JV20.isapsw.service.KorisnikService;
+import JV20.isapsw.service.LekarService;
 import JV20.isapsw.service.PacijentService;
 import net.bytebuddy.build.BuildLogger;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,8 @@ public class PacijentController {
     private KorisnikService korisnikService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private LekarService lekarService;
 
     private Logger logger = LoggerFactory.getLogger(PacijentController.class);
 
@@ -66,8 +70,7 @@ public class PacijentController {
     @RequestMapping(method = RequestMethod.GET, value = "/zdravstveniKarton/{userId}")
     @PreAuthorize("hasRole('DOKTOR')")
     public ZdravstveniKarton getZdravstveniKarton(@PathVariable Long userId) throws AccessDeniedException {
-        System.out.println(this.pacijentService.findOne(userId).getKarton().getMasa());
-        return this.pacijentService.findOne(userId).getKarton();
+        return this.pacijentService.getKartonPacijenta(userId);
     }
 
     @RequestMapping("/getRequests")

@@ -4,6 +4,7 @@ package JV20.isapsw.controller;
 import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.service.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class KlinikaController {
     private TipPregledaService tipPregledaService;
 
     @Autowired
-    private TerminService terminService;
+    private LokacijaService lokacijaService;
 
     @Autowired
     private SalaService salaService;
@@ -44,10 +45,10 @@ public class KlinikaController {
         return this.klinikaService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{nazivKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<Sala> getSale(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
+    public List<Sala> getSale(@PathVariable Long idKlinike) throws AccessDeniedException {
+        List<Sala> sale = klinikaService.findOne(idKlinike).getSale();
         List<Sala> retVal = new ArrayList<>();
         for(Sala s : sale){
             if(!s.isObrisana()){
@@ -92,34 +93,19 @@ public class KlinikaController {
         return this.klinikaService.getAllGoOds(klinika);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{nazivKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<TerminDTO> getSlobodniTermini(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Termin> termini = klinikaService.findByNaziv(nazivKlinike).getSlobodniTermini();
-        List<TerminDTO> retVal = new ArrayList<>();
-        for(Termin t : termini){
-            if(!t.isRezervisan() && !t.isObrisan()){
-                retVal.add(new TerminDTO(t));
-            }
-        }
-        return retVal;
+    public List<PregledDTO> getSlobodniTermini(@PathVariable Long idKlinike) throws AccessDeniedException {
+        Klinika klinika = klinikaService.findOne(idKlinike);
+        return klinikaService.pronadjiSlobodnePreglede(klinika);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/deleteTermin/{idKlinike}/{idTermina}")
+    @RequestMapping(method = RequestMethod.GET, value = "/deleteTerminZaPregled/{idKlinike}/{idTermina}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<Termin> deleteTermin(@PathVariable Long idKlinike, @PathVariable Long idTermina) throws AccessDeniedException {
+    public List<PregledDTO> deleteTermin(@PathVariable Long idKlinike, @PathVariable Long idTermina) throws AccessDeniedException {
         Klinika klinika = klinikaService.findOne(idKlinike);
-        List<Termin> termini = klinika.getSlobodniTermini();
-
-        for(Termin t: termini){
-            if(t.getId().equals(idTermina)){
-                t.setObrisan(true);
-            }
-        }
-
-        klinikaService.save(klinika);
-
-        return klinikaService.findOne(idKlinike).getSlobodniTermini();
+        klinikaService.obrisiTerminZaPregled(klinika, idTermina);
+        return klinikaService.pronadjiSlobodnePreglede(klinika);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{idKlinike}")
@@ -141,7 +127,11 @@ public class KlinikaController {
         return klinikaService.findPregledi(idKlinike);
     }
 
-
+    @RequestMapping(method = RequestMethod.GET, value = "/getKlinike/{tip}/{datum}/{lokacija}/{ocjena}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Klinika> getKlinike(@PathVariable String tip, @PathVariable String datum, @PathVariable String lokacija, @PathVariable String ocjena) throws AccessDeniedException {
+        return klinikaService.findAllBy(tip, datum, lokacija, ocjena);
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniLekari/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -207,61 +197,24 @@ public class KlinikaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "{idKlinike}/dodajSlobodanTermin")
+    @RequestMapping(method = RequestMethod.POST, value = "/dodajSlobodanPregled")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> dodajSlobodanTermin(@PathVariable Long idKlinike, @RequestBody TerminDTO termin) throws AccessDeniedException, ParseException {
-
-        Klinika klinika = this.klinikaService.findOne(idKlinike);
-        Termin t = new Termin();
-
-        SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date pocetak = formatter.parse(termin.getPocetak());
-        Date kraj = formatter.parse(termin.getKraj());
-
-        t.setPocetak(pocetak);
-        t.setKraj(kraj);
-        t.setRezervisan(false);
-        t.setKlinikaTermina(klinika);
-        klinika.getSlobodniTermini().add(t);
-
-        this.klinikaService.save(klinika);
-
+    public ResponseEntity<?> dodajSlobodanTermin(@RequestBody PregledDTO pregledDTO ) throws AccessDeniedException, ParseException {
+        this.klinikaService.dodajPregled(pregledDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmeniTipPregleda")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<TipPregleda> izmeniTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
-        //if bool zauzeto == true onda ne ubacujes u listu
-        TipPregleda tp = this.tipPregledaService.findOne(tipPregleda.getId());
-        Klinika klinika = tp.getKlinika();
-
-        tp.setNaziv(tipPregleda.getNaziv());
-        tp.setCena(tipPregleda.getCena());
-
-        tipPregledaService.save(tp);
-        klinikaService.save(klinika);
-
-        return klinika.getTipoviPregleda();
+    public Klinika izmeniTipPregleda(@RequestBody TipPregleda tipPregleda) throws AccessDeniedException {
+        return klinikaService.izmeniTipPregleda(tipPregleda);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteTipPregleda/{klinikaId}/{tipPregledaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<TipPregleda> deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
+    public Klinika deleteTipPregleda(@PathVariable Long tipPregledaId, @PathVariable Long klinikaId) throws AccessDeniedException {
         //if bool zauzeto == true onda ne ubacujes u listu
-        Klinika klinika = this.klinikaService.findOne(klinikaId);
-
-        for(TipPregleda tp : klinika.getTipoviPregleda()){
-            //ako ne postoji rezervisan pregled po tim tipom obrisi
-            if(tp.getId().equals(tipPregledaId)){
-                tp.setObrisan(true);
-            }
-        }
-
-        klinikaService.save(klinika);
-
-        return this.klinikaService.findOne(klinikaId).getTipoviPregleda();
+        return this.klinikaService.deleteTipPregleda(tipPregledaId, klinikaId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaKlinike")
@@ -270,7 +223,6 @@ public class KlinikaController {
         Klinika zaIzmenu = klinikaService.findOne(klinika.getId());
         //ovdje setovati novu kliniku i sacuvati u bazi
         zaIzmenu.setNaziv(klinika.getNaziv());
-        System.out.println(zaIzmenu.getLokacija() + zaIzmenu.getNaziv());
         zaIzmenu.setLokacija(klinika.getLokacija());
         zaIzmenu.setOpis(klinika.getOpis());
         klinikaService.save(zaIzmenu);
@@ -287,6 +239,7 @@ public class KlinikaController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        this.lokacijaService.save(klinika.getLokacijaNaMapi());
         klinika.setProsecnaOcena(0.0);
         this.klinikaService.save(klinika);
 

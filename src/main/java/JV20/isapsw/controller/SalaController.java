@@ -68,7 +68,7 @@ public class SalaController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregledu/{brojSale}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException {
+    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException, InterruptedException {
         Pregled pregled = this.pregledService.findOne(pregledDTO.getId());
         this.salaService.dodijeliSaluPregledu(pregled, brojSale);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -91,11 +91,8 @@ public class SalaController {
         if(s != null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        sala.setKlinikaSale(this.klinikaService.findOne(sala.getIdKlinike()));
-        sala.setObrisana(false);
-        sala.setSlobodna(true);
-        sala.setRezervisana(false);
-        s = this.salaService.save(sala);
-         return new ResponseEntity<User>( HttpStatus.CREATED);
+        salaService.saveNew(sala);
+
+         return new ResponseEntity<>( HttpStatus.CREATED);
     }
 }

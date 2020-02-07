@@ -18,14 +18,17 @@
     <!-- Font special for pages-->
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <!-- Vendor CSS-->
+    <!--MAPE-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>    <!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
     <!-- Main CSS-->
     <link href="css/homepage.css" rel="stylesheet" media="all">
+
 </head>
 
-<body>
+<body >
 <div class="page-wrapper bg-gra-02 p-t-20 p-b-100 font-poppins">
     <div class="wrapper">
         <div class="card card-4">
@@ -72,8 +75,8 @@
                 <tr>
                     <th>Naziv</th>
                     <th>Lokacija</th>
-                    <th>Broj lekara</th>
-                    <th>Broj sala</th>
+                    <th>Opis</th>
+                    <th>Prosecna ocena</th>
                 </tr>
             </thead>
             <tbody>
@@ -102,6 +105,15 @@
     </div>
 </div>
 
+<div id="mapModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id = "closeMap" class="close">&times;</span>
+        <div id = "map" class="map">
+
+        </div>
+    </div>
+</div>
 
 <div id="lekariModal" class="modal">
     <!-- Modal content -->
@@ -114,7 +126,6 @@
 
 </div>
 
-
 <div id="rezervacijaSaleModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content-termin">
@@ -124,6 +135,7 @@
         </div>
     </div>
 </div>
+
 
 <div id="tipPregledaModal" class="modal">
     <!-- Modal content -->
@@ -222,7 +234,6 @@
 <script src="vendor/select2/select2.min.js"></script>
 <script src="vendor/datepicker/moment.min.js"></script>
 <script src="vendor/datepicker/daterangepicker.js"></script>
-
 <!-- Main JS-->
 <script src="js/global.js"></script>
 <script src="js/pocetna.js"></script>

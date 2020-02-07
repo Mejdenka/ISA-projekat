@@ -8,10 +8,7 @@ import JV20.isapsw.model.GodisnjiOdsustvoTermin;
 import JV20.isapsw.model.Klinika;
 import JV20.isapsw.model.Lekar;
 import JV20.isapsw.model.Pregled;
-import JV20.isapsw.service.AdministratorKlinikeService;
-import JV20.isapsw.service.GodisnjiOdsustvoService;
-import JV20.isapsw.service.KlinikaService;
-import JV20.isapsw.service.LekarService;
+import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +54,7 @@ public class AdministratorKlinikeController {
     @RequestMapping(method = RequestMethod.POST, value = "/posaljiGoOds")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public void sacuvajGoOds(@RequestBody GodisnjiOdsustvoTerminDTO godisnjiOdsustvoTerminDTO) throws AccessDeniedException {
+
         this.godisnjiOdsustvoService.save(godisnjiOdsustvoTerminDTO);
     }
 

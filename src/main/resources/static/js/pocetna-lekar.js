@@ -261,6 +261,8 @@ function prikaziProfilPacijenta(pacijentId) {
 
 function zapocniPregled(pacijent) {
     return function () {
+        var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+
         var modal = document.getElementById("zapocniPregledModal");
         modal.style.display = "block";
 
@@ -380,10 +382,13 @@ function zapocniPregled(pacijent) {
             var dijagnoza = $('#dijagnoza').val();
             var lek = $('#lek').val();
             var izvestaj = $('#izvestaj').val();
+            var idLekara = String(ulogovan.id);
+            console.log(ulogovan.id);
+            console.log(idLekara);
 
             $.post({
                 url: 'api/recepti/izdajRecept',
-                data: JSON.stringify({dijagnoza, lek, izvestaj}),
+                data: JSON.stringify({dijagnoza, lek, izvestaj, idLekara}),
                 contentType: 'application/json',
                 headers: {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -477,8 +482,6 @@ function zapocniPregled(pacijent) {
                         }
                     }
                 });
-
-
             }
         })
         operacijaBtn.addEventListener('change', (event) => {
@@ -489,8 +492,6 @@ function zapocniPregled(pacijent) {
                 }
             }
         })
-
-
 
         var s = document.createElement("input"); //input element, Submit button
         s.setAttribute('type',"submit");

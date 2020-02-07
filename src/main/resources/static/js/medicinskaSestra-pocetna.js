@@ -152,12 +152,186 @@ function zakaziOdmorOdsustvo(){
 }
 
 function overiRecept(){
+    var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+    $("#content").fadeOut(100, function() {
 
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Uskoro ce biti moguce overiti recept");
-    document.getElementById("content").appendChild(textnode);
+        $.get({
+            url: 'api/sestra/getRecepti',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(recepti){
+                $("#content").fadeOut(100, function () {
+                    var content = document.getElementById('content')
+                    content.innerHTML = "";
 
-    $("#content").fadeIn(500);
+                    var naslov = document.createElement("header");
+                    naslov.innerText = "- - - Recepti - - -";
+                    naslov.fontSize = "50px"
+                    content.appendChild(naslov);
 
+                    var table = document.createElement('table');
+                    table.classList.add("tabela");
+                    table.id = "tabelaRecepata";
+                    var tableRef = document.createElement('tbody');
+
+                    for(let recept of recepti){
+                        var podaciRecepta = tableRef.insertRow();
+                        var receptLek = podaciRecepta.insertCell(0);
+                        var receptLekText = document.createTextNode(recept.lek);
+                        receptLek.appendChild(receptLekText);
+
+                        var receptDijagnoza = podaciRecepta.insertCell(1);
+                        var receptDijagnozaText = document.createTextNode(recept.dijagnoza);
+                        receptDijagnoza.appendChild(receptDijagnozaText);
+
+                        var receptIzvestaj = podaciRecepta.insertCell(2);
+                        var receptIzvestajText = document.createTextNode(recept.izvestaj);
+                        receptIzvestaj.appendChild(receptIzvestajText);
+
+                        var receptIzvestaj = podaciRecepta.insertCell(3);
+                        var receptIzvestajBtn = document.createElement("BUTTON");
+                        receptIzvestajBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                        receptIzvestajBtn.innerText = "Recept i izvestaj";
+                        receptIzvestajBtn.style.color = "white";
+                        receptIzvestajBtn.style.fontSize = "15px"
+                        receptIzvestajBtn.style.height = "30px"
+                        receptIzvestajBtn.onclick = overiIzmeni(recept)
+                        receptIzvestaj.appendChild(receptIzvestajBtn);
+
+                    }
+
+                    table.appendChild(tableRef);
+                    content.appendChild(table);
+
+                });
+                $("#content").fadeIn(500);
+            }
+
+
+
+        });
+
+    });
+
+}
+
+function overiIzmeni(recept){
+    return function(){
+        var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+
+        var modal = document.getElementById("overiIzmeniModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeOveriIzmeni");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        var content = document.getElementById("overiIzmeniDiv");
+        content.innerHTML = "";
+
+        var naslov = document.createElement("Header");
+        naslov.innerText = "Overa recepta i izmena izvestaja pregleda ";
+        naslov.style.fontSize = "20px";
+        naslov.style.marginTop = "10px";
+        naslov.style.marginBottom = "10px";
+        content.appendChild(naslov);
+        content.appendChild(document.createElement("br"));
+
+        var red = document.createElement("var");
+        red.classList.add("row", "wrapper--w680");
+        var varDijagnoza = document.createElement("var");
+        varDijagnoza.classList.add("col-2", "input-group");
+        var dijagnoza = document.createTextNode("Dijagnoza");
+        varDijagnoza.appendChild(dijagnoza);
+        varDijagnoza.appendChild(document.createElement("br"));
+        var txtDijagnoza = document.createElement('input');
+        txtDijagnoza.type = 'text';
+        txtDijagnoza.disabled = true;
+        txtDijagnoza.value = recept.dijagnoza;
+        txtDijagnoza.id = "dijagnoza";
+        txtDijagnoza.classList.add("input--style-4");
+        txtDijagnoza.style.height = "40px";
+        txtDijagnoza.style.width = "250px";
+        varDijagnoza.appendChild(txtDijagnoza);
+        red.appendChild(varDijagnoza);
+
+        var varLek = document.createElement("var");
+        varLek.classList.add("col-2", "input-group");
+        var lek = document.createTextNode("Terapija");
+        varLek.appendChild(lek);
+        varLek.appendChild(document.createElement("br"));
+        var txtLek = document.createElement('input');
+        txtLek.disabled = true;
+        txtLek.value = recept.lek;
+        txtLek.id = "lek";
+        txtLek.classList.add("input--style-4");
+        txtLek.style.height = "40px";
+        txtLek.style.width = "250px";
+        varLek.appendChild(txtLek);
+        red.appendChild(varLek);
+
+        content.appendChild(red);
+
+        var red1 = document.createElement("var");
+        red1.classList.add("row", "wrapper--w680");
+        var varIzvestaj = document.createElement("var");
+        varIzvestaj.classList.add("col-2", "input-group");
+        var izvestaj = document.createTextNode("Izvestaj o pregledu");
+        varIzvestaj.appendChild(izvestaj);
+        varIzvestaj.appendChild(document.createElement("br"));
+        var txtIzvestaj = document.createElement('input');
+        txtIzvestaj.type = 'text';
+        txtIzvestaj.value = recept.izvestaj;
+        txtIzvestaj.id = "izvestaj";
+        txtIzvestaj.classList.add("input--style-4");
+        txtIzvestaj.style.height = "120px";
+        txtIzvestaj.style.width = "580px";
+        varIzvestaj.appendChild(txtIzvestaj);
+        red1.appendChild(varIzvestaj);
+        red1.appendChild(varIzvestaj);
+        content.appendChild(red1);
+
+        var overiIzmeniBtn = document.createElement("BUTTON");
+        overiIzmeniBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+        overiIzmeniBtn.innerText = "Overi recept i sacuvaj izmene";
+        overiIzmeniBtn.style.color = "white";
+        overiIzmeniBtn.style.fontSize = "15px";
+        overiIzmeniBtn.style.height = "30px";
+        overiIzmeniBtn.onclick = function(){
+            var izvestaj = $('#izvestaj').val();
+            var id = recept.id;
+
+            $.post({
+                url: 'api/sestra/overiRecept',
+                data: JSON.stringify({id, izvestaj}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function(){
+                    alert("Recept je overen i sacuvane su izmene.");
+                    return;
+                },
+                error: function(){
+                    alert("Greska prilikom overe recepta! Pokusajte ponovo.");
+                    return;
+                }
+            });
+
+        }
+        content.appendChild(overiIzmeniBtn);
+
+
+    }
 }
 

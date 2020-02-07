@@ -11,18 +11,26 @@ public class ReceptDTO {
     private String lek;
     private String dijagnoza;
     private String izvestaj;
+    private String idLekara;
+    private String imeLekara;
+    private String przLekara;
+    private boolean overen;
+    private Long idSestre;
 
     public ReceptDTO() {}
 
     public ReceptDTO(Recept recept){
-        this(recept.getId(), recept.getLek(), recept.getDijagnoza(), recept.getIzvestaj());
+        this(recept.getId(), recept.getLek(), recept.getDijagnoza(), recept.getIzvestaj(), recept.getIdLekara(), recept.isOveren(), recept.getIdSestre());
     }
 
-    public ReceptDTO(Long id, String lek, String dijagnoza, String izvestaj){
+    public ReceptDTO(Long id, String lek, String dijagnoza, String izvestaj, String idLekara, boolean overen, Long idSestre){
         this.id = id;
         this.lek = lek;
         this.dijagnoza = dijagnoza;
         this.izvestaj = izvestaj;
+        this.idLekara = idLekara;
+        this.overen = overen;
+        this.idSestre = idSestre;
     }
 
     public Long getId() {

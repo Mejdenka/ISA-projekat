@@ -1,5 +1,7 @@
 package JV20.isapsw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,8 +15,19 @@ public class Recept {
     private String dijagnoza;
     private String izvestaj;
     private boolean overen = false;
-    private Long idLekara;
+    private String idLekara;
     private Long idSestre;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Klinika klinikaRecept;
+
+    public Klinika getKlinikaRecept() {
+        return klinikaRecept;
+    }
+
+    public void setKlinikaRecept(Klinika klinikaRecept) {
+        this.klinikaRecept = klinikaRecept;
+    }
 
     public Recept() {}
 
@@ -22,6 +35,7 @@ public class Recept {
         this.lek = recept.lek;
         this.dijagnoza = recept.dijagnoza;
         this.izvestaj = recept.izvestaj;
+        this.idLekara = recept.idLekara;
         this.overen = false;
     }
 
@@ -63,5 +77,21 @@ public class Recept {
 
     public void setOveren(boolean overen) {
         this.overen = overen;
+    }
+
+    public String getIdLekara() {
+        return idLekara;
+    }
+
+    public void setIdLekara(String idLekara) {
+        this.idLekara = idLekara;
+    }
+
+    public Long getIdSestre() {
+        return idSestre;
+    }
+
+    public void setIdSestre(Long idSestre) {
+        this.idSestre = idSestre;
     }
 }

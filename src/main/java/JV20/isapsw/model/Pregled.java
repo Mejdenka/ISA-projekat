@@ -18,6 +18,11 @@ public class Pregled {
     @OneToOne
     private Lekar lekar;
 
+    //za listu pregleda u lekaru
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Lekar lekarPregleda;
+
     private boolean obavljen;
     private boolean obrisan;
 
@@ -104,5 +109,13 @@ public class Pregled {
 
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
+    }
+
+    public Lekar getLekarPregleda() {
+        return lekarPregleda;
+    }
+
+    public void setLekarPregleda(Lekar lekarPregleda) {
+        this.lekarPregleda = lekarPregleda;
     }
 }

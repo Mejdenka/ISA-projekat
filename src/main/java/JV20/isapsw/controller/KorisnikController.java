@@ -90,7 +90,7 @@ public class KorisnikController {
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public Klinika getKlinika(@PathVariable Long userId) throws AccessDeniedException {
         AdministratorKlinike ak = (AdministratorKlinike) korisnikService.findOne(userId);
-        return ak.getKlinika();
+        return ak.getKlinikaAdmina();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/izmenaPodataka")

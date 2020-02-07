@@ -20,7 +20,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -40,6 +43,8 @@ public class LekarController {
     private PregledService pregledService ;
     @Autowired
     private TipPregledaService tipPregledaService ;
+    @Autowired
+    private EmailService emailService ;
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/getLekar/{idLekara}")
@@ -84,27 +89,34 @@ public class LekarController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/napraviTerminZaPregled/{tipPregleda}")
     @PreAuthorize("hasRole('DOKTOR')")
-    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Termin termin,  @PathVariable("tipPregleda") String tipPregleda) throws AccessDeniedException, ParseException {
+    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Termin termin,  @PathVariable("tipPregleda") String tipPregleda) throws AccessDeniedException, ParseException, InterruptedException {
         Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Klinika klinika = this.klinikaService.findOne(lekar.getKlinikaLekara().getId());
         TipPregleda tp = tipPregledaService.findOneByNaziv(tipPregleda.replace("%20", " "));
         Pacijent pacijent = (Pacijent)this.korisnikService.findOne(termin.getPacijentId());
         Termin noviTermin = this.terminService.rezervisi(termin, klinika);
         Pregled pregled = this.pregledService.saveNew(noviTermin, pacijent, lekar, tp);
-
+        emailService.sendPregledLekara(pregled, klinika);
         return new ResponseEntity<User>( HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/napraviTerminZaOperaciju/{pacijentId}")
+    @RequestMapping(method = RequestMethod.POST, value = "/napraviTerminZaOperaciju")
     @PreAuthorize("hasRole('DOKTOR')")
-    public ResponseEntity<?> napraviTerminZaOperaciju( @RequestBody Termin termin, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException, ParseException {
+    public ResponseEntity<?> napraviTerminZaOperaciju( @RequestBody Termin termin) throws AccessDeniedException, ParseException, InterruptedException {
         Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Klinika klinika = this.klinikaService.findOne(lekar.getKlinikaLekara().getId());
-        Pacijent pacijent = (Pacijent)this.korisnikService.findOne(pacijentId);
+        Pacijent pacijent = (Pacijent)this.korisnikService.findOne(termin.getPacijentId());
         Termin noviTermin = this.terminService.rezervisi(termin, klinika);
         Operacija operacija = this.operacijaService.saveNew(noviTermin, pacijent, lekar);
+        emailService.sendOperacijaLekara(operacija, klinika);
 
         return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/zapoceoPregled/{pacijentId}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public boolean zapoceoPregled( @RequestBody boolean zapoceo, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException {
+        return lekarService.zapocniPregled(zapoceo, pacijentId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/rezervisiGoOds")

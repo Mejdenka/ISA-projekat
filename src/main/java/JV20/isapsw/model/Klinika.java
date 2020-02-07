@@ -22,6 +22,10 @@ public class Klinika {
     @OneToOne
     private Lokacija lokacijaNaMapi;
 
+    @OneToMany(mappedBy = "klinikaAdmina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<AdministratorKlinike> adminiKlinike;
+
     @OneToMany(mappedBy = "klinikaLekara", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Lekar> lekari;
@@ -173,5 +177,13 @@ public class Klinika {
 
     public void setLokacijaNaMapi(Lokacija lokacijaNaMapi) {
         this.lokacijaNaMapi = lokacijaNaMapi;
+    }
+
+    public List<AdministratorKlinike> getAdminiKlinike() {
+        return adminiKlinike;
+    }
+
+    public void setAdminiKlinike(List<AdministratorKlinike> adminiKlinike) {
+        this.adminiKlinike = adminiKlinike;
     }
 }

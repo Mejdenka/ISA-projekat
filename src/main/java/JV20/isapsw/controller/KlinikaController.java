@@ -45,10 +45,10 @@ public class KlinikaController {
         return this.klinikaService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{nazivKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getSale/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public List<Sala> getSale(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
+    public List<Sala> getSale(@PathVariable Long idKlinike) throws AccessDeniedException {
+        List<Sala> sale = klinikaService.findOne(idKlinike).getSale();
         List<Sala> retVal = new ArrayList<>();
         for(Sala s : sale){
             if(!s.isObrisana()){

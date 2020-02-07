@@ -1,15 +1,13 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.common.TimeProvider;
-import JV20.isapsw.model.Authority;
-import JV20.isapsw.model.Korisnik;
-import JV20.isapsw.model.Pacijent;
-import JV20.isapsw.model.UserRequest;
+import JV20.isapsw.model.*;
 import JV20.isapsw.repository.PacijentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,10 @@ public class PacijentService {
     private TimeProvider timeProvider;
     @Autowired
     private AuthorityService authService;
+    @Autowired
+    private  KlinikaService klinikaService ;
+    @Autowired
+    private KorisnikService korisnikService;
 
     public Pacijent findOne(Long id) {
         return pacijentRepository.findById(id).orElseGet(null);
@@ -72,6 +74,17 @@ public class PacijentService {
 
         pacijent = this.pacijentRepository.save(pacijent);
         return pacijent;
+    }
+
+    public ZdravstveniKarton getKartonPacijenta(Long pacijentId) {
+        Lekar lekar =  (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Klinika klinika = klinikaService.findOne(lekar.getKlinikaLekara().getId());
+        for(Pregled p : klinika.getPregledi()){
+            if(p.getPacijent().getId().equals(pacijentId) && p.getLekar().getId().equals(lekar.getId()) && p.isObavljen()){
+                return findOne(pacijentId).getKarton();
+            }
+        }
+        return null;
     }
 
     public Pacijent save(Pacijent pacijent) { return this.pacijentRepository.save(pacijent);}

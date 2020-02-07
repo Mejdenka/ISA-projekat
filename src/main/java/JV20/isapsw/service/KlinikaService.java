@@ -112,6 +112,8 @@ public class KlinikaService {
         pregled.setSala(sala);
         pregled.setObrisan(false);
         pregled.setLekar(lekar);
+        //ovaj seter je za listu pregleda u lekaru za laksu pretragu
+        pregled.setLekarPregleda(lekar);
         pregled.setObavljen(false);
         pregledService.save(pregled);
 
@@ -203,7 +205,10 @@ public class KlinikaService {
             if(!p.isObavljen() && !p.isObrisan() ){
                 //ako mu nije dodijeljena sala
                 if(p.getSala() == null){
-                    retVal.add(new PregledDTO(p));
+                    PregledDTO pregledDTO = new PregledDTO(p.getId(),new TerminDTO(p.getTermin()),new LekarDTO(p.getLekar()),
+                            new PacijentDTO(p.getPacijent()), p.getTipPregleda(), p.getKlinikaPregleda());
+
+                    retVal.add(pregledDTO);
                 }
             }
         }

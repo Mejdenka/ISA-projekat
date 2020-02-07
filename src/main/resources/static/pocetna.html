@@ -26,6 +26,8 @@
     <!-- Main CSS-->
     <link href="css/homepage.css" rel="stylesheet" media="all">
 
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 </head>
 
 <body >
@@ -214,6 +216,18 @@
 
 </div>
 
+<div id="chartModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id = "closeChartModal" class="close">&times;</span>
+        <div id = "chartContainer">
+
+        </div>
+    </div>
+
+</div>
+
+
 <div id="overiIzmeniModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
@@ -229,6 +243,7 @@
 <input type="hidden" id="name_order" value="asc">
 <input type="hidden" id="prezime_order" value="asc">
 <input type="hidden" id="jbo_order" value="asc">
+<input type="hidden" id="email_order" value="asc">
 
 
 <!-- Jquery JS-->

@@ -129,6 +129,9 @@ $(document).ready(function(){
     $('body').on('click', '#zakaziBtn', function(e) {
         generisiFormuZaZakazivnje(ulogovan);
     });
+    $('body').on('click', '#kalendarBtn', function(e) {
+        generisiKalendarLekara(ulogovan);
+    });
     //************************************************************************************************************************
     //funkcije dugmadi za ADMINA KLINIKE
 

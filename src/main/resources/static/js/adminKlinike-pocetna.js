@@ -356,7 +356,7 @@ function prikaziIzvestajPoslovanja(klinika) {
             odrzaniPreglediBtn.innerHTML = "Održani pregledi";
             odrzaniPreglediBtn.style.marginTop = "20px"
             odrzaniPreglediBtn.id = "odrzaniPreglediBtn";
-            //odrzaniPreglediBtn.onclick = prikazOdrzanihPregleda(klinika);
+            odrzaniPreglediBtn.onclick = prikazOdrzanihPregleda(klinika);
 
             content.appendChild(prviRed);
             content.appendChild(drugiRed);
@@ -367,6 +367,56 @@ function prikaziIzvestajPoslovanja(klinika) {
         });
 
         $("#content").fadeIn(500);
+    }
+}
+
+function prikazOdrzanihPregleda(klinika) {
+    return function () {
+        var modal = document.getElementById("chartModal");
+        var span = document.getElementById("closeChartModal");
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                $("#chartModal").fadeOut(100);
+            }
+        }
+
+        var content = document.getElementById("chartContainer");
+        content.innerHTML = "";
+
+        $("#chartModal").fadeIn(500);
+
+        $.ajax({
+            url: 'api/klinike/getObavljeniPregledi/' + klinika.id,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (pregledi) {
+                console.log(pregledi)
+                let dataPoints = [];
+                for(let pregled of pregledi){
+                    dataPoints.push({label: pregled.termin.pocetak.substr(0,10), y:pregled.tipPregleda.cena});
+                }
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    title:{
+                        text: "Održani pregledi"
+                    },
+                    data: [
+                        {
+                            // Change type to "doughnut", "line", "splineArea", etc.
+                            type: "column",
+                            dataPoints: dataPoints
+                        }
+                    ]
+                });
+                chart.render();
+            }
+        });
+
     }
 }
 

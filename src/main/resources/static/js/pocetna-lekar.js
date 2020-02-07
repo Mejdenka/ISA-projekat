@@ -71,6 +71,48 @@ function generisiListuPacijenata() {
                     table.classList.add("tabela");
                     table.id = "tabelaPacijenata";
                     var tableRef = document.createElement('tbody');
+                    tableRef.id = "tabelaPacijenataBody";
+                    var header = table.createTHead();
+                    var row = header.insertRow(0);
+                    var cell = row.insertCell(0);
+                    var cell1 = row.insertCell(1);
+                    var cell2 = row.insertCell(2);
+                    var cell3 = row.insertCell(3);
+                    var sortImeBtn = document.createElement("button");
+                    sortImeBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortImeBtn.innerText = "▼";
+                    sortImeBtn.style.color = "white";
+                    sortImeBtn.style.fontSize = "15px";
+                    sortImeBtn.style.height = "30px";
+                    sortImeBtn.onclick = sort_ime();
+                    cell.appendChild(sortImeBtn);
+
+                    var sortPrezimeBtn = document.createElement("button");
+                    sortPrezimeBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortPrezimeBtn.innerText = "▼";
+                    sortPrezimeBtn.style.color = "white";
+                    sortPrezimeBtn.style.fontSize = "15px";
+                    sortPrezimeBtn.style.height = "30px";
+                    sortPrezimeBtn.onclick = sort_prezime();
+                    cell1.appendChild(sortPrezimeBtn);
+
+                    var sortJBO = document.createElement("button");
+                    sortJBO.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortJBO.innerText = "▼";
+                    sortJBO.style.color = "white";
+                    sortJBO.style.fontSize = "15px";
+                    sortJBO.style.height = "30px";
+                    sortJBO.onclick = sort_jbo();
+                    cell2.appendChild(sortJBO);
+
+                    // var sortEmail = document.createElement("button");
+                    // sortEmail.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    // sortEmail.innerText = "▼";
+                    // sortEmail.style.color = "white";
+                    // sortEmail.style.fontSize = "15px";
+                    // sortEmail.style.height = "30px";
+                    // sortEmail.onclick = sort_email();
+                    // cell3.appendChild(sortEmail);
 
                     for (let pacijent of pacijenti) {
                         var podaciPacijenta = tableRef.insertRow();
@@ -81,10 +123,6 @@ function generisiListuPacijenata() {
                         var prezimePacijenta = podaciPacijenta.insertCell(1);
                         var prezimePacijentaText = document.createTextNode(pacijent.prezime);
                         prezimePacijenta.appendChild(prezimePacijentaText);
-
-                        /*var datRodjenja = podaciPacijenta.insertCell(2);
-                        var datum = document.createTextNode(pacijent.datumRodjenja);
-                        datRodjenja.appendChild(datum);*/
 
                         var jbo = podaciPacijenta.insertCell(2);
                         var jboText = document.createTextNode(pacijent.jbo);

@@ -20,6 +20,7 @@ public class Lekar extends Korisnik {
     private boolean trajePregled;
     private String radnoVreme;
 
+
     @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<GodisnjiOdsustvoTermin> rezervisaniGO;

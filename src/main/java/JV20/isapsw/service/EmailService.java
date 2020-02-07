@@ -28,7 +28,6 @@ public class EmailService {
 
         //Simulacija duze aktivnosti da bi se uocila razlika
         Thread.sleep(1000);
-        System.out.println("Slanje emaila...");
 
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(korisnik.getEmail());
@@ -36,8 +35,6 @@ public class EmailService {
         mail.setSubject("Naša mala klinika - Uspešna registracija");
         mail.setText("Pozdrav " + korisnik.getIme() + ",\n\nVaša registracija je prihvaćena. \n\nDobro došli!\n\n\nNaša mala klinika");
         javaMailSender.send(mail);
-
-        System.out.println("Email poslat!");
     }
 
     @Async
@@ -45,7 +42,6 @@ public class EmailService {
 
         //Simulacija duze aktivnosti da bi se uocila razlika
         Thread.sleep(1000);
-        System.out.println("Slanje emaila...");
 
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(korisnik.getEmail());
@@ -54,7 +50,6 @@ public class EmailService {
         mail.setText("Pozdrav " + korisnik.getIme() + ",\n\nžao nam je. Vaša registracija je odbijena.\n\nRazlog: \n\n\nNaša mala klinika");
         javaMailSender.send(mail);
 
-        System.out.println("Email poslat!");
     }
 
     @Async

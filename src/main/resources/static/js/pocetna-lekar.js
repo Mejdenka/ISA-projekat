@@ -262,26 +262,8 @@ function prikaziProfilPacijenta(pacijentId) {
 function zapocniPregled(pacijent) {
     return function () {
         var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
-
-        var modal = document.getElementById("zapocniPregledModal");
-        modal.style.display = "block";
-
-        var span = document.getElementById("closeZapocniPregled");
-
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        var content = document.getElementById("zapocniPregledDiv");
-        content.innerHTML = "";
-
         let zapoceo = 1;
+
         $.post({
             url: 'api/lekari/zapoceoPregled/' + pacijent.id,
             data: JSON.stringify(zapoceo),
@@ -294,11 +276,33 @@ function zapocniPregled(pacijent) {
                     alert("Trenutno nije termin za pregled ovog pacijenta.");
                     return;
                 }
+                //*********************************************************************************
                 var modal = document.getElementById("zapocniPregledModal");
                 modal.style.display = "block";
 
-
                 var span = document.getElementById("closeZapocniPregled");
+
+                span.onclick = function () {
+                    modal.style.display = "none";
+                };
+
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                };
+
+                var content = document.getElementById("zapocniPregledDiv");
+                content.innerHTML = "";
+                //*********************************************************************************
+
+                var naslov = document.createElement("Header");
+                naslov.innerText = "Pregled za pacijenta: " + pacijent.ime + " " + pacijent.prezime;
+                naslov.style.fontSize = "20px";
+                naslov.style.marginTop = "10px";
+                naslov.style.marginBottom = "10px";
+                content.appendChild(naslov);
+                content.appendChild(document.createElement("br"));
 
               var red = document.createElement("var");
               red.classList.add("row", "wrapper--w680");
@@ -313,6 +317,7 @@ function zapocniPregled(pacijent) {
               txtDijagnoza.classList.add("input--style-4");
               txtDijagnoza.style.height = "40px";
               txtDijagnoza.style.width = "250px";
+
               $.get({
                   url:'api/dijagnoze/getDijagnoze',
                   contentType: 'application/json',
@@ -329,6 +334,7 @@ function zapocniPregled(pacijent) {
                       }
                   }
               });
+
               varDijagnoza.appendChild(txtDijagnoza);
               red.appendChild(varDijagnoza);
 
@@ -358,10 +364,9 @@ function zapocniPregled(pacijent) {
                       }
                   }
               });
+
               varLek.appendChild(txtLek);
-
               red.appendChild(varLek);
-
               content.appendChild(red);
 
               var red1 = document.createElement("var");
@@ -415,38 +420,12 @@ function zapocniPregled(pacijent) {
 
                   });
 
-              }
+              };
+
               red2.appendChild(izdajReceptBtn);
               content.appendChild(red2);
 
-              var odaberiNaslov = document.createElement("Header");
-              odaberiNaslov.innerText = "Zakazivanje sljedećeg pregleda/operacije";
-              odaberiNaslov.style.fontSize = "20px";
-              odaberiNaslov.style.marginTop = "10px";
-              odaberiNaslov.style.marginBottom = "10px";
-              content.appendChild(odaberiNaslov);
-
-                span.onclick = function () {
-                    modal.style.display = "none";
-                }
-
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-
-                var content = document.getElementById("zapocniPregledDiv");
-                content.innerHTML = "";
-
-                var naslov = document.createElement("Header");
-                naslov.innerText = "Pregled za pacijenta: " + pacijent.ime + " " + pacijent.prezime;
-                naslov.style.fontSize = "20px";
-                naslov.style.marginTop = "10px";
-                naslov.style.marginBottom = "10px";
-                content.appendChild(naslov);
-                content.appendChild(document.createElement("br"));
-
+              //********************************************STUDENT 2 DIO*********************************************
 
                 var odaberiNaslov = document.createElement("Header");
                 odaberiNaslov.innerText = "Zakazivanje sljedećeg pregleda/operacije";
@@ -525,7 +504,7 @@ function zapocniPregled(pacijent) {
 
 
                     }
-                })
+                });
                 operacijaBtn.addEventListener('change', (event) => {
                     if (event.target.checked) {
                         pregledBtn.checked = false;
@@ -534,82 +513,6 @@ function zapocniPregled(pacijent) {
                         }
                     }
                 });
-            }
-        })
-        operacijaBtn.addEventListener('change', (event) => {
-            if (event.target.checked) {
-                pregledBtn.checked = false;
-                if(forma.contains(document.getElementById("divTp"))){
-                    forma.removeChild(document.getElementById("divTp"));
-                }
-            }
-        })
-
-        var s = document.createElement("input"); //input element, Submit button
-        s.setAttribute('type',"submit");
-        s.setAttribute('value',"Pošalji");
-        s.classList.add("btn2", "btn--light-blue");
-        s.style.height = "35px"
-        s.style.width = "250px"
-
-        var treciRed = document.createElement("var");
-        treciRed.classList.add("row", "wrapper--w680");
-        var varPocDatum = document.createElement("var");
-        varPocDatum.classList.add("col-2", "input-group");
-        var datumTxt = document.createTextNode("Vreme početka");
-        varPocDatum.style.marginTop = "20px";
-        varPocDatum.appendChild(datumTxt);
-        varPocDatum.appendChild(document.createElement("br"));
-        var datumPocetak = document.createElement('input');
-        datumPocetak.type = 'datetime-local';
-        datumPocetak.id = "datumPoc";
-        datumPocetak.classList.add("input--style-4");
-        datumPocetak.style.height = "40px";
-        datumPocetak.style.width = "270px"
-
-        varPocDatum.appendChild(datumPocetak);
-        treciRed.appendChild(varPocDatum);
-        var varKrajDatum = document.createElement("var");
-        varKrajDatum.classList.add("col-2", "input-group");
-        var datumTxt = document.createTextNode("Vreme kraja");
-        varKrajDatum.style.marginTop = "20px";
-        varKrajDatum.appendChild(datumTxt);
-        varKrajDatum.appendChild(document.createElement("br"));
-        var datumKraj = document.createElement('input');
-        datumKraj.type = 'datetime-local';
-        datumKraj.id = "datumKr";
-        datumKraj.classList.add("input--style-4");
-        datumKraj.style.height = "40px";
-        datumKraj.style.width = "270px"
-        varKrajDatum.appendChild(datumKraj);
-        treciRed.appendChild(varKrajDatum);
-        forma.appendChild(treciRed);
-
-        datumPocetak.onchange = function(){
-            var poc = $("#datumPoc").val();
-            var kr = $("#datumKr").val();
-            if( poc == "" || kr == ""){
-                if(forma.contains(s))
-                    forma.removeChild(s);
-                return;
-            } else if(kr < poc){
-                alert("Krajnji datum mora biti veći od početnog.");
-                if(forma.contains(s))
-                    forma.removeChild(s);
-                return;
-            } else if(poc.substr(0,10) != kr.substr(0,10)){
-                alert("Datumi se ne poklapaju.");
-                return;
-            }
-            forma.appendChild(s);
-
-        }
-        datumKraj.onchange = function(){
-            var poc = $("#datumPoc").val();
-            var kr = $("#datumKr").val();
-
-                })
-
 
 
                 var s = document.createElement("input"); //input element, Submit button
@@ -623,7 +526,7 @@ function zapocniPregled(pacijent) {
                 treciRed.classList.add("row", "wrapper--w680");
                 var varPocDatum = document.createElement("var");
                 varPocDatum.classList.add("col-2", "input-group");
-                var datumTxt = document.createTextNode("Vrijeme početka");
+                var datumTxt = document.createTextNode("Vreme početka");
                 varPocDatum.style.marginTop = "20px";
                 varPocDatum.appendChild(datumTxt);
                 varPocDatum.appendChild(document.createElement("br"));
@@ -638,7 +541,7 @@ function zapocniPregled(pacijent) {
                 treciRed.appendChild(varPocDatum);
                 var varKrajDatum = document.createElement("var");
                 varKrajDatum.classList.add("col-2", "input-group");
-                var datumTxt = document.createTextNode("Vrijeme kraja");
+                var datumTxt = document.createTextNode("Vreme kraja");
                 varKrajDatum.style.marginTop = "20px";
                 varKrajDatum.appendChild(datumTxt);
                 varKrajDatum.appendChild(document.createElement("br"));
@@ -670,7 +573,8 @@ function zapocniPregled(pacijent) {
                     }
                     forma.appendChild(s);
 
-                }
+                };
+
                 datumKraj.onchange = function(){
                     var poc = $("#datumPoc").val();
                     var kr = $("#datumKr").val();
@@ -690,7 +594,7 @@ function zapocniPregled(pacijent) {
                     }
                     forma.appendChild(s);
 
-                }
+                };
 
 
                 content.appendChild(forma);
@@ -737,31 +641,32 @@ function zapocniPregled(pacijent) {
                         urlString = 'api/lekari/napraviTerminZaOperaciju';
                     }
 
-                    $.post({
-                        url: urlString,
-                        data: JSON.stringify({pocetak, kraj, pacijentId}),
-                        contentType: 'application/json',
-                        headers: {
-                            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-                        },
-                        success: function() {
-                            alert("Rezervcija poslata.")
-                        },
-                        error: function() {
-                            alert("Greška.")
-                        }
-                    });
-                }
-            }
-        });
+                            $.post({
+                                url: urlString,
+                                data: JSON.stringify({pocetak, kraj, pacijentId}),
+                                contentType: 'application/json',
+                                headers: {
+                                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                                },
+                                success: function() {
+                                    alert("Rezervcija poslata.")
+                                },
+                                error: function() {
+                                    alert("Greška.")
+                                }
+                                 });
+                            }
 
-        var poslednjiRed = document.createElement("var");
-        poslednjiRed.classList.add("row", "wrapper--w680");
-        var zakaziBtn = document.createElement("BUTTON");
-        zakaziBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
-        zakaziBtn.innerHTML = "Zakazi";
-        poslednjiRed.appendChild(zakaziBtn);
-        content.appendChild(poslednjiRed);
+                            var poslednjiRed = document.createElement("var");
+                            poslednjiRed.classList.add("row", "wrapper--w680");
+                            var zakaziBtn = document.createElement("BUTTON");
+                            zakaziBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                            zakaziBtn.innerHTML = "Zakazi";
+                            poslednjiRed.appendChild(zakaziBtn);
+                            content.appendChild(poslednjiRed);
+                    }
+              });
+
 
     }
 }

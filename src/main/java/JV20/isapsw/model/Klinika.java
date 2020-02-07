@@ -177,13 +177,13 @@ public class Klinika {
         this.operacije = operacije;
     }
 
- overa_recepta_izmena_izvestaja
     public List<Recept> getRecepti() {
         return recepti;
     }
 
     public void setRecepti(List<Recept> recepti) {
         this.recepti = recepti;
+    }
 
     public Lokacija getLokacijaNaMapi() {
         return lokacijaNaMapi;

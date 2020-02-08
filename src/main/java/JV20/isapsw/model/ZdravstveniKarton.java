@@ -15,6 +15,10 @@ public class ZdravstveniKarton {
     private Integer broj;
     private double visina;
     private double masa;
+    private String krvnaGrupa;
+    private String dioptrija;
+    private String alergije;
+
 
     @OneToOne
     @JsonIgnore
@@ -26,11 +30,14 @@ public class ZdravstveniKarton {
 
     public ZdravstveniKarton() {}
 
-    public ZdravstveniKarton(Integer broj, Pacijent pacijent, Set<Dijagnoza> dijagnoze, Set<Pregled> pregledi) {
+    public ZdravstveniKarton(Integer broj, Pacijent pacijent, Set<Dijagnoza> dijagnoze, Set<Pregled> pregledi, String krvnaGrupa, String dioptrija, String alergije) {
         this.broj = broj;
         this.pacijent = pacijent;
         this.dijagnoze = dijagnoze;
         this.pregledi = pregledi;
+        this.krvnaGrupa = krvnaGrupa;
+        this.dioptrija = dioptrija;
+        this.alergije = alergije;
     }
 
     public Long getId() {
@@ -87,5 +94,29 @@ public class ZdravstveniKarton {
 
     public void setMasa(double masa) {
         this.masa = masa;
+    }
+
+    public String getKrvnaGrupa() {
+        return krvnaGrupa;
+    }
+
+    public void setKrvnaGrupa(String krvnaGrupa) {
+        this.krvnaGrupa = krvnaGrupa;
+    }
+
+    public String getDioptrija() {
+        return dioptrija;
+    }
+
+    public void setDioptrija(String dioptrija) {
+        this.dioptrija = dioptrija;
+    }
+
+    public String getAlergije() {
+        return alergije;
+    }
+
+    public void setAlergije(String alergije) {
+        this.alergije = alergije;
     }
 }

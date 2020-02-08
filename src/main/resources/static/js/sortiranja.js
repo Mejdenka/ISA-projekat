@@ -93,3 +93,34 @@ function sort_prezime()
         }
     }
 }
+
+function sort_email()
+{
+    return function () {
+
+        var tbody =$('#tabelaPacijenataBody');
+
+        tbody.find('tr').sort(function(a, b)
+        {
+            if($('#email_order').val()=='asc')
+            {
+                return $('td:nth-child(3)', a).text().localeCompare($('td:nth-child(3)', b).text());
+            }
+            else
+            {
+                return $('td:nth-child(3)', b).text().localeCompare($('td:nth-child(3)', a).text());
+            }
+
+        }).appendTo(tbody);
+
+        var sort_order=$('#email_order').val();
+        if(sort_order=="asc")
+        {
+            document.getElementById("email_order").value="desc";
+        }
+        if(sort_order=="desc")
+        {
+            document.getElementById("email_order").value="asc";
+        }
+    }
+}

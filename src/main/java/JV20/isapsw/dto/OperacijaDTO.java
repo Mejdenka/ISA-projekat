@@ -39,4 +39,20 @@ public class OperacijaDTO {
     public TerminDTO getTermin() {
         return termin;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPacijent(PacijentDTO pacijent) {
+        this.pacijent = pacijent;
+    }
+
+    public void setLekar(LekarDTO lekar) {
+        this.lekar = lekar;
+    }
+
+    public void setTermin(TerminDTO termin) {
+        this.termin = termin;
+    }
 }

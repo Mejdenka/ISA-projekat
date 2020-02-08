@@ -11,6 +11,7 @@ INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena, lokacija_na_mapi_id)
 
 INSERT INTO lokacija (broj_ulice, lat, lon) VALUES ('Janka Veselinovica, 20', 45.261608, 19.815776);
 
+
 INSERT INTO sala (naziv, broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 1', 1, 1, 1, 0, 1);
 INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 2', 2, 0, 0, 0, 1);
 INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 3', 3, 1, 0, 0, 1);
@@ -18,10 +19,14 @@ INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 100, 1, 0);
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 200, 1, 0);
 
-INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-07 19:20:00', '2020-02-07 19:50:00', 1, 1, 0, 1);
+
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-10 11:00:00', '2020-02-10 23:45:00', 1, 1, 0, 1);
+
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-07 23:20:00', '2020-02-07 23:50:00', 1, 1, 0, 1);
+
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-13 12:50:00', '2020-02-13 13:20:00', 1, 1, 0, 8);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-14 10:30:00', '2020-02-14 16:00:00', 1, 1, 0, 8);
-INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-10 10:30:00', '2020-02-10 16:00:00', 1, 1, 0, 1);
+INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-10 10:30:00', '2020-02-10 12:00:00', 1, 1, 0, 1);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-11 12:00:00', '2020-02-11 12:00:00', 0, 1, 0, null);
 
 INSERT INTO godisnji_odsustvo_termin (pocetak, kraj, godisnji, odsustvo, obrisan, odobren, lekargo_id, lekar_ods_id, med_sestra_go_id, med_sestra_ods_id)
@@ -29,18 +34,19 @@ VALUES ('2020-02-14 10:30:00', '2020-02-14 16:00:00', 0, 1, 0, 0, null, null, nu
 INSERT INTO godisnji_odsustvo_termin (godisnji, odsustvo, pocetak, kraj, obrisan, lekargo_id, lekar_ods_id, odobren, med_sestra_go_id, med_sestra_ods_id) VALUES
  (1, 0, '2020-02-14 01:01:00', '2020-02-22 11:11:00', 0, 5, null, 0, null, null);
 
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 2, 2, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 1, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 2, 1, 8, 1, 1, 1, 0, 5);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 8, 4, 1, 0, 0, 5);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 3, 1, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 8, 4, 1, 1, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, null, 3, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 2, 1, 1, 2, 1, 0, 0, 5);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, null, 2, 2, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, 1, 2, 1, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 1, 4, 1, 1, 0, 5);
 
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, 3, 1, 1, 3, 0, 0);
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, null, 1, 1, 1, 0, 0);
 
-INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa) VALUES ('112', 1, '198.2', '99.0');
-INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa) VALUES ('113', 8, '178.1', '59');
+INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa, krvna_grupa, dioptrija, alergije) VALUES ('112', 1, '198.2', '99.0', "A+", "Desno: +2.52    Levo: -0.5", "Brufen, Penicilin");
+INSERT INTO zdravstveni_karton (broj, pacijent_id, visina, masa, krvna_grupa, dioptrija, alergije) VALUES ('113', 8, '178.1', '59', "0+", "Desno: -0.5    Levo: +0.5", "Nema alergije na lekove");
 
 INSERT INTO authority (name) VALUES ('ROLE_USER');
 INSERT INTO authority (name) VALUES ('ROLE_PACIJENT');
@@ -75,8 +81,5 @@ INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (2, 'Kandida'
 INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (3, 'Hemoroidi', 'Hrm1');
 INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (4, 'Trihineloza', 'Th1');
 
-INSERT INTO zdravstveni_karton_dijagnoze(zdravstveni_karton_id, dijagnoze_id) values(2, 1);
-INSERT INTO zdravstveni_karton_dijagnoze(zdravstveni_karton_id, dijagnoze_id) values(2, 2);
 
-INSERT INTO zdravstveni_karton_pregledi(zdravstveni_karton_id, pregledi_id) values(2, 2);
-INSERT INTO zdravstveni_karton_pregledi(zdravstveni_karton_id, pregledi_id) values(2, 3);
+

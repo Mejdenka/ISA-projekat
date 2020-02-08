@@ -54,7 +54,6 @@ public class AdministratorKlinikeController {
     @RequestMapping(method = RequestMethod.POST, value = "/posaljiGoOds")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public void sacuvajGoOds(@RequestBody GodisnjiOdsustvoTerminDTO godisnjiOdsustvoTerminDTO) throws AccessDeniedException {
-
         this.godisnjiOdsustvoService.save(godisnjiOdsustvoTerminDTO);
     }
 

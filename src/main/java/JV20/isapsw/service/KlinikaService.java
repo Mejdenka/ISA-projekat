@@ -275,6 +275,16 @@ public class KlinikaService {
         return retVal;
     }
 
+    public List<Pregled> findObavljeniPregledi(Long id){
+        List<Pregled> retVal = new ArrayList<>();
+        for(Pregled p : findOne(id).getPregledi()){
+            if(!p.isObrisan() && p.isObavljen()){
+                retVal.add(p);
+            }
+        }
+        return retVal;
+    }
+
     public List<PregledDTO> findRezervisanePreglede(Long id){
         List<PregledDTO> retVal = new ArrayList<>();
         for(Pregled p : findOne(id).getPregledi()){

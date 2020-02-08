@@ -31,10 +31,138 @@ function pocetnaLekar(korisnik) {
 
 }
 
+function generisiKalendarLekara(lekar) {
+    $("#content").fadeOut(100, function() {
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/lekari/getZakazaniPregledi/'+lekar.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (pregledi) {
+                var content = document.getElementById("content");
+                content.innerHTML = "";
+                var naslov = document.createElement("HEADER");
+                naslov.innerText = "Pregledi";
+                naslov.style.fontSize = "18px";
+                content.appendChild(naslov);
+                content.appendChild(document.createElement("br"));
+
+                var table = document.createElement('table');
+                table.id = "tabelaPregleda";
+                table.classList.add("tabela");
+
+                var header = table.createTHead();
+                var row = header.insertRow(0);
+                var cell = row.insertCell(0);
+                var cell1 = row.insertCell(1);
+                var cell2 = row.insertCell(2);
+                var cell3 = row.insertCell(3);
+                cell.innerHTML = "<b>Tip pregleda</b>";
+                cell1.innerHTML = "<b>Pacijent</b>";
+                cell2.innerHTML = "<b>Sala</b>";
+                cell3.innerHTML = "<b>Termin</b>";
+
+                var tableRef = document.createElement('tbody');
+
+                if (pregledi.length > 0) {
+                    for (let pregled of pregledi) {
+                        console.log(pregled)
+                        var podaciZahteva = tableRef.insertRow();
+                        var tipZahteva = podaciZahteva.insertCell(0);
+                        var tipZahtevaText = document.createTextNode(pregled.tipPregleda.naziv);
+                        tipZahteva.appendChild(tipZahtevaText);
+
+                        var pacijent = podaciZahteva.insertCell(1);
+                        if(pregled.pacijent == null)
+                            var pacijentText = document.createTextNode("Još nezakazan");
+                        else
+                            var pacijentText = document.createTextNode(pregled.pacijent.ime + " " + pregled.pacijent.prezime);
+
+                        pacijent.appendChild(pacijentText);
+
+                        var sala = podaciZahteva.insertCell(2);
+                        if(pregled.sala == null)
+                            var salaText = document.createTextNode("Još nedodeljena");
+                        else
+                            var salaText = document.createTextNode(pregled.sala.naziv + " ("+ pregled.sala.broj +")");
+
+                        sala.appendChild(salaText);
+
+                        var termin = podaciZahteva.insertCell(3);
+                        var terminText = document.createTextNode(pregled.termin.pocetak + "-" + pregled.termin.kraj);
+                        termin.appendChild(terminText);
+
+                    }
+                    table.appendChild(tableRef);
+                    content.appendChild(table);
+
+                } else if (pregledi.length === 0) {
+                    var textnode = document.createTextNode("Ne postoje pregledi za obaviti trenutno.");
+                    content.appendChild(textnode);
+                }
+                //ZA OPERACIJE******************************************************************************
+                $.get({
+
+                    url: 'api/lekari/getZakazaneOperacije/' + lekar.id,
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function (operacije) {
+
+                        var content = document.getElementById("content");
+                        content.appendChild(document.createElement("br"));
+                        var naslov = document.createElement("HEADER");
+                        naslov.innerText = "Operacije";
+                        naslov.style.fontSize = "18px";
+                        content.appendChild(naslov);
+                        content.appendChild(document.createElement("br"));
+
+                        var table = document.createElement('table');
+                        table.id = "tabelaOperacija";
+                        table.classList.add("tabela");
+
+                        var header = table.createTHead();
+                        var row = header.insertRow(0);
+                        var cell1 = row.insertCell(0);
+                        var cell3 = row.insertCell(1);
+                        cell1.innerHTML = "<b>Pacijent</b>";
+                        cell3.innerHTML = "<b>Termin</b>";
+                        var tableRef = document.createElement('tbody');
+
+                        if (operacije.length > 0) {
+                            for (let operacija of operacije) {
+                                var podaciZahteva = tableRef.insertRow();
+
+                                var pacijent = podaciZahteva.insertCell(0);
+                                var pacijentText = document.createTextNode(operacija.pacijent.ime + " " + operacija.pacijent.prezime);
+                                pacijent.appendChild(pacijentText);
+
+                                var termin = podaciZahteva.insertCell(1);
+                                var terminText = document.createTextNode(operacija.termin.pocetak + "-" + operacija.termin.kraj);
+                                termin.appendChild(terminText);
+
+                            }
+                            table.appendChild(tableRef);
+                            content.appendChild(table);
+
+                        } else if (operacije.length === 0) {
+                            var textnode = document.createTextNode("Ne postoje rezervisane operacije trenutno.");
+                            content.appendChild(textnode);
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $("#content").fadeIn(100);
+}
+
 function generisiListuPacijenata() {
     $("#content").fadeOut(100, function() {
-
-
         $.ajax
         ({
             type: "GET",
@@ -105,14 +233,14 @@ function generisiListuPacijenata() {
                     sortJBO.onclick = sort_jbo();
                     cell2.appendChild(sortJBO);
 
-                    // var sortEmail = document.createElement("button");
-                    // sortEmail.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
-                    // sortEmail.innerText = "▼";
-                    // sortEmail.style.color = "white";
-                    // sortEmail.style.fontSize = "15px";
-                    // sortEmail.style.height = "30px";
-                    // sortEmail.onclick = sort_email();
-                    // cell3.appendChild(sortEmail);
+                    var sortEmail = document.createElement("button");
+                    sortEmail.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortEmail.innerText = "▼";
+                    sortEmail.style.color = "white";
+                    sortEmail.style.fontSize = "15px";
+                    sortEmail.style.height = "30px";
+                    sortEmail.onclick = sort_email();
+                    cell3.appendChild(sortEmail);
 
                     for (let pacijent of pacijenti) {
                         var podaciPacijenta = tableRef.insertRow();
@@ -642,7 +770,7 @@ function zapocniPregled(pacijent) {
                 var zdarvstveniKartonBtn = document.createElement("BUTTON");
                 zdarvstveniKartonBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                 zdarvstveniKartonBtn.innerHTML = "Zdravstveni karton";
-                zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijent.id, pacijent.ime + " " + pacijent.prezime);
+                zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijent.id, pacijent.ime + " " + pacijent.prezime, true);
                 varZdrK.appendChild(zdarvstveniKartonBtn);
                 content.appendChild(varZdrK);
 
@@ -709,7 +837,7 @@ function zapocniPregled(pacijent) {
     }
 }
 
-function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
+function zdravstveniKarton(pacijentId, imeIPrezimePacijenta, flag) {
     return function(){
         if((document.getElementById("zapocniPregledModal").style.display) == "block"){
             document.getElementById("zapocniPregledModal").style.display = "none";
@@ -765,7 +893,7 @@ function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
                     txtVisina.classList.add("input--style-4");
                     txtVisina.style.height = "40px"
                     txtVisina.style.width = "250px"
-                    txtVisina.value = zk.visina + " cm";
+                    txtVisina.value = zk.visina;
                     txtVisina.disabled = "true";
                     varVisina.appendChild(txtVisina);
                     treciRed.appendChild(varVisina);
@@ -780,14 +908,166 @@ function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
                     masaTxt.classList.add("input--style-4");
                     masaTxt.style.height = "40px"
                     masaTxt.style.width = "250px"
-                    masaTxt.value = zk.masa + " kg";
+                    masaTxt.value = zk.masa;
                     masaTxt.disabled = "true";
                     varMasa.appendChild(masaTxt);
                     treciRed.appendChild(varMasa);
                     content.appendChild(treciRed);
 
+                    var cetvrtiRed = document.createElement("var");
+                    cetvrtiRed.classList.add("row", "wrapper--w680");
+                    var varKrvnaGrupa = document.createElement("var");
+                    varKrvnaGrupa.classList.add("col-2", "input-group");
+                    var krvnaGrupa = document.createTextNode("Krvna grupa");
+                    varKrvnaGrupa.appendChild(krvnaGrupa);
+                    varKrvnaGrupa.appendChild(document.createElement("br"));
+                    var selKrvnaGrupa = document.createElement('select');
+                    selKrvnaGrupa.type = 'select';
+                    selKrvnaGrupa.id = "krvnaGrupa";
+                    selKrvnaGrupa.value = zk.krvnaGrupa;
+                    selKrvnaGrupa.classList.add("input--style-4");
+                    selKrvnaGrupa.style.height = "40px";
+                    selKrvnaGrupa.style.width = "250px";
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
 
+                    var option = document.createElement('option');
+                    option.value="Nije odredjeno";
+                    option.innerHTML="Nije odredjeno";
+                    selKrvnaGrupa.appendChild(option);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
 
+                    var option0m = document.createElement('option');
+                    option0m.value="0-";
+                    option0m.innerHTML="0-";
+                    selKrvnaGrupa.appendChild(option0m);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var option0p = document.createElement('option');
+                    option0p.value="0+";
+                    option0p.innerHTML="0+";
+                    selKrvnaGrupa.appendChild(option0p);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionAm = document.createElement('option');
+                    optionAm.value="A-";
+                    optionAm.innerHTML="A-";
+                    selKrvnaGrupa.appendChild(optionAm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionAp = document.createElement('option');
+                    optionAp.value="A+";
+                    optionAp.innerHTML="A+";
+                    selKrvnaGrupa.appendChild(optionAp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionBm = document.createElement('option');
+                    optionBm.value="B-";
+                    optionBm.innerHTML="B-";
+                    selKrvnaGrupa.appendChild(optionBm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionBp = document.createElement('option');
+                    optionBp.value="B+";
+                    optionBp.innerHTML="B+";
+                    selKrvnaGrupa.appendChild(optionBp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionABm = document.createElement('option');
+                    optionABm.value="AB-";
+                    optionABm.innerHTML="AB-";
+                    selKrvnaGrupa.appendChild(optionABm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionABp = document.createElement('option');
+                    optionABp.value="AB+";
+                    optionABp.innerHTML="AB+";
+                    selKrvnaGrupa.appendChild(optionABp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var varDioptrija = document.createElement("var");
+                    varDioptrija.classList.add("col-2", "input-group");
+                    var dioptrija = document.createTextNode("Dioptrija");
+                    varDioptrija.appendChild(dioptrija);
+                    varDioptrija.appendChild(document.createElement("br"));
+                    var txtDioptrija = document.createElement('input');
+                    txtDioptrija.type = 'text';
+                    txtDioptrija.id = "dioptrija";
+                    txtDioptrija.classList.add("input--style-4");
+                    txtDioptrija.style.height = "40px"
+                    txtDioptrija.style.width = "250px"
+                    txtDioptrija.value = zk.dioptrija;
+                    varDioptrija.appendChild(txtDioptrija);
+                    cetvrtiRed.appendChild(varDioptrija);
+                    content.appendChild(cetvrtiRed);
+
+                    var petiRed = document.createElement("var");
+                    petiRed.classList.add("row", "wrapper--w680");
+                    var varAlergije = document.createElement("var");
+                    varAlergije.classList.add("col-2", "input-group");
+                    var alergije = document.createTextNode("Alergije");
+                    varAlergije.appendChild(alergije);
+                    varAlergije.appendChild(document.createElement("br"));
+                    var txtAlergije = document.createElement('input');
+                    txtAlergije.type = 'text';
+                    txtAlergije.id = "alergije";
+                    txtAlergije.value = zk.alergije;
+                    txtAlergije.classList.add("input--style-4");
+                    txtAlergije.style.height = "80px"
+                    txtAlergije.style.width = "520px"
+                    //txtAlergije.value = zk.visina + " cm";
+                    txtAlergije.disabled = "true";
+                    varAlergije.appendChild(txtAlergije);
+                    petiRed.appendChild(varAlergije);
+                    content.appendChild(petiRed);
+
+                    var sestiRed = document.createElement("var");
+                    sestiRed.classList.add("row", "wrapper--w680");
+                    var izmeniKartonBtn = document.createElement("BUTTON");
+                    izmeniKartonBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    izmeniKartonBtn.innerHTML = "Sacuvaj izmene";
+                    izmeniKartonBtn.onclick = function() {
+                        var id = zk.id;
+                        var visina = $('#visina').val();
+                        var masa = $('#masa').val();
+                        var krvnaGrupa = $('#krvnaGrupa').val();
+                        var dioptrija = $('#dioptrija').val();
+                        var alergije = $('#alergije').val();
+
+                        $.post({
+                            url: 'api/kartoni/sacuvajIzmene',
+                            data: JSON.stringify({id, visina, masa, krvnaGrupa, dioptrija, alergije}),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function() {
+                                alert("Uspesno sacuvane izmene kartona pacijenta!");
+                                return;
+                            },
+                            error: function() {
+                                alert("Greška prilikom cuvanja izmena kartona pacijenta.")
+                                return;
+                            }
+                        });
+
+                    }
+                    sestiRed.appendChild(izmeniKartonBtn);
+                    content.appendChild(sestiRed);
+
+                    if(flag){
+                        txtVisina.disabled = false;
+                        masaTxt.disabled = false;
+                        txtAlergije.disabled = false;
+                    }
                 }
             });
         });

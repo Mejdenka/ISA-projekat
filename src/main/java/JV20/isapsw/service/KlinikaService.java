@@ -193,7 +193,8 @@ public class KlinikaService {
 
     }
 
-    public List<PregledDTO> pronadjiSlobodnePreglede(Klinika klinika) {
+    public List<PregledDTO> pronadjiSlobodnePreglede(Long klinikaId) {
+        Klinika klinika = findOne(klinikaId);
         List<PregledDTO> pregledi = new ArrayList<>();
 
         for(Pregled p : klinika.getPregledi()){

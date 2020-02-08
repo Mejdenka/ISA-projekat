@@ -94,10 +94,9 @@ public class KlinikaController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{idKlinike}")
-    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE') or hasRole('PACIJENT')")
     public List<PregledDTO> getSlobodniTermini(@PathVariable Long idKlinike) throws AccessDeniedException {
-        Klinika klinika = klinikaService.findOne(idKlinike);
-        return klinikaService.pronadjiSlobodnePreglede(klinika);
+        return klinikaService.pronadjiSlobodnePreglede(idKlinike);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/deleteTerminZaPregled/{idKlinike}/{idTermina}")
@@ -105,7 +104,7 @@ public class KlinikaController {
     public List<PregledDTO> deleteTermin(@PathVariable Long idKlinike, @PathVariable Long idTermina) throws AccessDeniedException {
         Klinika klinika = klinikaService.findOne(idKlinike);
         klinikaService.obrisiTerminZaPregled(klinika, idTermina);
-        return klinikaService.pronadjiSlobodnePreglede(klinika);
+        return klinikaService.pronadjiSlobodnePreglede(klinika.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{idKlinike}")

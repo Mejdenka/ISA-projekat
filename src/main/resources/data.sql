@@ -10,7 +10,8 @@ INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabl
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_med_sestre_id, obrisan, promijenjena_lozinka) VALUES('MedicinskaSestra', 'sestra', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Svetlana', 'Micic','sestra@example.com', 1,'2017-10-01 18:57:58', '1997-10-01 18:57:58', 1, 1, 0, 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_pacijenta_id, jbo, karton_id, obrisan, promijenjena_lozinka) VALUES ('Pacijent', 'pacijent', '$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Marina', 'Simic', 'userka@example.com', 1, '2017-10-01 21:58:58', '2000-01-01 18:57:58', 1, 1, '1512997186666', 2, 0, 1);
 
-INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena, lokacija_na_mapi_id) VALUES ('Klinika 1', 'Janka Veselinovica, 20', 'Prva klinika u centru.', 4.3, 1);
+INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena, lokacija_na_mapi_id) VALUES ('Klinika 1', 'Janka Veselinovica, 20',
+'Prva klinika u centru.', 4.3, 1);
 
 INSERT INTO lokacija (broj_ulice, lat, lon) VALUES ('Janka Veselinovica, 20', 45.261608, 19.815776);
 

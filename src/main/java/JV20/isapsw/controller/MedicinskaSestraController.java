@@ -51,7 +51,6 @@ public class MedicinskaSestraController {
     public List<ReceptDTO> getRecepti() throws AccessDeniedException {
         MedicinskaSestra sestra = (MedicinskaSestra) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<Recept> recepti = klinikaService.findOne(sestra.getKlinikaMedSestre().getId()).getRecepti();
-        System.out.println("Recepti: "+recepti);
         List<ReceptDTO> retVal = new ArrayList<>();
         for(Recept r : recepti){
             retVal.add(new ReceptDTO(r));

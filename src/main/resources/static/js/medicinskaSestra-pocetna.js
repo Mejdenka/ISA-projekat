@@ -145,11 +145,10 @@ function radniKalendarMedSestre(){
 
 
 function zakaziOdmorOdsustvo(){
-    document.getElementById("content").innerHTML = "";
-    var textnode = document.createTextNode("Uskoro ce biti moguce zakazati odmor ili odsustvo");
-    document.getElementById("content").appendChild(textnode);
-
-    $("#content").fadeIn(500);
+    var ulogovan = JSON.parse(localStorage.getItem('ulogovan'));
+    $("#content").fadeOut(100, function() {
+        generisiFormuZaGO(ulogovan);
+    });
 }
 
 function overiRecept(){
@@ -209,9 +208,6 @@ function overiRecept(){
                 });
                 $("#content").fadeIn(500);
             }
-
-
-
         });
 
     });
@@ -334,5 +330,176 @@ function overiIzmeni(recept){
 
 
     }
+}
+
+function generisiFormuZaGO(ulogovan) {
+
+    $("#content").fadeOut(100, function(){
+
+        var content = document.getElementById('content')
+        content.innerHTML = "";
+
+        /*********************CHECKBOXOVI*************************/
+
+        var forma = document.createElement("form");
+        var divGo = document.createElement("div");
+        divGo.classList.add( "divGo");
+        var goBtn = document.createElement("input");
+        goBtn.type = "checkbox";
+        goBtn.id = "godisnji";
+        var goLabel = document.createElement("label");
+        goLabel.for = "godisnji";
+        goLabel.innerText = "Godisnji odmor";
+        divGo.appendChild(goBtn);
+        divGo.appendChild(goLabel);
+        forma.appendChild(divGo);
+        content.appendChild(forma);
+        var divOds = document.createElement("div");
+        divOds.classList.add("divOds") ;
+        var odsBtn = document.createElement("input");
+        odsBtn.type = "checkbox";
+        odsBtn.id = "odsustvo";
+        var odsLabel = document.createElement("label");
+        odsLabel.for = "odsustvo";
+        odsLabel.innerText = "Odsustvo";
+        divOds.appendChild(odsBtn);
+        divOds.appendChild(odsLabel);
+        forma.appendChild(divOds);
+        content.appendChild(forma);
+
+        goBtn.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                odsBtn.checked = false;
+            }
+        })
+        odsBtn.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                goBtn.checked = false;
+            }
+        })
+
+
+        var s = document.createElement("input"); //input element, Submit button
+        s.setAttribute('type',"submit");
+        s.setAttribute('value',"Pošalji");
+        s.classList.add("btn2", "btn--light-blue");
+        s.style.height = "35px"
+        s.style.width = "250px"
+
+        var treciRed = document.createElement("var");
+        treciRed.classList.add("row", "wrapper--w680");
+        var varPocDatum = document.createElement("var");
+        varPocDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Pocetni datum");
+        varPocDatum.style.marginTop = "20px";
+        varPocDatum.appendChild(datumTxt);
+        varPocDatum.appendChild(document.createElement("br"));
+        var datumPocetak = document.createElement('input');
+        datumPocetak.type = 'datetime-local';
+        datumPocetak.id = "datumPoc";
+        datumPocetak.classList.add("input--style-4");
+        datumPocetak.style.height = "40px";
+        datumPocetak.style.width = "270px"
+
+        varPocDatum.appendChild(datumPocetak);
+        treciRed.appendChild(varPocDatum);
+        var varKrajDatum = document.createElement("var");
+        varKrajDatum.classList.add("col-2", "input-group");
+        var datumTxt = document.createTextNode("Krajnji datum");
+        varKrajDatum.style.marginTop = "20px";
+        varKrajDatum.appendChild(datumTxt);
+        varKrajDatum.appendChild(document.createElement("br"));
+        var datumKraj = document.createElement('input');
+        datumKraj.type = 'datetime-local';
+        datumKraj.id = "datumKr";
+        datumKraj.classList.add("input--style-4");
+        datumKraj.style.height = "40px";
+        datumKraj.style.width = "270px"
+        varKrajDatum.appendChild(datumKraj);
+        treciRed.appendChild(varKrajDatum);
+        forma.appendChild(treciRed);
+
+        datumPocetak.onchange = function(){
+            var poc = $("#datumPoc").val();
+            var kr = $("#datumKr").val();
+            if( poc == "" || kr == ""){
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            } else if(kr < poc){
+                alert("Krajnji datum mora biti veći od početnog.");
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            }
+            forma.appendChild(s);
+
+        }
+        datumKraj.onchange = function(){
+            var poc = $("#datumPoc").val();
+            var kr = $("#datumKr").val();
+
+            if( poc == "" || kr == ""){
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            } else if(kr < poc){
+                alert("Krajnji datum mora biti veći od početnog.");
+                if(forma.contains(s))
+                    forma.removeChild(s);
+                return;
+            }
+            forma.appendChild(s);
+        }
+
+        forma.onsubmit = function (event) {
+            event.preventDefault();
+
+            var godisnji;
+            var odsustvo;
+
+            if(goBtn.checked){
+                godisnji = true;
+                odsustvo = false;
+            }
+            else if(odsBtn.checked){
+                godisnji = false;
+                odsustvo = true;
+            }
+
+            if(!goBtn.checked && !odsBtn.checked){
+                alert("Morate čekirati jednu od navedenih stavki.");
+                return;
+            }
+            var pocetak = $("#datumPoc").val();
+            var kraj = $("#datumKr").val();
+            $.post({
+                url: 'api/lekari/rezervisiGoOds',
+                data: JSON.stringify({pocetak, kraj, godisnji, odsustvo}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function() {
+                    alert("Uspješna rezervacija.")
+                    var body = document.getElementsByTagName("BODY")[0];
+                },
+                error: function() {
+                    alert("Greška.")
+                }
+            });
+        }
+
+        var prikaziBtn = document.createElement("BUTTON");
+        prikaziBtn.innerText = "Rezervisano";
+        prikaziBtn.id = "rezervisanoBtn";
+        prikaziBtn.classList.add("btn2", "btn--light-blue");
+        prikaziBtn.style.height = "35px";
+        prikaziBtn.style.width = "250px";
+        //prikaziBtn.onclick = generisiGoOds(ulogovan);
+        content.appendChild(prikaziBtn);
+
+    });
+    $("#content").fadeIn(500);
 }
 

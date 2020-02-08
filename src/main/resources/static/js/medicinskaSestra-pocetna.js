@@ -1,5 +1,6 @@
 // Dugmad na pocetnoj stranici medicinske sestre
 function pocetnaMedicinskaSestra(ulogovan) {
+
     korisnik = ulogovan;
     var imeKorisnika = korisnik.ime + " " + korisnik.prezime;
     var nazivi = ["Lista pacijenata", "Radni kalendar", "Zakazi godisnji odmor/odsustvo", imeKorisnika, "Overi recept"];

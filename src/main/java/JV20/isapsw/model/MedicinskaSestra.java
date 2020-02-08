@@ -24,7 +24,6 @@ public class MedicinskaSestra extends Korisnik {
     @JsonIgnore
     private Set<GodisnjiOdsustvoTermin> rezervisanaOdustva;
 
-
     public MedicinskaSestra() {}
 
     public Long getId() {
@@ -58,5 +57,6 @@ public class MedicinskaSestra extends Korisnik {
     public void setRezervisanaOdustva(Set<GodisnjiOdsustvoTermin> rezervisanaOdustva) {
         this.rezervisanaOdustva = rezervisanaOdustva;
     }
+
 }
 

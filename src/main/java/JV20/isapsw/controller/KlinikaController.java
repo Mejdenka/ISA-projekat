@@ -127,6 +127,12 @@ public class KlinikaController {
         return klinikaService.findPregledi(idKlinike);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getObavljeniPregledi/{idKlinike}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public List<Pregled> getObavljeniPregledi(@PathVariable Long idKlinike) throws AccessDeniedException {
+        return klinikaService.findObavljeniPregledi(idKlinike);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/getKlinike/{tip}/{datum}/{lokacija}/{ocjena}")
     @PreAuthorize("hasRole('USER')")
     public List<Klinika> getKlinike(@PathVariable String tip, @PathVariable String datum, @PathVariable String lokacija, @PathVariable String ocjena) throws AccessDeniedException {
@@ -183,16 +189,9 @@ public class KlinikaController {
         if(tp != null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         Klinika klinika = this.klinikaService.findOne(tipPregleda.getIdKlinike());
 
-        tp = new TipPregleda();
-        tp.setNaziv(tipPregleda.getNaziv());
-        tp.setCena(tipPregleda.getCena());
-        tp.setIdKlinike(tipPregleda.getIdKlinike());
-        tp.setKlinika(klinika);
-        tipPregledaService.save(tp);
-        klinikaService.save(klinika);
+        tipPregledaService.saveNew(tipPregleda, klinika);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

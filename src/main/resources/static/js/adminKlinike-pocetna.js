@@ -24,7 +24,7 @@ function pocetnaAdminKlinike(ulogovan) {
                 break;
             case "Dodaj lekara":
                 btn.id = "dodajLekaraBtn"
-                btn.onclick = generisiFormuZaNovogLekara(ulogovan.klinika);
+                btn.onclick = generisiFormuZaNovogLekara(ulogovan);
                 break;
             case "Tipovi pregleda":
                 btn.id = "tipoviPregledaBtn"
@@ -356,7 +356,7 @@ function prikaziIzvestajPoslovanja(klinika) {
             odrzaniPreglediBtn.innerHTML = "Održani pregledi";
             odrzaniPreglediBtn.style.marginTop = "20px"
             odrzaniPreglediBtn.id = "odrzaniPreglediBtn";
-            //odrzaniPreglediBtn.onclick = prikazOdrzanihPregleda(klinika);
+            odrzaniPreglediBtn.onclick = prikazOdrzanihPregleda(klinika);
 
             content.appendChild(prviRed);
             content.appendChild(drugiRed);
@@ -367,6 +367,56 @@ function prikaziIzvestajPoslovanja(klinika) {
         });
 
         $("#content").fadeIn(500);
+    }
+}
+
+function prikazOdrzanihPregleda(klinika) {
+    return function () {
+        var modal = document.getElementById("chartModal");
+        var span = document.getElementById("closeChartModal");
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                $("#chartModal").fadeOut(100);
+            }
+        }
+
+        var content = document.getElementById("chartContainer");
+        content.innerHTML = "";
+
+        $("#chartModal").fadeIn(500);
+
+        $.ajax({
+            url: 'api/klinike/getObavljeniPregledi/' + klinika.id,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (pregledi) {
+                console.log(pregledi)
+                let dataPoints = [];
+                for(let pregled of pregledi){
+                    dataPoints.push({label: pregled.termin.pocetak.substr(0,10), y:pregled.tipPregleda.cena});
+                }
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    title:{
+                        text: "Održani pregledi"
+                    },
+                    data: [
+                        {
+                            // Change type to "doughnut", "line", "splineArea", etc.
+                            type: "column",
+                            dataPoints: dataPoints
+                        }
+                    ]
+                });
+                chart.render();
+            }
+        });
+
     }
 }
 
@@ -1775,195 +1825,210 @@ function ukloniTipPregleda(klinikaId, tipPregledaId) {
 }
 
 
-function generisiFormuZaNovogLekara(klinika) {
+function generisiFormuZaNovogLekara(ulogovan) {
     return function () {
         $("#content").fadeOut(100, function(){
-            var content = document.getElementById("content");
-            content.innerHTML = "";
 
-            var prviRed = document.createElement("var");
-            prviRed.classList.add("row", "wrapper--w680");
-            var varIme = document.createElement("var");
-            varIme.classList.add("col-2", "input-group");
-            var ime = document.createTextNode("Ime");
-            varIme.appendChild(ime);
-            varIme.appendChild(document.createElement("br"));
-            var txtIme = document.createElement('input');
-            txtIme.type = 'text';
-            txtIme.id = "ime";
-            txtIme.classList.add("input--style-4");
-            txtIme.style.height = "40px";
-            txtIme.style.width = "250px";
-            varIme.appendChild(txtIme);
-            prviRed.appendChild(varIme);
-            var varPrezime = document.createElement("var");
-            varPrezime.classList.add("col-2", "input-group");
-            var prezime = document.createTextNode("Prezime");
-            varPrezime.appendChild(prezime);
-            varPrezime.appendChild(document.createElement("br"));
-            var txtPrezime = document.createElement('input');
-            txtPrezime.type = 'text';
-            txtPrezime.id = "prezime";
-            txtPrezime.classList.add("input--style-4");
-            txtPrezime.style.height = "40px"
-            txtPrezime.style.width = "250px"
-            content.appendChild(txtPrezime);
-            varPrezime.appendChild(txtPrezime);
-            prviRed.appendChild(varPrezime);
-            content.appendChild(prviRed);
+            $.ajax
+            ({
+                type: "GET",
+                url: 'api/korisnici/getKlinikaAdmina/' + ulogovan.id,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function (klinika) {
 
-            var drugiRed = document.createElement("var");
-            drugiRed.classList.add("row", "wrapper--w680");
-            var varUsername = document.createElement("var");
-            varUsername.classList.add("col-2", "input-group");
-            var username = document.createTextNode("Korisničko ime");
-            varUsername.appendChild(username);
-            varUsername.appendChild(document.createElement("br"));
-            var txtUsername = document.createElement('input');
-            txtUsername.type = 'text';
-            txtUsername.id = "username";
-            txtUsername.classList.add("input--style-4");
-            txtUsername.style.height = "40px"
-            txtUsername.style.width = "250px"
-            varUsername.appendChild(txtUsername);
-            drugiRed.appendChild(varUsername);
-            var varEmail = document.createElement("var");
-            varEmail.classList.add("col-2", "input-group");
-            var email = document.createTextNode("E-mail");
-            varEmail.appendChild(email);
-            varEmail.appendChild(document.createElement("br"));
-            var txtEmail = document.createElement('input');
-            txtEmail.type = 'email';
-            txtEmail.id = "email";
-            txtEmail.classList.add("input--style-4");
-            txtEmail.style.height = "40px"
-            txtEmail.style.width = "250px"
-            varEmail.appendChild(txtEmail);
-            drugiRed.appendChild(varEmail);
-            content.appendChild(drugiRed);
+                    var content = document.getElementById("content");
+                    content.innerHTML = "";
 
-            var treciRed = document.createElement("var");
-            treciRed.classList.add("row", "wrapper--w680");
-            var varLozinka = document.createElement("var");
-            varLozinka.classList.add("col-2", "input-group");
-            var lozinka = document.createTextNode("Lozinka");
-            varLozinka.appendChild(lozinka);
-            varLozinka.appendChild(document.createElement("br"));
-            var txtLozinka = document.createElement('input');
-            txtLozinka.type = 'password';
-            txtLozinka.id = "lozinka";
-            txtLozinka.classList.add("input--style-4");
-            txtLozinka.style.height = "40px"
-            txtLozinka.style.width = "250px"
-            varLozinka.appendChild(txtLozinka);
-            treciRed.appendChild(varLozinka);
-            var varLozinka2 = document.createElement("var");
-            varLozinka2.classList.add("col-2", "input-group");
-            var lozinka2 = document.createTextNode("Ponovite lozinku");
-            varLozinka2.appendChild(lozinka2);
-            varLozinka2.appendChild(document.createElement("br"));
-            var txtLozinka2 = document.createElement('input');
-            txtLozinka2.type = 'password';
-            txtLozinka2.id = "lozinka2";
-            txtLozinka2.classList.add("input--style-4");
-            txtLozinka2.style.height = "40px"
-            txtLozinka2.style.width = "250px"
-            varLozinka2.appendChild(txtLozinka2);
-            treciRed.appendChild(varLozinka2);
-            content.appendChild(treciRed);
-            content.appendChild(document.createElement("br"));
-            content.appendChild(document.createElement("br"));
+                    var prviRed = document.createElement("var");
+                    prviRed.classList.add("row", "wrapper--w680");
+                    var varIme = document.createElement("var");
+                    varIme.classList.add("col-2", "input-group");
+                    var ime = document.createTextNode("Ime");
+                    varIme.appendChild(ime);
+                    varIme.appendChild(document.createElement("br"));
+                    var txtIme = document.createElement('input');
+                    txtIme.type = 'text';
+                    txtIme.id = "ime";
+                    txtIme.classList.add("input--style-4");
+                    txtIme.style.height = "40px";
+                    txtIme.style.width = "250px";
+                    varIme.appendChild(txtIme);
+                    prviRed.appendChild(varIme);
+                    var varPrezime = document.createElement("var");
+                    varPrezime.classList.add("col-2", "input-group");
+                    var prezime = document.createTextNode("Prezime");
+                    varPrezime.appendChild(prezime);
+                    varPrezime.appendChild(document.createElement("br"));
+                    var txtPrezime = document.createElement('input');
+                    txtPrezime.type = 'text';
+                    txtPrezime.id = "prezime";
+                    txtPrezime.classList.add("input--style-4");
+                    txtPrezime.style.height = "40px"
+                    txtPrezime.style.width = "250px"
+                    content.appendChild(txtPrezime);
+                    varPrezime.appendChild(txtPrezime);
+                    prviRed.appendChild(varPrezime);
+                    content.appendChild(prviRed);
 
-            var cetvrtiRed = document.createElement("var");
-            cetvrtiRed.classList.add("row", "wrapper--w680");
-            var varPocetak = document.createElement("var");
-            varPocetak.classList.add("col-2", "input-group");
-            var pocetak = document.createTextNode("Početak radnog vremena");
-            varPocetak.appendChild(pocetak);
-            varPocetak.appendChild(document.createElement("br"));
-            var cifraPocetak = document.createElement('input');
-            cifraPocetak.type = 'time';
-            cifraPocetak.id = "pocRadnogVremena";
-            cifraPocetak.classList.add("input--style-4");
-            cifraPocetak.style.height = "40px"
-            cifraPocetak.style.width = "250px"
-            varPocetak.appendChild(cifraPocetak);
-            cetvrtiRed.appendChild(varPocetak);
-            var varKraj = document.createElement("var");
-            varKraj.classList.add("col-2", "input-group");
-            var lozinka2 = document.createTextNode("Ponovite lozinku");
-            varKraj.appendChild(lozinka2);
-            varKraj.appendChild(document.createElement("br"));
-            var cifraKraj = document.createElement('input');
-            cifraKraj.type = 'time';
-            cifraKraj.id = "krRadnogVremena";
-            cifraKraj.classList.add("input--style-4");
-            cifraKraj.style.height = "40px"
-            cifraKraj.style.width = "250px"
-            varKraj.appendChild(cifraKraj);
-            cetvrtiRed.appendChild(varKraj);
-            content.appendChild(cetvrtiRed);
+                    var drugiRed = document.createElement("var");
+                    drugiRed.classList.add("row", "wrapper--w680");
+                    var varUsername = document.createElement("var");
+                    varUsername.classList.add("col-2", "input-group");
+                    var username = document.createTextNode("Korisničko ime");
+                    varUsername.appendChild(username);
+                    varUsername.appendChild(document.createElement("br"));
+                    var txtUsername = document.createElement('input');
+                    txtUsername.type = 'text';
+                    txtUsername.id = "username";
+                    txtUsername.classList.add("input--style-4");
+                    txtUsername.style.height = "40px"
+                    txtUsername.style.width = "250px"
+                    varUsername.appendChild(txtUsername);
+                    drugiRed.appendChild(varUsername);
+                    var varEmail = document.createElement("var");
+                    varEmail.classList.add("col-2", "input-group");
+                    var email = document.createTextNode("E-mail");
+                    varEmail.appendChild(email);
+                    varEmail.appendChild(document.createElement("br"));
+                    var txtEmail = document.createElement('input');
+                    txtEmail.type = 'email';
+                    txtEmail.id = "email";
+                    txtEmail.classList.add("input--style-4");
+                    txtEmail.style.height = "40px"
+                    txtEmail.style.width = "250px"
+                    varEmail.appendChild(txtEmail);
+                    drugiRed.appendChild(varEmail);
+                    content.appendChild(drugiRed);
 
-            var btnAdd = document.createElement("BUTTON");
-            btnAdd.classList.add("btn2", "btn--light-blue");
-            btnAdd.innerHTML = "Dodaj";
-            btnAdd.onclick = function(){
-                var korisnickoIme=$('#username').val();
-                var lozinka=$('#lozinka').val();
-                var lozinka_potvrda=$('#lozinka2').val();
-                var ime=$('#ime').val();
-                var prezime=$('#prezime').val();
-                var email=$('#email').val();
-                var idKlinike = klinika.id;
-                var radnoVreme = $('#pocRadnogVremena').val() + " " +  $('#krRadnogVremena').val();
+                    var treciRed = document.createElement("var");
+                    treciRed.classList.add("row", "wrapper--w680");
+                    var varLozinka = document.createElement("var");
+                    varLozinka.classList.add("col-2", "input-group");
+                    var lozinka = document.createTextNode("Lozinka");
+                    varLozinka.appendChild(lozinka);
+                    varLozinka.appendChild(document.createElement("br"));
+                    var txtLozinka = document.createElement('input');
+                    txtLozinka.type = 'password';
+                    txtLozinka.id = "lozinka";
+                    txtLozinka.classList.add("input--style-4");
+                    txtLozinka.style.height = "40px"
+                    txtLozinka.style.width = "250px"
+                    varLozinka.appendChild(txtLozinka);
+                    treciRed.appendChild(varLozinka);
+                    var varLozinka2 = document.createElement("var");
+                    varLozinka2.classList.add("col-2", "input-group");
+                    var lozinka2 = document.createTextNode("Ponovite lozinku");
+                    varLozinka2.appendChild(lozinka2);
+                    varLozinka2.appendChild(document.createElement("br"));
+                    var txtLozinka2 = document.createElement('input');
+                    txtLozinka2.type = 'password';
+                    txtLozinka2.id = "lozinka2";
+                    txtLozinka2.classList.add("input--style-4");
+                    txtLozinka2.style.height = "40px"
+                    txtLozinka2.style.width = "250px"
+                    varLozinka2.appendChild(txtLozinka2);
+                    treciRed.appendChild(varLozinka2);
+                    content.appendChild(treciRed);
+                    content.appendChild(document.createElement("br"));
+                    content.appendChild(document.createElement("br"));
 
-                if(korisnickoIme === "" || lozinka === "" || lozinka_potvrda === "" || ime === "" || prezime === "" || email === ""){
-                    alert("Nijedno polje ne sme ostati prazno.");
-                    return;
-                }
+                    var cetvrtiRed = document.createElement("var");
+                    cetvrtiRed.classList.add("row", "wrapper--w680");
+                    var varPocetak = document.createElement("var");
+                    varPocetak.classList.add("col-2", "input-group");
+                    var pocetak = document.createTextNode("Početak radnog vremena");
+                    varPocetak.appendChild(pocetak);
+                    varPocetak.appendChild(document.createElement("br"));
+                    var cifraPocetak = document.createElement('input');
+                    cifraPocetak.type = 'time';
+                    cifraPocetak.id = "pocRadnogVremena";
+                    cifraPocetak.classList.add("input--style-4");
+                    cifraPocetak.style.height = "40px"
+                    cifraPocetak.style.width = "250px"
+                    varPocetak.appendChild(cifraPocetak);
+                    cetvrtiRed.appendChild(varPocetak);
+                    var varKraj = document.createElement("var");
+                    varKraj.classList.add("col-2", "input-group");
+                    var lozinka2 = document.createTextNode("Ponovite lozinku");
+                    varKraj.appendChild(lozinka2);
+                    varKraj.appendChild(document.createElement("br"));
+                    var cifraKraj = document.createElement('input');
+                    cifraKraj.type = 'time';
+                    cifraKraj.id = "krRadnogVremena";
+                    cifraKraj.classList.add("input--style-4");
+                    cifraKraj.style.height = "40px"
+                    cifraKraj.style.width = "250px"
+                    varKraj.appendChild(cifraKraj);
+                    cetvrtiRed.appendChild(varKraj);
+                    content.appendChild(cetvrtiRed);
 
-                if( lozinka!=lozinka_potvrda){
-                    alert("Lozinke se ne poklapaju!");
-                    return;
-                }
+                    var btnAdd = document.createElement("BUTTON");
+                    btnAdd.classList.add("btn2", "btn--light-blue");
+                    btnAdd.innerHTML = "Dodaj";
+                    btnAdd.onclick = function(){
+                        var korisnickoIme=$('#username').val();
+                        var lozinka=$('#lozinka').val();
+                        var lozinka_potvrda=$('#lozinka2').val();
+                        var ime=$('#ime').val();
+                        var prezime=$('#prezime').val();
+                        var email=$('#email').val();
+                        var idKlinike = klinika.id;
+                        var radnoVreme = $('#pocRadnogVremena').val() + " " +  $('#krRadnogVremena').val();
 
-                if(lozinka.length < 5){
-                    alert("Lozinka mora imati više od pet karaktera!");
-                    return;
-                }
+                        if(korisnickoIme === "" || lozinka === "" || lozinka_potvrda === "" || ime === "" || prezime === "" || email === ""){
+                            alert("Nijedno polje ne sme ostati prazno.");
+                            return;
+                        }
 
-                if(ime.length < 3){
-                    alert("Ime mora imati bar tri karaktera!");
-                    return;
-                }
+                        if( lozinka!=lozinka_potvrda){
+                            alert("Lozinke se ne poklapaju!");
+                            return;
+                        }
 
-                if(korisnickoIme.length < 5){
-                    alert("Korisnicko ime mora imati bar pet karaktera!");
-                    return;
-                }
+                        if(lozinka.length < 5){
+                            alert("Lozinka mora imati više od pet karaktera!");
+                            return;
+                        }
 
-                if(prezime.length < 3){
-                    alert("Prezime mora imati bar tri karaktera!");
-                    return;
+                        if(ime.length < 3){
+                            alert("Ime mora imati bar tri karaktera!");
+                            return;
+                        }
 
-                }
+                        if(korisnickoIme.length < 5){
+                            alert("Korisnicko ime mora imati bar pet karaktera!");
+                            return;
+                        }
 
-                $.post({
-                    url: 'api/lekari/dodajLekara',
-                    data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, idKlinike, radnoVreme}),
-                    contentType: 'application/json',
-                    headers: {
-                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-                    },
-                    success: function() {
-                        alert("Novi lekar uspesno dodat.")
-                    },
-                    error: function() {
-                        alert("Novi lekar nije dodat.")
+                        if(prezime.length < 3){
+                            alert("Prezime mora imati bar tri karaktera!");
+                            return;
+
+                        }
+
+                        $.post({
+                            url: 'api/lekari/dodajLekara',
+                            data: JSON.stringify({korisnickoIme, lozinka, ime, prezime, email, idKlinike, radnoVreme}),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function() {
+                                alert("Novi lekar uspesno dodat.")
+                            },
+                            error: function() {
+                                alert("Novi lekar nije dodat.")
+                            }
+                        });
                     }
-                });
-            }
-            content.appendChild(btnAdd);
+                    content.appendChild(btnAdd);
+
+                }
+            });
+
         });
         $("#content").fadeIn(500);
     }

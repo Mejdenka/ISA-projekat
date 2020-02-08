@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -67,4 +70,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     }
 
+    // Funkcija pomocu koje korisnik menja svoju lozinku
+    public Korisnik changePasswordFirstTime(String newPassword) {
+
+        Korisnik user = (Korisnik) loadUserByUsername((SecurityContextHolder.getContext().getAuthentication().getName()));
+        user.setLozinka(passwordEncoder.encode(newPassword));
+        user.setLastPasswordResetDate(new Timestamp(new Date().getTime()));
+        user.setPromijenjenaLozinka(true);
+        return korisnikRepository.save(user);
+
+    }
 }

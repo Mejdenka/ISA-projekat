@@ -1,8 +1,6 @@
 package JV20.isapsw.controller;
 
-import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
-import JV20.isapsw.dto.LekarDTO;
-import JV20.isapsw.dto.PacijentDTO;
+import JV20.isapsw.dto.*;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.model.Pacijent;
@@ -47,11 +45,24 @@ public class LekarController {
     private EmailService emailService ;
 
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getZakazaniPregledi/{idLekara}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<PregledDTO> getZakazaniPregledi(@PathVariable Long idLekara) throws AccessDeniedException {
+        return this.lekarService.getZakazaniPregledi(idLekara);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getZakazaneOperacije/{idLekara}")
+    @PreAuthorize("hasRole('DOKTOR')")
+    public List<OperacijaDTO> getZakazaneOperacije(@PathVariable Long idLekara) throws AccessDeniedException {
+        return this.lekarService.getZakazaneOperacije(idLekara);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/getLekar/{idLekara}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public LekarDTO getLekar(@PathVariable Long idLekara) throws AccessDeniedException {
         return new LekarDTO(this.lekarService.findOne(idLekara));
     }
+
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/obrisiLekara/{lekarId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -78,9 +89,6 @@ public class LekarController {
         }
 
         Lekar lekar = this.lekarService.save(userRequest);
-        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
-        lekar.setRadnoVreme(userRequest.getRadnoVreme());
-        lekar = this.lekarService.save(lekar);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/korisnici/korisnik/{userId}").buildAndExpand(lekar.getId()).toUri());

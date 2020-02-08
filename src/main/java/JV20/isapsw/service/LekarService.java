@@ -1,7 +1,7 @@
 package JV20.isapsw.service;
 
 import JV20.isapsw.common.TimeProvider;
-import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
+import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.repository.KlinikaRepository;
 import JV20.isapsw.repository.LekarRepository;
@@ -80,6 +80,46 @@ public class LekarService {
         return save(lekar);
     }
 
+
+    public List<PregledDTO> getZakazaniPregledi(Long lekarId) {
+        Lekar lekar = findOne(lekarId);
+        List<PregledDTO> retVal = new ArrayList<>();
+
+        for(Pregled p:lekar.getPregledi()){
+            if(!p.isObavljen() && !p.isObrisan()){
+                PregledDTO pregledDTO = new PregledDTO();
+                pregledDTO.setId(p.getId());
+                pregledDTO.setLekar(new LekarDTO(p.getLekar()));
+                pregledDTO.setTermin(new TerminDTO(p.getTermin()));
+                pregledDTO.setTipPregleda(p.getTipPregleda());
+                if(p.getSala()!=null)
+                    pregledDTO.setSala(p.getSala());
+                if(p.getPacijent()!=null)
+                    pregledDTO.setPacijent(new PacijentDTO(p.getPacijent()));
+                retVal.add(pregledDTO);
+            }
+        }
+        return retVal;
+    }
+
+    public List<OperacijaDTO> getZakazaneOperacije(Long lekarId) {
+        Lekar lekar = findOne(lekarId);
+        List<OperacijaDTO> retVal = new ArrayList<>();
+
+        for(Operacija o:lekar.getOperacije()){
+            if(!o.isObavljena() && !o.isObrisana()){
+                OperacijaDTO operacijaDTO = new OperacijaDTO();
+                operacijaDTO.setId(o.getId());
+                operacijaDTO.setLekar(new LekarDTO(o.getLekar()));
+                operacijaDTO.setTermin(new TerminDTO(o.getTermin()));
+                if(o.getPacijent()!=null)
+                    operacijaDTO.setPacijent(new PacijentDTO(o.getPacijent()));
+                retVal.add(operacijaDTO);
+            }
+        }
+        return retVal;
+    }
+
     public Lekar save(UserRequest userRequest) throws ParseException {
         Lekar lekar = new Lekar();
         lekar.setKorisnickoIme(userRequest.getKorisnickoIme());
@@ -102,6 +142,10 @@ public class LekarService {
         auth.add(authService.findByname("ROLE_USER"));
         lekar.setAuthorities(auth);
 
+        lekar.setKlinikaLekara(klinikaService.findOne(userRequest.getIdKlinike()));
+        lekar.setRadnoVreme(userRequest.getRadnoVreme());
+        lekar.setPromijenjenaLozinka(false);
+
         lekar = this.lekarRepository.save(lekar);
         return lekar;
     }
@@ -119,11 +163,12 @@ public class LekarService {
         Lekar lekar = (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for (Pregled pregled : lekar.getPregledi()) {
-            if (pregled.getPacijent().getId().equals(pacijentId)) {
+            if (pregled.getPacijent() != null && pregled.getPacijent().getId().equals(pacijentId)) {
                 Calendar datum = Calendar.getInstance();
                 datum.setTime(pregled.getTermin().getPocetak());
                 Calendar danas = Calendar.getInstance();
-
+                System.out.println(formatter.format(danas.getTime()));
+                System.out.println(formatter.format(datum.getTime()));
                 if (danas.get(Calendar.HOUR_OF_DAY) == datum.get(Calendar.HOUR_OF_DAY) - 1 && danas.get(Calendar.DATE) == datum.get(Calendar.DATE)) {
                     lekar.setTrajePregled(zapoceo);
                     lekar.setSlobodan(false);

@@ -31,10 +31,138 @@ function pocetnaLekar(korisnik) {
 
 }
 
+function generisiKalendarLekara(lekar) {
+    $("#content").fadeOut(100, function() {
+        $.ajax
+        ({
+            type: "GET",
+            url: 'api/lekari/getZakazaniPregledi/'+lekar.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function (pregledi) {
+                var content = document.getElementById("content");
+                content.innerHTML = "";
+                var naslov = document.createElement("HEADER");
+                naslov.innerText = "Pregledi";
+                naslov.style.fontSize = "18px";
+                content.appendChild(naslov);
+                content.appendChild(document.createElement("br"));
+
+                var table = document.createElement('table');
+                table.id = "tabelaPregleda";
+                table.classList.add("tabela");
+
+                var header = table.createTHead();
+                var row = header.insertRow(0);
+                var cell = row.insertCell(0);
+                var cell1 = row.insertCell(1);
+                var cell2 = row.insertCell(2);
+                var cell3 = row.insertCell(3);
+                cell.innerHTML = "<b>Tip pregleda</b>";
+                cell1.innerHTML = "<b>Pacijent</b>";
+                cell2.innerHTML = "<b>Sala</b>";
+                cell3.innerHTML = "<b>Termin</b>";
+
+                var tableRef = document.createElement('tbody');
+
+                if (pregledi.length > 0) {
+                    for (let pregled of pregledi) {
+                        console.log(pregled)
+                        var podaciZahteva = tableRef.insertRow();
+                        var tipZahteva = podaciZahteva.insertCell(0);
+                        var tipZahtevaText = document.createTextNode(pregled.tipPregleda.naziv);
+                        tipZahteva.appendChild(tipZahtevaText);
+
+                        var pacijent = podaciZahteva.insertCell(1);
+                        if(pregled.pacijent == null)
+                            var pacijentText = document.createTextNode("Još nezakazan");
+                        else
+                            var pacijentText = document.createTextNode(pregled.pacijent.ime + " " + pregled.pacijent.prezime);
+
+                        pacijent.appendChild(pacijentText);
+
+                        var sala = podaciZahteva.insertCell(2);
+                        if(pregled.sala == null)
+                            var salaText = document.createTextNode("Još nedodeljena");
+                        else
+                            var salaText = document.createTextNode(pregled.sala.naziv + " ("+ pregled.sala.broj +")");
+
+                        sala.appendChild(salaText);
+
+                        var termin = podaciZahteva.insertCell(3);
+                        var terminText = document.createTextNode(pregled.termin.pocetak + "-" + pregled.termin.kraj);
+                        termin.appendChild(terminText);
+
+                    }
+                    table.appendChild(tableRef);
+                    content.appendChild(table);
+
+                } else if (pregledi.length === 0) {
+                    var textnode = document.createTextNode("Ne postoje pregledi za obaviti trenutno.");
+                    content.appendChild(textnode);
+                }
+                //ZA OPERACIJE******************************************************************************
+                $.get({
+
+                    url: 'api/lekari/getZakazaneOperacije/' + lekar.id,
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                    },
+                    success: function (operacije) {
+
+                        var content = document.getElementById("content");
+                        content.appendChild(document.createElement("br"));
+                        var naslov = document.createElement("HEADER");
+                        naslov.innerText = "Operacije";
+                        naslov.style.fontSize = "18px";
+                        content.appendChild(naslov);
+                        content.appendChild(document.createElement("br"));
+
+                        var table = document.createElement('table');
+                        table.id = "tabelaOperacija";
+                        table.classList.add("tabela");
+
+                        var header = table.createTHead();
+                        var row = header.insertRow(0);
+                        var cell1 = row.insertCell(0);
+                        var cell3 = row.insertCell(1);
+                        cell1.innerHTML = "<b>Pacijent</b>";
+                        cell3.innerHTML = "<b>Termin</b>";
+                        var tableRef = document.createElement('tbody');
+
+                        if (operacije.length > 0) {
+                            for (let operacija of operacije) {
+                                var podaciZahteva = tableRef.insertRow();
+
+                                var pacijent = podaciZahteva.insertCell(0);
+                                var pacijentText = document.createTextNode(operacija.pacijent.ime + " " + operacija.pacijent.prezime);
+                                pacijent.appendChild(pacijentText);
+
+                                var termin = podaciZahteva.insertCell(1);
+                                var terminText = document.createTextNode(operacija.termin.pocetak + "-" + operacija.termin.kraj);
+                                termin.appendChild(terminText);
+
+                            }
+                            table.appendChild(tableRef);
+                            content.appendChild(table);
+
+                        } else if (operacije.length === 0) {
+                            var textnode = document.createTextNode("Ne postoje rezervisane operacije trenutno.");
+                            content.appendChild(textnode);
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $("#content").fadeIn(100);
+}
+
 function generisiListuPacijenata() {
     $("#content").fadeOut(100, function() {
-
-
         $.ajax
         ({
             type: "GET",
@@ -71,6 +199,48 @@ function generisiListuPacijenata() {
                     table.classList.add("tabela");
                     table.id = "tabelaPacijenata";
                     var tableRef = document.createElement('tbody');
+                    tableRef.id = "tabelaPacijenataBody";
+                    var header = table.createTHead();
+                    var row = header.insertRow(0);
+                    var cell = row.insertCell(0);
+                    var cell1 = row.insertCell(1);
+                    var cell2 = row.insertCell(2);
+                    var cell3 = row.insertCell(3);
+                    var sortImeBtn = document.createElement("button");
+                    sortImeBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortImeBtn.innerText = "▼";
+                    sortImeBtn.style.color = "white";
+                    sortImeBtn.style.fontSize = "15px";
+                    sortImeBtn.style.height = "30px";
+                    sortImeBtn.onclick = sort_ime();
+                    cell.appendChild(sortImeBtn);
+
+                    var sortPrezimeBtn = document.createElement("button");
+                    sortPrezimeBtn.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortPrezimeBtn.innerText = "▼";
+                    sortPrezimeBtn.style.color = "white";
+                    sortPrezimeBtn.style.fontSize = "15px";
+                    sortPrezimeBtn.style.height = "30px";
+                    sortPrezimeBtn.onclick = sort_prezime();
+                    cell1.appendChild(sortPrezimeBtn);
+
+                    var sortJBO = document.createElement("button");
+                    sortJBO.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortJBO.innerText = "▼";
+                    sortJBO.style.color = "white";
+                    sortJBO.style.fontSize = "15px";
+                    sortJBO.style.height = "30px";
+                    sortJBO.onclick = sort_jbo();
+                    cell2.appendChild(sortJBO);
+
+                    var sortEmail = document.createElement("button");
+                    sortEmail.classList.add("btn--radius", "btn--light-blue", "btn--tabela");
+                    sortEmail.innerText = "▼";
+                    sortEmail.style.color = "white";
+                    sortEmail.style.fontSize = "15px";
+                    sortEmail.style.height = "30px";
+                    sortEmail.onclick = sort_email();
+                    cell3.appendChild(sortEmail);
 
                     for (let pacijent of pacijenti) {
                         var podaciPacijenta = tableRef.insertRow();
@@ -81,10 +251,6 @@ function generisiListuPacijenata() {
                         var prezimePacijenta = podaciPacijenta.insertCell(1);
                         var prezimePacijentaText = document.createTextNode(pacijent.prezime);
                         prezimePacijenta.appendChild(prezimePacijentaText);
-
-                        /*var datRodjenja = podaciPacijenta.insertCell(2);
-                        var datum = document.createTextNode(pacijent.datumRodjenja);
-                        datRodjenja.appendChild(datum);*/
 
                         var jbo = podaciPacijenta.insertCell(2);
                         var jboText = document.createTextNode(pacijent.jbo);

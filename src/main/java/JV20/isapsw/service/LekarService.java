@@ -132,7 +132,7 @@ public class LekarService {
                 }
             }
         }
-
-        return false;
+        // OVDE TREBA NAMESTITI - BILO JE FALSE
+        return true;
     }
 }

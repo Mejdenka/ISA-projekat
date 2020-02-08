@@ -604,7 +604,7 @@ function zapocniPregled(pacijent) {
                 var zdarvstveniKartonBtn = document.createElement("BUTTON");
                 zdarvstveniKartonBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                 zdarvstveniKartonBtn.innerHTML = "Zdravstveni karton";
-                zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijent.id, pacijent.ime + " " + pacijent.prezime);
+                zdarvstveniKartonBtn.onclick = zdravstveniKarton(pacijent.id, pacijent.ime + " " + pacijent.prezime, true);
                 varZdrK.appendChild(zdarvstveniKartonBtn);
                 content.appendChild(varZdrK);
 
@@ -671,7 +671,7 @@ function zapocniPregled(pacijent) {
     }
 }
 
-function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
+function zdravstveniKarton(pacijentId, imeIPrezimePacijenta, flag) {
     return function(){
         if((document.getElementById("zapocniPregledModal").style.display) == "block"){
             document.getElementById("zapocniPregledModal").style.display = "none";
@@ -727,7 +727,7 @@ function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
                     txtVisina.classList.add("input--style-4");
                     txtVisina.style.height = "40px"
                     txtVisina.style.width = "250px"
-                    txtVisina.value = zk.visina + " cm";
+                    txtVisina.value = zk.visina;
                     txtVisina.disabled = "true";
                     varVisina.appendChild(txtVisina);
                     treciRed.appendChild(varVisina);
@@ -742,14 +742,166 @@ function zdravstveniKarton(pacijentId, imeIPrezimePacijenta) {
                     masaTxt.classList.add("input--style-4");
                     masaTxt.style.height = "40px"
                     masaTxt.style.width = "250px"
-                    masaTxt.value = zk.masa + " kg";
+                    masaTxt.value = zk.masa;
                     masaTxt.disabled = "true";
                     varMasa.appendChild(masaTxt);
                     treciRed.appendChild(varMasa);
                     content.appendChild(treciRed);
 
+                    var cetvrtiRed = document.createElement("var");
+                    cetvrtiRed.classList.add("row", "wrapper--w680");
+                    var varKrvnaGrupa = document.createElement("var");
+                    varKrvnaGrupa.classList.add("col-2", "input-group");
+                    var krvnaGrupa = document.createTextNode("Krvna grupa");
+                    varKrvnaGrupa.appendChild(krvnaGrupa);
+                    varKrvnaGrupa.appendChild(document.createElement("br"));
+                    var selKrvnaGrupa = document.createElement('select');
+                    selKrvnaGrupa.type = 'select';
+                    selKrvnaGrupa.id = "krvnaGrupa";
+                    selKrvnaGrupa.value = zk.krvnaGrupa;
+                    selKrvnaGrupa.classList.add("input--style-4");
+                    selKrvnaGrupa.style.height = "40px";
+                    selKrvnaGrupa.style.width = "250px";
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
 
+                    var option = document.createElement('option');
+                    option.value="Nije odredjeno";
+                    option.innerHTML="Nije odredjeno";
+                    selKrvnaGrupa.appendChild(option);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
 
+                    var option0m = document.createElement('option');
+                    option0m.value="0-";
+                    option0m.innerHTML="0-";
+                    selKrvnaGrupa.appendChild(option0m);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var option0p = document.createElement('option');
+                    option0p.value="0+";
+                    option0p.innerHTML="0+";
+                    selKrvnaGrupa.appendChild(option0p);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionAm = document.createElement('option');
+                    optionAm.value="A-";
+                    optionAm.innerHTML="A-";
+                    selKrvnaGrupa.appendChild(optionAm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionAp = document.createElement('option');
+                    optionAp.value="A+";
+                    optionAp.innerHTML="A+";
+                    selKrvnaGrupa.appendChild(optionAp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionBm = document.createElement('option');
+                    optionBm.value="B-";
+                    optionBm.innerHTML="B-";
+                    selKrvnaGrupa.appendChild(optionBm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionBp = document.createElement('option');
+                    optionBp.value="B+";
+                    optionBp.innerHTML="B+";
+                    selKrvnaGrupa.appendChild(optionBp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionABm = document.createElement('option');
+                    optionABm.value="AB-";
+                    optionABm.innerHTML="AB-";
+                    selKrvnaGrupa.appendChild(optionABm);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var optionABp = document.createElement('option');
+                    optionABp.value="AB+";
+                    optionABp.innerHTML="AB+";
+                    selKrvnaGrupa.appendChild(optionABp);
+                    varKrvnaGrupa.appendChild(selKrvnaGrupa);
+                    cetvrtiRed.appendChild(varKrvnaGrupa);
+
+                    var varDioptrija = document.createElement("var");
+                    varDioptrija.classList.add("col-2", "input-group");
+                    var dioptrija = document.createTextNode("Dioptrija");
+                    varDioptrija.appendChild(dioptrija);
+                    varDioptrija.appendChild(document.createElement("br"));
+                    var txtDioptrija = document.createElement('input');
+                    txtDioptrija.type = 'text';
+                    txtDioptrija.id = "dioptrija";
+                    txtDioptrija.classList.add("input--style-4");
+                    txtDioptrija.style.height = "40px"
+                    txtDioptrija.style.width = "250px"
+                    txtDioptrija.value = zk.dioptrija;
+                    varDioptrija.appendChild(txtDioptrija);
+                    cetvrtiRed.appendChild(varDioptrija);
+                    content.appendChild(cetvrtiRed);
+
+                    var petiRed = document.createElement("var");
+                    petiRed.classList.add("row", "wrapper--w680");
+                    var varAlergije = document.createElement("var");
+                    varAlergije.classList.add("col-2", "input-group");
+                    var alergije = document.createTextNode("Alergije");
+                    varAlergije.appendChild(alergije);
+                    varAlergije.appendChild(document.createElement("br"));
+                    var txtAlergije = document.createElement('input');
+                    txtAlergije.type = 'text';
+                    txtAlergije.id = "alergije";
+                    txtAlergije.value = zk.alergije;
+                    txtAlergije.classList.add("input--style-4");
+                    txtAlergije.style.height = "80px"
+                    txtAlergije.style.width = "520px"
+                    //txtAlergije.value = zk.visina + " cm";
+                    txtAlergije.disabled = "true";
+                    varAlergije.appendChild(txtAlergije);
+                    petiRed.appendChild(varAlergije);
+                    content.appendChild(petiRed);
+
+                    var sestiRed = document.createElement("var");
+                    sestiRed.classList.add("row", "wrapper--w680");
+                    var izmeniKartonBtn = document.createElement("BUTTON");
+                    izmeniKartonBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+                    izmeniKartonBtn.innerHTML = "Sacuvaj izmene";
+                    izmeniKartonBtn.onclick = function() {
+                        var id = zk.id;
+                        var visina = $('#visina').val();
+                        var masa = $('#masa').val();
+                        var krvnaGrupa = $('#krvnaGrupa').val();
+                        var dioptrija = $('#dioptrija').val();
+                        var alergije = $('#alergije').val();
+
+                        $.post({
+                            url: 'api/kartoni/sacuvajIzmene',
+                            data: JSON.stringify({id, visina, masa, krvnaGrupa, dioptrija, alergije}),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                            },
+                            success: function() {
+                                alert("Uspesno sacuvane izmene kartona pacijenta!");
+                                return;
+                            },
+                            error: function() {
+                                alert("Greška prilikom cuvanja izmena kartona pacijenta.")
+                                return;
+                            }
+                        });
+
+                    }
+                    sestiRed.appendChild(izmeniKartonBtn);
+                    content.appendChild(sestiRed);
+
+                    if(flag){
+                        txtVisina.disabled = false;
+                        masaTxt.disabled = false;
+                        txtAlergije.disabled = false;
+                    }
                 }
             });
         });

@@ -473,7 +473,7 @@ function generisiFormuZaGO(ulogovan) {
             var pocetak = $("#datumPoc").val();
             var kraj = $("#datumKr").val();
             $.post({
-                url: 'api/lekari/rezervisiGoOds',
+                url: 'api/sestra/rezervisiGoOds',
                 data: JSON.stringify({pocetak, kraj, godisnji, odsustvo}),
                 contentType: 'application/json',
                 headers: {
@@ -489,16 +489,8 @@ function generisiFormuZaGO(ulogovan) {
             });
         }
 
-        var prikaziBtn = document.createElement("BUTTON");
-        prikaziBtn.innerText = "Rezervisano";
-        prikaziBtn.id = "rezervisanoBtn";
-        prikaziBtn.classList.add("btn2", "btn--light-blue");
-        prikaziBtn.style.height = "35px";
-        prikaziBtn.style.width = "250px";
-        //prikaziBtn.onclick = generisiGoOds(ulogovan);
-        content.appendChild(prikaziBtn);
-
     });
     $("#content").fadeIn(500);
 }
+
 

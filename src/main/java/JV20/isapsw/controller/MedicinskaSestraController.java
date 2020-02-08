@@ -1,11 +1,9 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.GodisnjiOdsustvoTerminDTO;
 import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.dto.ReceptDTO;
-import JV20.isapsw.model.Lekar;
-import JV20.isapsw.model.MedicinskaSestra;
-import JV20.isapsw.model.Pacijent;
-import JV20.isapsw.model.Recept;
+import JV20.isapsw.model.*;
 import JV20.isapsw.service.KlinikaService;
 import JV20.isapsw.service.KorisnikService;
 import JV20.isapsw.service.MedicinskaSestraService;
@@ -15,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -67,5 +66,36 @@ public class MedicinskaSestraController {
         r.setOveren(true);
         this.receptService.save(r);
         return new ResponseEntity<>( HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/rezervisiGoOds")
+    @PreAuthorize("hasRole('MEDICINSKA_SESTRA')")
+    public ResponseEntity<?> rezervisiGodisnjiOdmorOdsustvo( @RequestBody GodisnjiOdsustvoTermin godisnjiOdsustvoTermin) throws AccessDeniedException, ParseException {
+        MedicinskaSestra sestra = (MedicinskaSestra) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(godisnjiOdsustvoTermin.isGodisnji()){
+            godisnjiOdsustvoTermin.setMedSestraGo(sestra);
+            sestra.getRezervisaniGO().add(godisnjiOdsustvoTermin);
+        } else if(godisnjiOdsustvoTermin.isOdsustvo()){
+            godisnjiOdsustvoTermin.setMedSestraOds(sestra);
+            sestra.getRezervisanaOdustva().add(godisnjiOdsustvoTermin);
+        }
+        sestraService.save(sestra);
+        return new ResponseEntity<User>( HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getGoOds/{sestraId}")
+    @PreAuthorize("hasRole('MEDICINSKA_SESTRA')")
+    public List<GodisnjiOdsustvoTerminDTO> getGodisnjiOdsustva(@PathVariable("sestraId") Long sestraId) throws AccessDeniedException {
+        MedicinskaSestra sestra = sestraService.findOne(sestraId);
+        List<GodisnjiOdsustvoTermin> termini = new ArrayList<>();
+        termini.addAll(sestra.getRezervisaniGO());
+        termini.addAll(sestra.getRezervisanaOdustva());
+
+        List<GodisnjiOdsustvoTerminDTO> retVal = new ArrayList<>();
+        for(GodisnjiOdsustvoTermin t : termini){
+            if(!t.isObrisan())
+                retVal.add(new GodisnjiOdsustvoTerminDTO(t));
+        }
+        return retVal;
     }
 }

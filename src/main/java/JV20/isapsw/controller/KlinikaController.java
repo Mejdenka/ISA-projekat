@@ -239,7 +239,8 @@ public class KlinikaController {
         }
 
         this.lokacijaService.save(klinika.getLokacijaNaMapi());
-        klinika.setProsecnaOcena(0.0);
+        klinika.setBrojOcena(0);
+        klinika.setZbirOcena(0);
         this.klinikaService.save(klinika);
 
 

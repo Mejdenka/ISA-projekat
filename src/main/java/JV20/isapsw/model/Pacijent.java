@@ -19,9 +19,6 @@ public class Pacijent extends Korisnik {
     @OneToMany
     private Set<Recept> recepti;
 
-    @OneToMany
-    private Set<OcenaLekara> ocene;
-
     @OneToMany(mappedBy = "pacijent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Operacija> operacije;
@@ -82,13 +79,5 @@ public class Pacijent extends Korisnik {
 
     public void setPregledi(Set<Pregled> pregledi) {
         this.pregledi = pregledi;
-    }
-
-    public Set<OcenaLekara> getOcene() {
-        return ocene;
-    }
-
-    public void setOcene(Set<OcenaLekara> ocene) {
-        this.ocene = ocene;
     }
 }

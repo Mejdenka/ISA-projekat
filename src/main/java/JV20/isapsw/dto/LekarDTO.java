@@ -11,23 +11,25 @@ public class LekarDTO {
     private String email;
     private String korisnickoIme;
     private Date datumRodjenja;
-    private Integer ocena;
+    private Integer zbirOcena;
+    private Integer brojOcena;
     private boolean slobodan;
     private String radnoVreme;
 
     public LekarDTO(Lekar lekar){
         this(lekar.getId(), lekar.getKorisnickoIme(), lekar.getIme(), lekar.getPrezime(), lekar.getDatumRodjenja(),
-                lekar.getEmail(), lekar.getOcena(), lekar.isSlobodan(), lekar.getRadnoVreme());
+                lekar.getEmail(), lekar.getZbirOcena(), lekar.getBrojOcena(), lekar.isSlobodan(), lekar.getRadnoVreme());
     }
 
-    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer ocena, boolean slobodan, String radnoVreme) {
+    public LekarDTO(Long id, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String email, Integer zbirOcena, Integer brojOcena, boolean slobodan, String radnoVreme) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
         this.prezime = prezime;
         this.datumRodjenja = datumRodjenja;
         this.email = email;
-        this.ocena = ocena;
+        this.zbirOcena = zbirOcena;
+        this.brojOcena = brojOcena;
         this.slobodan = slobodan;
         this.radnoVreme = radnoVreme;
     }
@@ -56,8 +58,12 @@ public class LekarDTO {
         return datumRodjenja;
     }
 
-    public Integer getOcena() {
-        return ocena;
+    public Integer getZbirOcena() {
+        return zbirOcena;
+    }
+
+    public Integer getBrojOcena() {
+        return brojOcena;
     }
 
     public boolean isSlobodan() {

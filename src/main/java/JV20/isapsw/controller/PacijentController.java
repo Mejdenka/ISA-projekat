@@ -5,10 +5,7 @@ import JV20.isapsw.dto.PacijentDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
 import JV20.isapsw.model.Pacijent;
-import JV20.isapsw.service.EmailService;
-import JV20.isapsw.service.KorisnikService;
-import JV20.isapsw.service.LekarService;
-import JV20.isapsw.service.PacijentService;
+import JV20.isapsw.service.*;
 import net.bytebuddy.build.BuildLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/pacijenti")
@@ -43,6 +41,8 @@ public class PacijentController {
     private EmailService emailService;
     @Autowired
     private LekarService lekarService;
+    @Autowired
+    private KlinikaService klinikaService;
 
     private Logger logger = LoggerFactory.getLogger(PacijentController.class);
 
@@ -79,6 +79,12 @@ public class PacijentController {
         return this.pacijentService.findOne(userId).getKarton();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/mojeOperacije/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public Set<Operacija> mojeOperacije(@PathVariable Long userId) throws AccessDeniedException {
+        return this.pacijentService.findOne(userId).getOperacije();
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{userId}")
     @PreAuthorize("hasRole('USER')")
     public List<Lekar> getLekari(@PathVariable Long userId) throws AccessDeniedException {
@@ -93,6 +99,40 @@ public class PacijentController {
         }
 
         return sviMojiLekari;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getKlinike/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Klinika> getKlinike(@PathVariable Long userId) throws AccessDeniedException {
+        List<Klinika> sveMojeKlinike = new ArrayList<Klinika>();
+
+        for( Pregled p : this.pacijentService.findOne(userId).getPregledi()){
+            if (p.isObavljen()){
+                if (!sveMojeKlinike.contains(p.getKlinikaPregleda())){
+                    sveMojeKlinike.add(p.getKlinikaPregleda());
+                }
+            }
+        }
+
+        return sveMojeKlinike;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/oceniLekara/{lekarId}/{ocena}")
+    @PreAuthorize("hasRole('USER')")
+    public void oceniLekara(@PathVariable Long lekarId, @PathVariable int ocena) throws AccessDeniedException {
+        Lekar lekar = lekarService.findOne(lekarId);
+        lekar.setZbirOcena(lekar.getZbirOcena() + ocena);
+        lekar.setBrojOcena(lekar.getBrojOcena() + 1);
+        lekarService.save(lekar);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/oceniKliniku/{klinikaId}/{ocena}")
+    @PreAuthorize("hasRole('USER')")
+    public void oceniKliniku(@PathVariable Long klinikaId, @PathVariable int ocena) throws AccessDeniedException {
+        Klinika klinika = klinikaService.findOne(klinikaId);
+        klinika.setZbirOcena(klinika.getZbirOcena() + ocena);
+        klinika.setBrojOcena(klinika.getBrojOcena() + 1);
+        klinikaService.save(klinika);
     }
 
     @RequestMapping("/getRequests")

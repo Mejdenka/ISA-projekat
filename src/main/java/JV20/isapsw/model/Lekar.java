@@ -14,7 +14,8 @@ public class Lekar extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer ocena;
+    private Integer zbirOcena;
+    private Integer brojOcena;
     private boolean slobodan;
     private boolean naGodisnjem;
     private boolean trajePregled;
@@ -49,12 +50,24 @@ public class Lekar extends Korisnik {
         this.id = id;
     }
 
-    public Integer getOcena() {
-        return ocena;
+    public Integer getZbirOcena() {
+        return zbirOcena;
     }
 
-    public void setOcena(Integer ocena) {
-        this.ocena = ocena;
+    public void setZbirOcena(Integer ocena) {
+        this.zbirOcena = ocena;
+    }
+
+    public Integer getBrojOcena() {
+        return brojOcena;
+    }
+
+    public void setBrojOcena(Integer ocena) {
+        this.brojOcena = ocena;
+    }
+    public Double getProsecnaOcena() {
+        if (brojOcena != 0 ) return Double.valueOf(zbirOcena)/brojOcena;
+        else return 0.0;
     }
 
     public boolean isTrajePregled() {

@@ -30,7 +30,6 @@ function pocetnaPacijent(ulogovan) {
     }
 }
 
-
 function generisiIstoriju() {
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
@@ -343,8 +342,7 @@ function generisiZdravstveniKarton(korisnik) {
                 prviRed.classList.add("row", "wrapper--w680");
                 var varVisina = document.createElement("var");
                 varVisina.classList.add("col-2", "input-group");
-                var visina = document.createTextNode("Visina");
-                varVisina.appendChild(visina);
+                varVisina.appendChild(document.createTextNode("Visina"));
                 varVisina.appendChild(document.createElement("br"));
                 var txtVisina = document.createElement('input');
                 txtVisina.disabled = 'true';
@@ -357,8 +355,7 @@ function generisiZdravstveniKarton(korisnik) {
 
                 var varMasa = document.createElement("var");
                 varMasa.classList.add("col-2", "input-group");
-                var masa = document.createTextNode("Masa");
-                varMasa.appendChild(masa);
+                varMasa.appendChild(document.createTextNode("Masa"));
                 varMasa.appendChild(document.createElement("br"));
                 var txtMasa = document.createElement('input');
                 txtMasa.disabled = 'true';
@@ -375,8 +372,7 @@ function generisiZdravstveniKarton(korisnik) {
                 drugiRed.classList.add("row", "wrapper--w680");
                 var varKrvnaGrupa = document.createElement("var");
                 varKrvnaGrupa.classList.add("col-2", "input-group");
-                var krvnaGrupa = document.createTextNode("Krvna grupa");
-                varKrvnaGrupa.appendChild(krvnaGrupa);
+                varKrvnaGrupa.appendChild(document.createTextNode("Krvna grupa"));
                 varKrvnaGrupa.appendChild(document.createElement("br"));
                 var txtKrvnaGrupa = document.createElement('input');
                 txtKrvnaGrupa.disabled = 'true';
@@ -389,8 +385,7 @@ function generisiZdravstveniKarton(korisnik) {
 
                 var varDioptrija = document.createElement("var");
                 varDioptrija.classList.add("col-2", "input-group");
-                var dioptrija = document.createTextNode("Dioptrija");
-                varDioptrija.appendChild(dioptrija);
+                varDioptrija.appendChild(document.createTextNode("Dioptrija"));
                 varDioptrija.appendChild(document.createElement("br"));
                 var txtDioptrija = document.createElement('input');
                 txtDioptrija.disabled = 'true';
@@ -405,21 +400,19 @@ function generisiZdravstveniKarton(korisnik) {
 
                 var varAlergije = document.createElement("var");
                 varAlergije.classList.add("col-2", "input-group");
-                var alergije = document.createTextNode("Alergije");
-                varAlergije.appendChild(alergije);
+                varAlergije.appendChild(document.createTextNode("Alergije"));
                 varAlergije.appendChild(document.createElement("br"));
                 var txtAlergije = document.createElement('input');
                 txtAlergije.disabled = 'true';
                 txtAlergije.value = zk.alergije;
                 txtAlergije.classList.add("input--style-4");
-                txtAlergije.style.height = "300px";
-                txtAlergije.style.width = "500px";
+                txtAlergije.style.height = "40px";
+                txtAlergije.style.width = "600px";
                 varAlergije.appendChild(txtAlergije);
                 document.getElementById("content").appendChild(varAlergije);
 
                 var lblDijagnoze = document.createElement("H1");
-                var t = document.createTextNode("Dijagnoze");
-                lblDijagnoze.appendChild(t);
+                lblDijagnoze.appendChild(document.createTextNode("Dijagnoze"));
                 document.getElementById("content").appendChild(lblDijagnoze);
 
                 for (let d of zk.dijagnoze)
@@ -441,29 +434,17 @@ function generisiZdravstveniKarton(korisnik) {
 
 function generisiKlinike() {
 
-   $.get({
-        url:'api/klinike/getAll',
-        contentType: 'application/json',
-        headers: {
-            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-        },
-        success: function(klinike)
-        {
-            prikazKlinika(klinike);
-        }
-    });
+   prikazKlinika([]);
 }
 
-function prikazKlinika(klinike)
-{
+function prikazKlinika(klinike){
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
         var prviRed = document.createElement("var");
         prviRed.classList.add("row", "wrapper--w680");
         var varTip = document.createElement("var");
         varTip.classList.add("col-2", "input-group");
-        var tip = document.createTextNode("Tip pregleda*");
-        varTip.appendChild(tip);
+        varTip.appendChild(document.createTextNode("Tip pregleda*"));
         varTip.appendChild(document.createElement("br"));
         var txtTip = document.createElement('select');
         txtTip.id = 'tipPregleda';
@@ -493,8 +474,7 @@ function prikazKlinika(klinike)
 
         var varDan = document.createElement("var");
         varDan.classList.add("col-2", "input-group");
-        var dan = document.createTextNode("Dan*");
-        varDan.appendChild(dan);
+        varDan.appendChild(document.createTextNode("Dan*"));
         varDan.appendChild(document.createElement("br"));
         var txtDan = document.createElement('input');
         txtDan.setAttribute("type", "date");
@@ -517,8 +497,7 @@ function prikazKlinika(klinike)
 
         var varLokacija = document.createElement("var");
         varLokacija.classList.add("col-2", "input-group");
-        var lokacija = document.createTextNode("Lokacija");
-        varLokacija.appendChild(lokacija);
+        varLokacija.appendChild(document.createTextNode("Lokacija"));
         varLokacija.appendChild(document.createElement("br"));
         var txtLokacija = document.createElement('input');
         txtLokacija.id = 'lokacija';
@@ -531,8 +510,7 @@ function prikazKlinika(klinike)
 
         var varOcjena = document.createElement("var");
         varOcjena.classList.add("col-2", "input-group");
-        var ocjena = document.createTextNode("Minimalna ocena");
-        varOcjena.appendChild(ocjena);
+        varOcjena.appendChild(document.createTextNode("Minimalna ocena"));
         varOcjena.appendChild(document.createElement("br"));
         var txtOcjena = document.createElement('select');
         txtOcjena.id = 'ocjena';
@@ -561,15 +539,74 @@ function prikazKlinika(klinike)
         submit.id = "pretrazi";
         submit.onclick = filtrirajKlinike();
         document.getElementById("content").appendChild(submit);
+        document.getElementById("content").appendChild(document.createElement("br"));
+
+        var txtP1 = document.createElement('input');
+        txtP1.disabled = 'true';
+        txtP1.value = "Naziv";
+        txtP1.style.height = "40px";
+        txtP1.style.width = "180px";
+        txtP1.style.textAlign = 'center';
+        document.getElementById("content").appendChild(txtP1);
+        var txtP2 = document.createElement('input');
+        txtP2.disabled = 'true';
+        txtP2.value = "Lokacija";
+        txtP2.style.height = "40px";
+        txtP2.style.width = "280px";
+        txtP2.style.textAlign = 'center';
+        document.getElementById("content").appendChild(txtP2);
+        var txtP3 = document.createElement('input');
+        txtP3.disabled = 'true';
+        txtP3.value = "Ocena";
+        txtP3.style.height = "40px";
+        txtP3.style.width = "80px";
+        txtP3.style.textAlign = 'center';
+        document.getElementById("content").appendChild(txtP3);
+        var txtP4 = document.createElement('input');
+        txtP4.disabled = 'true';
+        txtP4.value = "Profil";
+        txtP4.style.height = "40px";
+        txtP4.style.width = "80px";
+        txtP4.style.textAlign = 'center';
+        document.getElementById("content").appendChild(txtP4);
+        document.getElementById("content").appendChild(document.createElement("br"));
 
         for(let klinika of klinike)
         {
+            var txt1 = document.createElement('input');
+            txt1.disabled = 'true';
+            txt1.value = klinika.naziv;
+            txt1.style.height = "40px";
+            txt1.style.backgroundColor = "white";
+            txt1.style.width = "180px";
+            txt1.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txt1);
+            var txt2 = document.createElement('input');
+            txt2.disabled = 'true';
+            txt2.value = klinika.lokacija;
+            txt2.style.height = "40px";
+            txt2.style.backgroundColor = "white";
+            txt2.style.width = "280px";
+            txt2.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txt2);
+            var txt3 = document.createElement('input');
+            txt3.disabled = 'true';
+            txt3.value = Math.round(klinika.prosecnaOcena * 100) / 100;
+            txt3.style.height = "40px";
+            txt3.style.backgroundColor = "white";
+            txt3.style.width = "80px";
+            txt3.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txt3);
             var btn = document.createElement("BUTTON");
-            btn.classList.add("btn-list", "btn--radius-2", "btn--light-blue");
-            btn.innerHTML = klinika.naziv;
+            btn.innerHTML = "➤";
+            btn.style.fontSize = "20px";
             btn.id = klinika.naziv;
             btn.onclick = infoKlinike(klinika);
+            btn.style.height = "40px";
+            btn.style.width = "80px";
+            btn.style.textAlign = 'center';
             document.getElementById("content").appendChild(btn);
+            document.getElementById("content").appendChild(document.createElement("br"));
         }
     });
 
@@ -579,43 +616,64 @@ function prikazKlinika(klinike)
 function infoKlinike(klinika)
 {
     return function(){
-        // Get the modal
-        var modal = document.getElementById("klinikaModal");
-        var tableRef = document.getElementById('infoKlinike').getElementsByTagName('tbody')[0];
-        tableRef.innerHTML="";
-        var podaciKlinike   = tableRef.insertRow();
+        $("#content").fadeOut(100, function(){
+            var tipPregleda = $('#tipPregleda').val();
+            var datum = $('#datum').val();
+            document.getElementById("content").innerHTML = "";
+            var naziv = document.createElement("H2");
+            naziv.appendChild(document.createTextNode(klinika.naziv));
+            document.getElementById("content").appendChild(naziv);
 
-        var nazivKlinike  = podaciKlinike.insertCell(0);
-        nazivKlinike.appendChild(document.createTextNode(klinika.naziv));
+            var tip = document.createElement("var");
+            tip.classList.add("col-2", "input-group");
+            tip.appendChild(document.createTextNode("Tip pregleda"));
+            tip.appendChild(document.createElement("br"));
+            var txtTip = document.createElement('input');
+            txtTip.value = tipPregleda;
+            txtTip.disabled = 'true';
+            txtTip.setAttribute("type", "text");
+            txtTip.style.height = "40px";
+            txtTip.style.width = "250px";
+            txtTip.classList.add("input--style-4");
+            tip.appendChild(txtTip);
 
-        var lokacijaKlinike  = podaciKlinike.insertCell(1);
-        lokacijaKlinike.appendChild(document.createTextNode(klinika.lokacija));
+            var cena = document.createElement("var");
+            cena.classList.add("col-2", "input-group");
+            cena.appendChild(document.createTextNode("Cena"));
+            cena.appendChild(document.createElement("br"));
+            var txtCena = document.createElement('input');
+            $.get({
+                url: 'api/klinike/getCena/' + klinika.id + '/' + tipPregleda,
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function (cena) {
+                    if (cena<0){
+                        txtCena.value = 'Nedostupno';
+                    }
+                    else{
+                        txtCena.value = cena;
+                    }
+                }
+            });
+            txtCena.disabled = 'true';
+            txtCena.setAttribute("type", "text");
+            txtCena.style.height = "40px";
+            txtCena.style.width = "250px";
+            txtCena.classList.add("input--style-4");
+            cena.appendChild(txtCena);
 
-        var brLekara  = podaciKlinike.insertCell(2);
-        brLekara.appendChild(document.createTextNode(klinika.opis));
+            document.getElementById("content").innerHTML = "";
+            var prviRed = document.createElement("var");
+            prviRed.classList.add("row", "wrapper--w680");
+            prviRed.appendChild(tip);
+            prviRed.appendChild(cena);
+            document.getElementById("content").appendChild(prviRed);
 
-        var brSala  = podaciKlinike.insertCell(3);
-        brSala.appendChild(document.createTextNode(klinika.prosecnaOcena));
+        });
 
-            // When the user clicks on the button, open the modal
-        //modal.style.display = "block";
-        $("#klinikaModal").fadeIn(500);
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                //modal.style.display = "none";
-                $("#klinikaModal").fadeOut(100);
-            }
-        }
+        $("#content").fadeIn(500);
     }
 }
 
@@ -643,7 +701,7 @@ function filtrirajKlinike() {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
             },
             success: function (klinike) {
-                prikazKlinika(klinike);
+                prikazKlinika(klinike, tip);
             }
         });
     }

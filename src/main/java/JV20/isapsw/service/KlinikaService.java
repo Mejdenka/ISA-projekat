@@ -93,8 +93,6 @@ public class KlinikaService {
                 continue;
             }
 
-            nadjeno = false;
-
             if (!lokacija.equals("NULL"))
             {
                 if (!k.getLokacija().startsWith(lokacija)){
@@ -104,19 +102,11 @@ public class KlinikaService {
 
             if (k.getProsecnaOcena() < Double.parseDouble(ocjena))
             {
-                continue;
+                if(k.getProsecnaOcena() != 0.0)
+                    continue;
             }
 
-            for (TipPregleda tp : k.getTipoviPregleda())
-            {
-                if (tp.getNaziv().equals(tip))
-                {
-                    nadjeno = true;
-                    break;
-                }
-            }
-
-            if (nadjeno) filtrirane.add(k);
+            filtrirane.add(k);
         }
 
         return filtrirane;

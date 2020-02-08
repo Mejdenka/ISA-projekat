@@ -246,4 +246,16 @@ public class KlinikaController {
 
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getCena/{idKlinike}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public double getCena(@PathVariable Long idKlinike, @PathVariable String tipPregleda ) throws AccessDeniedException, ParseException {
+        for (TipPregleda tp : klinikaService.findOne(idKlinike).getTipoviPregleda()){
+            if (tp.getNaziv().equals(tipPregleda)){
+                return tp.getCena();
+            }
+        }
+
+        return -1.0;
+    }
 }

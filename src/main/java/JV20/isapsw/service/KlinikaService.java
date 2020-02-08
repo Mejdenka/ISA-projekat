@@ -53,34 +53,45 @@ public class KlinikaService {
         for (Klinika k : klinikaRepository.findAll())
         {
 
+
             Boolean nadjeno = false;
 
-            for (Termin t : k.getSlobodniTermini())
+            for (Lekar l : k.getLekari())
             {
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(t.getPocetak());
-                int day= cal.get(Calendar.DAY_OF_MONTH);
-                int month = cal.get(Calendar.MONTH)+1;
-                int year = cal.get(Calendar.YEAR);
-
-                if( Integer.parseInt(datum.substring(0,4)) == year )
+                if (nadjeno) break;
+                for(Pregled p : l.getPregledi())
                 {
-                    if( Integer.parseInt(datum.substring(5,7)) == month )
+                    if (p.getPacijent() != null)
                     {
-                        if( Integer.parseInt(datum.substring(8,10)) == day )
+                        continue;
+                    }
+
+                    if (!p.getTipPregleda().getNaziv().equals(tip)) continue;
+                    Termin t = p.getTermin();
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(t.getPocetak());
+                    int day= cal.get(Calendar.DAY_OF_MONTH);
+                    int month = cal.get(Calendar.MONTH)+1;
+                    int year = cal.get(Calendar.YEAR);
+
+                    if( Integer.parseInt(datum.substring(0,4)) == year )
+                    {
+                        if( Integer.parseInt(datum.substring(5,7)) == month )
                         {
-                            nadjeno = true;
+                            if( Integer.parseInt(datum.substring(8,10)) == day )
+                            {
+                                nadjeno = true;
+                                break;
+                            }
                         }
                     }
                 }
             }
-            System.out.println("PRVA TACKA");
             if (!nadjeno)
             {
                 continue;
             }
-            System.out.println("DRUGA TACKA");
 
             nadjeno = false;
 

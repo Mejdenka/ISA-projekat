@@ -34,8 +34,36 @@ function pocetnaPacijent(ulogovan) {
 function generisiIstoriju() {
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
-        var textnode = document.createTextNode("Jos uvijek nije dostupna istorija.");
-        document.getElementById("content").appendChild(textnode);
+        var lblLekari = document.createElement("H2");
+        var t = document.createTextNode("Neocenjeni lekari");
+        lblLekari.appendChild(t);
+        document.getElementById("content").appendChild(lblLekari);
+
+        var cbLekar = document.createElement('select');
+        cbLekar.id = 'lekar';
+
+        $.get({
+            url:'api/pacijenti/getLekari/' + korisnik.id,
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+            },
+            success: function(lekari)
+            {
+                for(let lekar of lekari)
+                {
+                    var option = document.createElement('option');
+                    option.value=lekar.id;
+                    option.innerHTML=lekar.ime + ' ' + lekar.prezime;
+                    cbLekar.appendChild(option);
+                }
+            }
+        });
+        cbLekar.classList.add("input--style-4");
+        cbLekar.style.height = "40px";
+        cbLekar.style.width = "250px";
+        document.getElementById("content").appendChild(cbLekar);
+
     });
     $("#content").fadeIn(500);
 }
@@ -44,7 +72,7 @@ function generisiZdravstveniKarton(korisnik) {
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
         $.get({
-            url: 'api/pacijenti/zdravstveniKarton/' + korisnik.id,
+            url: 'api/pacijenti/myZdravstveniKarton/' + korisnik.id,
             contentType: 'application/json',
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -91,7 +119,7 @@ function generisiZdravstveniKarton(korisnik) {
                 {
                     var txtDijagnoza = document.createElement('input');
                     txtDijagnoza.disabled = 'true';
-                    txtDijagnoza.value = d.naziv;
+                    txtDijagnoza.value = d.nazivDijagnoze;
                     txtDijagnoza.classList.add("input--style-4");
                     txtDijagnoza.style.height = "40px";
                     txtDijagnoza.style.width = "250px";

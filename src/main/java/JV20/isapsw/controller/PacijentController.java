@@ -73,6 +73,28 @@ public class PacijentController {
         return this.pacijentService.getKartonPacijenta(userId);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/myZdravstveniKarton/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ZdravstveniKarton getMyZdravstveniKarton(@PathVariable Long userId) throws AccessDeniedException {
+        return this.pacijentService.findOne(userId).getKarton();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Lekar> getLekari(@PathVariable Long userId) throws AccessDeniedException {
+        List<Lekar> sviMojiLekari = new ArrayList<Lekar>();
+
+        for( Pregled p : this.pacijentService.findOne(userId).getPregledi()){
+            if (p.isObavljen()){
+                if (!sviMojiLekari.contains(p.getLekar())){
+                    sviMojiLekari.add(p.getLekar());
+                }
+            }
+        }
+
+        return sviMojiLekari;
+    }
+
     @RequestMapping("/getRequests")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Pacijent> getRequests() throws AccessDeniedException {

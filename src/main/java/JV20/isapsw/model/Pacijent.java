@@ -11,7 +11,6 @@ public class Pacijent extends Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long jbo;
 
     @OneToOne
     @JsonIgnore
@@ -19,6 +18,9 @@ public class Pacijent extends Korisnik {
 
     @OneToMany
     private Set<Recept> recepti;
+
+    @OneToMany
+    private Set<OcenaLekara> ocene;
 
     @OneToMany(mappedBy = "pacijent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -66,14 +68,6 @@ public class Pacijent extends Korisnik {
         this.klinikaPacijenta = klinikaPacijenta;
     }
 
-    public Long getJbo() {
-        return jbo;
-    }
-
-    public void setJbo(Long jbo) {
-        this.jbo = jbo;
-    }
-
     public Set<Operacija> getOperacije() {
         return operacije;
     }
@@ -90,5 +84,11 @@ public class Pacijent extends Korisnik {
         this.pregledi = pregledi;
     }
 
+    public Set<OcenaLekara> getOcene() {
+        return ocene;
+    }
 
+    public void setOcene(Set<OcenaLekara> ocene) {
+        this.ocene = ocene;
+    }
 }

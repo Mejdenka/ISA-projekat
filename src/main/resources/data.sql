@@ -11,7 +11,6 @@ INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena, lokacija_na_mapi_id)
 
 INSERT INTO lokacija (broj_ulice, lat, lon) VALUES ('Janka Veselinovica, 20', 45.261608, 19.815776);
 
-
 INSERT INTO sala (naziv, broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 1', 1, 1, 1, 0, 1);
 INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 2', 2, 0, 0, 0, 1);
 INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id) VALUES ('Sala 3', 3, 1, 0, 0, 1);
@@ -35,7 +34,7 @@ INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 8, 4, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 3, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 2, 1, 1, 2, 1, 0, 0, 5);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, 1, 2, 1, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, null, 2, 2, 0, 0, 5);
 
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, 3, 1, 1, 3, 0, 0);
 INSERT INTO operacija (lekar_id, sala_operacije_id, klinika_operacije_id, pacijent_id, termin_id, obavljena, obrisana) VALUES (5, null, 1, 1, 1, 0, 0);
@@ -76,5 +75,8 @@ INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (2, 'Kandida'
 INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (3, 'Hemoroidi', 'Hrm1');
 INSERT INTO dijagnoza(id, naziv_dijagnoze, sifra_dijagnoze) VALUES (4, 'Trihineloza', 'Th1');
 
+INSERT INTO zdravstveni_karton_dijagnoze(zdravstveni_karton_id, dijagnoze_id) values(2, 1);
+INSERT INTO zdravstveni_karton_dijagnoze(zdravstveni_karton_id, dijagnoze_id) values(2, 2);
 
-
+INSERT INTO zdravstveni_karton_pregledi(zdravstveni_karton_id, pregledi_id) values(2, 2);
+INSERT INTO zdravstveni_karton_pregledi(zdravstveni_karton_id, pregledi_id) values(2, 3);

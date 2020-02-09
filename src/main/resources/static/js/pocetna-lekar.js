@@ -1480,13 +1480,23 @@ function generisiFormuZaZakazivnje(ulogovan) {
             }
             var pocetak = $("#datumPoc").val();
             var kraj = $("#datumKr").val();
-            //zasad vjestacki, treba za pacijenta za koga se trenutno uzvrsava pregled
-            var idPacijenta = 1;
-            lekar = ulogovan;
+
+
+            var tipPregleda = "";
+            var urlString = "";
+            var pacijentId = pacijent.id;
+
+            if(pregled){
+                tipPregleda = $("#selectTipPregleda :selected").text();
+                urlString = 'api/lekari/napraviTerminZaPregled/'+tipPregleda;
+            } else if(operacija){
+                urlString = 'api/lekari/napraviTerminZaOperaciju';
+            }
+
             if(pregledBtn.checked){
                 $.post({
-                    url: 'api/lekari/rezervisiPregled/'+idPacijenta,
-                    data: JSON.stringify({pocetak, kraj, ulogovan}),
+                    url: urlString,
+                    data: JSON.stringify({pocetak, kraj, pacijentId}),
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

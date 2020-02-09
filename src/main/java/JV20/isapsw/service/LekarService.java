@@ -177,7 +177,8 @@ public class LekarService {
                 }
             }
         }
-        return false;
+        /////////////////////////////false
+        return true;
     }
 
     public List<Termin> getSlobodniTermini(Long lekarId, String datum, String tipPregleda){

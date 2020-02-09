@@ -30,12 +30,12 @@ INSERT INTO sala (naziv,  broj, slobodna, rezervisana, obrisana, klinika_sale_id
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 100, 1, 0);
 INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 200, 1, 0);
 
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 100, 2, 0);
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 100, 2, 0);
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 200, 3, 0);
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 300, 3, 0);
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glave', 200, 4, 0);
-INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srca', 400, 4, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled glavee', 100, 2, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled srcaa', 100, 2, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled pluca', 200, 3, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled kicme', 300, 3, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled ramena', 200, 4, 0);
+INSERT INTO tip_pregleda (naziv, cena, klinika_id, obrisan) VALUES ('Pregled zeluca', 400, 4, 0);
 
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-09 21:20:00', '2020-02-09 21:50:00', 1, 1, 0, 1);
 INSERT INTO termin (pocetak, kraj, rezervisan, klinika_termina_id, obrisan, pacijent_id) VALUES ('2020-02-08 13:40:00', '2020-02-08 14:10:00', 1, 1, 0, 1);

@@ -439,10 +439,10 @@ function generisiKlinike() {
     var yyyy = today.getFullYear();
 
     today = yyyy + '-' + mm + '-' + dd;
-   prikazKlinika([], '', today, '', 1);
+   prikazKlinika([], '', today, '', 1, false);
 }
 
-function prikazKlinika(klinike, tipP, datumP, lokacijaP, ocjenaP ){
+function prikazKlinika(klinike, tipP, datumP, lokacijaP, ocjenaP, first){
     $("#content").fadeOut(100, function(){
         document.getElementById("content").innerHTML = "";
         var prviRed = document.createElement("var");
@@ -547,7 +547,9 @@ function prikazKlinika(klinike, tipP, datumP, lokacijaP, ocjenaP ){
         submit.onclick = filtrirajKlinike();
         document.getElementById("content").appendChild(submit);
         document.getElementById("content").appendChild(document.createElement("br"));
+        document.getElementById("content").appendChild(document.createElement("br"));
 
+        if (first){
         var txtP1 = document.createElement('input');
         txtP1.disabled = 'true';
         txtP1.value = "Naziv";
@@ -608,25 +610,26 @@ function prikazKlinika(klinike, tipP, datumP, lokacijaP, ocjenaP ){
             btn.innerHTML = "➤";
             btn.style.fontSize = "30px";
             btn.id = klinika.naziv;
-            btn.onclick = infoKlinike(klinika);
+            btn.onclick = infoKlinike(klinika, '', '');
             btn.style.height = "40px";
             btn.style.width = "80px";
             btn.style.textAlign = 'center';
             document.getElementById("content").appendChild(btn);
             document.getElementById("content").appendChild(document.createElement("br"));
         }
+        }
     });
 
     $("#content").fadeIn(500);
 }
 
-function infoKlinike(klinika)
-{
+function infoKlinike(klinika, tipPregleda, datum){
     return function(){
         $("#content").fadeOut(100, function(){
-            var tipPregleda = $('#tipPregleda').val();
-            var datum = $('#datum').val();
+            if (tipPregleda === '' ) tipPregleda = $('#tipPregleda').val();
+            if (datum === '' ) datum = $('#datum').val();
             document.getElementById("content").innerHTML = "";
+
             var naziv = document.createElement("h2");
             naziv.appendChild(document.createTextNode(klinika.naziv));
             document.getElementById("content").appendChild(naziv);
@@ -693,107 +696,135 @@ function infoKlinike(klinika)
             document.getElementById("content").appendChild(dat);
 
             document.getElementById("content").appendChild(document.createElement("br"));
-
-            var lekari = document.createElement("h3");
-            lekari.appendChild(document.createTextNode("Dostupni lekari"));
-            document.getElementById("content").appendChild(lekari);
-
             document.getElementById("content").appendChild(document.createElement("br"));
 
-            $.get({
-                url: 'api/klinike/getSlobodniPregledi/' + klinika.id + '/' + datum + '/' + tipPregleda,
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
-                },
-                success: function (pregledi) {
-                    var txtP1 = document.createElement('input');
-                    txtP1.disabled = 'true';
-                    txtP1.value = "Ime i prezime";
-                    txtP1.style.height = "40px";
-                    txtP1.style.width = "180px";
-                    txtP1.style.textAlign = 'center';
-                    document.getElementById("content").appendChild(txtP1);
-                    var txtP2 = document.createElement('input');
-                    txtP2.disabled = 'true';
-                    txtP2.value = "Ocena";
-                    txtP2.style.height = "40px";
-                    txtP2.style.width = "80px";
-                    txtP2.style.textAlign = 'center';
-                    document.getElementById("content").appendChild(txtP2);
-                    var txtP3 = document.createElement('input');
-                    txtP3.disabled = 'true';
-                    txtP3.value = "Vreme početka";
-                    txtP3.style.height = "40px";
-                    txtP3.style.width = "120px";
-                    txtP3.style.textAlign = 'center';
-                    document.getElementById("content").appendChild(txtP3);
-                    var txtP4 = document.createElement('input');
-                    txtP4.disabled = 'true';
-                    txtP4.value = "Vreme kraja";
-                    txtP4.style.height = "40px";
-                    txtP4.style.width = "100px";
-                    txtP4.style.textAlign = 'center';
-                    document.getElementById("content").appendChild(txtP4);
-                    var txtP5 = document.createElement('input');
-                    txtP5.disabled = 'true';
-                    txtP5.value = "Zakazivanje";
-                    txtP5.style.height = "40px";
-                    txtP5.style.width = "100px";
-                    txtP5.style.textAlign = 'center';
-                    document.getElementById("content").appendChild(txtP5);
-                    document.getElementById("content").appendChild(document.createElement("br"));
+            var btn = document.createElement("BUTTON");
+            btn.classList.add("btn", "btn--radius-2", "btn--light-blue");
+            btn.innerHTML = "Zakažite predefinisani pregled";
+            btn.onclick = predefinisani(klinika, datum, tipPregleda);
+            btn.style.textAlign = 'center';
+            document.getElementById("content").appendChild(btn);
 
-                    for(let pregled of pregledi)
-                    {
-                        var txt1 = document.createElement('input');
-                        txt1.disabled = 'true';
-                        txt1.value = pregled.lekar.ime + " " + pregled.lekar.prezime;
-                        txt1.style.height = "40px";
-                        txt1.style.backgroundColor = "white";
-                        txt1.style.width = "180px";
-                        txt1.style.textAlign = 'center';
-                        document.getElementById("content").appendChild(txt1);
-                        var txt2 = document.createElement('input');
-                        txt2.disabled = 'true';
-                        txt2.value = Math.round(pregled.lekar.prosecnaOcena * 100) / 100;
-                        txt2.style.height = "40px";
-                        txt2.style.backgroundColor = "white";
-                        txt2.style.width = "80px";
-                        txt2.style.textAlign = 'center';
-                        document.getElementById("content").appendChild(txt2);
-                        var txt3 = document.createElement('input');
-                        txt3.disabled = 'true';
-                        txt3.value = pregled.termin.pocetak.substring(11, 16);
-                        txt3.style.height = "40px";
-                        txt3.style.backgroundColor = "white";
-                        txt3.style.width = "120px";
-                        txt3.style.textAlign = 'center';
-                        document.getElementById("content").appendChild(txt3);
-                        var txt4 = document.createElement('input');
-                        txt4.disabled = 'true';
-                        txt4.value = pregled.termin.kraj.substring(11, 16);
-                        txt4.style.height = "40px";
-                        txt4.style.backgroundColor = "white";
-                        txt4.style.width = "100px";
-                        txt4.style.textAlign = 'center';
-                        document.getElementById("content").appendChild(txt4);
-                        var btn = document.createElement("BUTTON");
-                        btn.innerHTML = "➤";
-                        btn.style.fontSize = "30px";
-                        btn.onclick = zakazivanje(pregled);
-                        btn.style.height = "40px";
-                        btn.style.width = "100px";
-                        btn.style.textAlign = 'center';
-                        document.getElementById("content").appendChild(btn);
-                        document.getElementById("content").appendChild(document.createElement("br"));
-                    }
-                }
-            });
-
+            var btn2 = document.createElement("BUTTON");
+            btn2.classList.add("btn", "btn--radius-2", "btn--light-blue");
+            btn2.innerHTML = "Lista slobodnih lekara";
+            btn2.onclick = lekari(klinika, datum, tipPregleda);
+            btn2.style.textAlign = 'center';
+            document.getElementById("content").appendChild(btn2);
         });
 
         $("#content").fadeIn(500);
+    }
+}
+
+function predefinisani(klinika, datum, tipPregleda){
+return function(){
+    $.get({
+        url: 'api/klinike/getSlobodniPregledi/' + klinika.id + '/' + datum + '/' + tipPregleda,
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+        },
+        success: function (pregledi) {
+            document.getElementById("content").innerHTML = "";
+            var btn1 = document.createElement("BUTTON");
+            btn1.innerHTML = "Nazad";
+            btn1.style.fontSize = "30px";
+            btn1.classList.add("btn", "btn--radius-2", "btn--light-blue");
+            btn1.onclick = infoKlinike(klinika, tipPregleda, datum);
+            btn1.style.textAlign = 'center';
+            document.getElementById("content").appendChild(btn1);
+            document.getElementById("content").appendChild(document.createElement("br"));
+            document.getElementById("content").appendChild(document.createElement("br"));
+            var txtP1 = document.createElement('input');
+            txtP1.disabled = 'true';
+            txtP1.value = "Ime i prezime";
+            txtP1.style.height = "40px";
+            txtP1.style.width = "180px";
+            txtP1.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txtP1);
+            var txtP2 = document.createElement('input');
+            txtP2.disabled = 'true';
+            txtP2.value = "Ocena";
+            txtP2.style.height = "40px";
+            txtP2.style.width = "80px";
+            txtP2.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txtP2);
+            var txtP3 = document.createElement('input');
+            txtP3.disabled = 'true';
+            txtP3.value = "Vreme početka";
+            txtP3.style.height = "40px";
+            txtP3.style.width = "120px";
+            txtP3.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txtP3);
+            var txtP4 = document.createElement('input');
+            txtP4.disabled = 'true';
+            txtP4.value = "Vreme kraja";
+            txtP4.style.height = "40px";
+            txtP4.style.width = "100px";
+            txtP4.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txtP4);
+            var txtP5 = document.createElement('input');
+            txtP5.disabled = 'true';
+            txtP5.value = "Zakazivanje";
+            txtP5.style.height = "40px";
+            txtP5.style.width = "100px";
+            txtP5.style.textAlign = 'center';
+            document.getElementById("content").appendChild(txtP5);
+            document.getElementById("content").appendChild(document.createElement("br"));
+
+            for(let pregled of pregledi)
+            {
+                var txt1 = document.createElement('input');
+                txt1.disabled = 'true';
+                txt1.value = pregled.lekar.ime + " " + pregled.lekar.prezime;
+                txt1.style.height = "40px";
+                txt1.style.backgroundColor = "white";
+                txt1.style.width = "180px";
+                txt1.style.textAlign = 'center';
+                document.getElementById("content").appendChild(txt1);
+                var txt2 = document.createElement('input');
+                txt2.disabled = 'true';
+                txt2.value = Math.round(pregled.lekar.prosecnaOcena * 100) / 100;
+                txt2.style.height = "40px";
+                txt2.style.backgroundColor = "white";
+                txt2.style.width = "80px";
+                txt2.style.textAlign = 'center';
+                document.getElementById("content").appendChild(txt2);
+                var txt3 = document.createElement('input');
+                txt3.disabled = 'true';
+                txt3.value = pregled.termin.pocetak.substring(11, 16);
+                txt3.style.height = "40px";
+                txt3.style.backgroundColor = "white";
+                txt3.style.width = "120px";
+                txt3.style.textAlign = 'center';
+                document.getElementById("content").appendChild(txt3);
+                var txt4 = document.createElement('input');
+                txt4.disabled = 'true';
+                txt4.value = pregled.termin.kraj.substring(11, 16);
+                txt4.style.height = "40px";
+                txt4.style.backgroundColor = "white";
+                txt4.style.width = "100px";
+                txt4.style.textAlign = 'center';
+                document.getElementById("content").appendChild(txt4);
+                var btn = document.createElement("BUTTON");
+                btn.innerHTML = "➤";
+                btn.style.fontSize = "30px";
+                btn.onclick = zakazivanje(pregled);
+                btn.style.height = "40px";
+                btn.style.width = "100px";
+                btn.style.textAlign = 'center';
+                document.getElementById("content").appendChild(btn);
+                document.getElementById("content").appendChild(document.createElement("br"));
+            }
+        }
+    });
+}
+}
+
+function lekari(klinika, datum, tipPregleda){
+    return function(){
+
     }
 }
 
@@ -810,7 +841,7 @@ function zakazivanje(pregled){
             },
             success: function (ulogovan){
                 $.post({
-                    url: 'api/lekari/zakaziPregled/' + ulogovan.id,
+                    url: 'api/pacijenti/zakaziPregled/' + ulogovan.id,
                     data: JSON.stringify(pregled),
                     contentType: 'application/json',
                     headers: {
@@ -853,7 +884,7 @@ function filtrirajKlinike() {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
             },
             success: function (klinike) {
-                prikazKlinika(klinike, tip, datum, lokacija, ocjena);
+                prikazKlinika(klinike, tip, datum, lokacija, ocjena, true);
             }
         });
     }

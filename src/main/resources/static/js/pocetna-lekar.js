@@ -1090,7 +1090,7 @@ function search_table(value) {
     });
 }
 
-function generisiFormuZaGO(ulogovan) {
+function generisiFormuZaGOLekar(ulogovan) {
 
     $("#content").fadeOut(100, function(){
 

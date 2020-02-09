@@ -16,6 +16,7 @@ public class Lekar extends Korisnik {
     private Long id;
     private Integer zbirOcena;
     private Integer brojOcena;
+    private Double prosecnaOcena = 5.0;
     private boolean slobodan;
     private boolean naGodisnjem;
     private boolean trajePregled;
@@ -140,5 +141,9 @@ public class Lekar extends Korisnik {
 
     public void setRezervisanaOdustva(Set<GodisnjiOdsustvoTermin> rezervisanaOdustva) {
         this.rezervisanaOdustva = rezervisanaOdustva;
+    }
+
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 }

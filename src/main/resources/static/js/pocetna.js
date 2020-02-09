@@ -124,7 +124,7 @@ $(document).ready(function(){
         generisiListuPacijenata();
     });
     $('body').on('click', '#zahtevGOBtn', function(e) {
-        generisiFormuZaGO(ulogovan);
+        generisiFormuZaGOLekar(ulogovan);
     });
     $('body').on('click', '#zakaziBtn', function(e) {
         generisiFormuZaZakazivnje(ulogovan);
@@ -445,7 +445,7 @@ function prikazKorisnika(korisnik) {
             };
 
             //AKO JE LEKAR (ima ocjenu)
-            if(korisnik.ocena != null){
+            if(korisnik.prosecnaOcena != null){
                content.appendChild(obrisiBtn);
             }
 
@@ -457,26 +457,26 @@ function prikazKorisnika(korisnik) {
                 let email = $('#email').val();
                 let datumRodjenja = $('#datumRodjenja').val();
                 let zvjezdice=$('#selectOcena').val();
-                let ocena = null;
+                let prosecnaOcena = null;
                 let poc = $('#pocRadnogVremena').val();
                 let kr = $('#krRadnogVremena').val();
                 let radnoVreme = poc + "-" + kr;
                 console.log(radnoVreme)
                 switch (zvjezdice) {
                     case "★★★★★":
-                        ocena = 5;
+                        prosecnaOcena = 5;
                         break;
                     case "★★★★":
-                        ocena = 4;
+                        prosecnaOcena = 4;
                         break;
                     case "★★★":
-                        ocena = 3;
+                        prosecnaOcena = 3;
                         break;
                     case "★★":
-                        ocena = 2;
+                        prosecnaOcena = 2;
                         break;
                     case "★":
-                        ocena = 1;
+                        prosecnaOcena = 1;
                 }
                 if(korisnickoIme == "" || ime == "" || prezime == "" || email == "" || datumRodjenja == "" || poc == "" || kr == ""){
                     alert("Nijedno polje ne sme ostati prazno.")
@@ -485,7 +485,7 @@ function prikazKorisnika(korisnik) {
 
                 $.post({
                     url: 'api/lekari/izmenaLekara',
-                    data: JSON.stringify({id, korisnickoIme, ime, prezime, email, datumRodjenja, ocena, radnoVreme}),
+                    data: JSON.stringify({id, korisnickoIme, ime, prezime, email, datumRodjenja, prosecnaOcena, radnoVreme}),
                     contentType: 'application/json',
                     headers: {
                         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))

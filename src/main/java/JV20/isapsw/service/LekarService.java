@@ -169,7 +169,7 @@ public class LekarService {
                 Calendar datum = Calendar.getInstance();
                 datum.setTime(pregled.getTermin().getPocetak());
                 Calendar danas = Calendar.getInstance();
-                if (danas.get(Calendar.HOUR_OF_DAY) == datum.get(Calendar.HOUR_OF_DAY) - 1 && danas.get(Calendar.DATE) == datum.get(Calendar.DATE)) {
+                if (danas.get(Calendar.HOUR_OF_DAY) == datum.get(Calendar.HOUR_OF_DAY) -1 && danas.get(Calendar.DATE) == datum.get(Calendar.DATE)) {
                     lekar.setTrajePregled(zapoceo);
                     lekar.setSlobodan(false);
                     save(lekar);
@@ -177,8 +177,7 @@ public class LekarService {
                 }
             }
         }
-        // OVDE TREBA NAMESTITI - BILO JE FALSE
-        return true;
+        return false;
     }
 
     public List<Termin> getSlobodniTermini(Long lekarId, String datum, String tipPregleda){

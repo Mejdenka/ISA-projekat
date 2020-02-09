@@ -17,6 +17,7 @@ public class Klinika {
     private String naziv;
     private String lokacija;
     private String opis;
+    private Double prosecnaOcena;
     private Integer zbirOcena;
     private Integer brojOcena;
 
@@ -117,6 +118,10 @@ public class Klinika {
     public Double getProsecnaOcena() {
         if (brojOcena != 0 ) return Double.valueOf(zbirOcena)/brojOcena;
         else return 0.0;
+    }
+
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 
     public String getOpis() {

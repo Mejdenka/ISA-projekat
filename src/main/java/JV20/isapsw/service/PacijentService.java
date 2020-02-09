@@ -32,6 +32,8 @@ public class PacijentService {
     private  KlinikaService klinikaService ;
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private LekarService lekarService;
 
     public Pacijent findOne(Long id) {
         return pacijentRepository.findById(id).orElseGet(null);
@@ -78,6 +80,7 @@ public class PacijentService {
 
     public ZdravstveniKarton getKartonPacijenta(Long pacijentId) {
         Lekar lekar =  (Lekar) this.korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        lekar = this.lekarService.findOne(lekar.getId());
         Klinika klinika = klinikaService.findOne(lekar.getKlinikaLekara().getId());
         for(Pregled p : klinika.getPregledi()){
             if(p.getPacijent().getId().equals(pacijentId) && p.getLekar().getId().equals(lekar.getId()) && p.isObavljen()){

@@ -261,7 +261,10 @@ function prikaziIzvestajPoslovanja(klinika) {
 
             var varOcena = document.createElement("var");
             varOcena.classList.add("col-2", "input-group");
-            var ocena = document.createTextNode("Prosecna ocena klinike: " + klinika.prosecnaOcena);
+            if(klinika.brojOcena != 0)
+                var ocena = document.createTextNode("Prosecna ocena klinike: " + klinika.zbirOcena / klinika.brojOcena);
+            else
+                var ocena = document.createTextNode("Prosecna ocena klinike: " + "Ne postoji još.");
             varOcena.appendChild(ocena);
             varOcena.appendChild(document.createElement("br"));
             prviRed.appendChild(varOcena);
@@ -296,7 +299,10 @@ function prikaziIzvestajPoslovanja(klinika) {
                         naziv.appendChild(nazivText);
 
                         var ocenaLekara = lekarRed.insertCell(1);
-                        var ocenaLekaraText = document.createTextNode(lekar.ocena);
+                        if(lekar.brojOcena != 0)
+                            var ocenaLekaraText = document.createTextNode(lekar.zbirOcena/lekar.brojOcena);
+                        else
+                            var ocenaLekaraText = document.createTextNode("Ne postoji još.");
                         ocenaLekara.appendChild(ocenaLekaraText);
                     }
                 }

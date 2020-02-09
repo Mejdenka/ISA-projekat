@@ -82,9 +82,9 @@ public class KlinikaController {
         return this.klinikaService.getAllGoOds(klinika);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{idKlinike}")
+    @RequestMapping(method = RequestMethod.GET, value = "/pronadjiSlobodnePreglede/{idKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE') or hasRole('PACIJENT')")
-    public List<PregledDTO> getSlobodniTermini(@PathVariable Long idKlinike) throws AccessDeniedException {
+    public List<PregledDTO>  pronadjiSlobodneTermini(@PathVariable Long idKlinike) throws AccessDeniedException {
         return klinikaService.pronadjiSlobodnePreglede(idKlinike);
     }
 

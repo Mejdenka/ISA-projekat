@@ -723,7 +723,7 @@ function infoSale(sala)
 function generisiSlobodneTermine(klinika) {
     $.get({
 
-        url: 'api/klinike/getSlobodniTermini/' + klinika.id,
+        url: 'api/klinike/pronadjiSlobodnePreglede/' + klinika.id,
         contentType: 'application/json',
         headers: {
             'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
@@ -738,6 +738,7 @@ function generisiSlobodneTermine(klinika) {
                 var tableRef = document.createElement('tbody');
 
                 for (let pregled of pregledi) {
+                    console.log(pregled)
                     var podaciTermina = tableRef.insertRow();
                     var pocetakTermina = podaciTermina.insertCell(0);
                     var pocetakTerminaText = document.createTextNode(pregled.termin.pocetak);

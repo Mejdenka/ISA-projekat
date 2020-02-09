@@ -60,7 +60,7 @@ INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 8, 4, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 3, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 2, 1, 1, 2, 1, 0, 0, 5);
-INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, 1, 5, 1, 0, 0, 5);
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, null, 5, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, null, 1, null, 5, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (9, null, 2, null, 5, 1, 0, 0, 9);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (10, null, 3, null, 5, 1, 0, 0, 10);

@@ -210,7 +210,7 @@ public class KlinikaService {
         List<PregledDTO> pregledi = new ArrayList<>();
 
         for(Pregled p : klinika.getPregledi()){
-            if(p.getPacijent() == null && !p.isObrisan()){
+            if(p.getPacijent() == null && !p.isObrisan() && p.getSala()!= null){
                 pregledi.add(new PregledDTO(p.getId(), new TerminDTO(p.getTermin()),
                         new LekarDTO (p.getLekar()), p.getTipPregleda(), p.getKlinikaPregleda(), p.getSala()));
              }
@@ -220,12 +220,10 @@ public class KlinikaService {
     }
 
     public void obrisiTerminZaPregled(Klinika klinika, Long idTermina) {
-        List<PregledDTO> pregledi = new ArrayList<>();
-
         for(Pregled p : klinika.getPregledi()){
             if(p.getId().equals(idTermina)){
                 p.setObrisan(true);
-                pregledService.save(p);
+                //pregledService.save(p);
             }
         }
         save(klinika);
@@ -292,7 +290,7 @@ public class KlinikaService {
         for(Pregled p : findOne(id).getPregledi()){
             if(!p.isObavljen() && !p.isObrisan() ){
                 //ako mu nije dodijeljena sala
-                if(p.getSala() == null){
+                if(p.getSala() == null && p.getPacijent() != null){
                     PregledDTO pregledDTO = new PregledDTO(p.getId(),new TerminDTO(p.getTermin()),new LekarDTO(p.getLekar()),
                             new PacijentDTO(p.getPacijent()), p.getTipPregleda(), p.getKlinikaPregleda());
 
@@ -306,7 +304,7 @@ public class KlinikaService {
     public List<OperacijaDTO> findRezervisaneOperacije(Long id){
         List<OperacijaDTO> retVal = new ArrayList<>();
         for(Operacija o : findOne(id).getOperacije()){
-            if(!o.isObavljena() && !o.isObrisana()){
+            if(!o.isObavljena() && !o.isObrisana() && o.getPacijent()!= null && o.getSalaOperacije() == null){
                 retVal.add(new OperacijaDTO(o));
             }
         }

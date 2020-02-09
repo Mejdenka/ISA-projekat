@@ -1,12 +1,13 @@
 package JV20.isapsw.controller;
 
-
 import JV20.isapsw.constants.KlinikaConstants;
-import JV20.isapsw.dto.PregledDTO;
 import JV20.isapsw.model.Klinika;
+import JV20.isapsw.model.Pregled;
 import JV20.isapsw.model.UserTokenState;
 import JV20.isapsw.security.auth.JwtAuthenticationRequest;
 import JV20.isapsw.service.KlinikaService;
+import JV20.isapsw.service.PregledService;
+import JV20.isapsw.service.SalaService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -18,45 +19,34 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.testng.Assert.assertTrue;
-
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class KlinikaControllerUnitTest {
+public class SalaControllerUnitTest {
 
     private String accessToken;
 
     @Autowired
     private TestRestTemplate restTemplate;
-    private String URI_PREFIX = "/api/klinike/";
+    private String URI_PREFIX = "/api/sale/";
 
     private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -69,7 +59,7 @@ public class KlinikaControllerUnitTest {
     private MockMvc mockMvc;
 
     @Mock
-    private KlinikaService mockKlinikaService;
+    private PregledService mockPregledService;
 
     @PostConstruct
     public void setUp() {
@@ -101,24 +91,42 @@ public class KlinikaControllerUnitTest {
         accessToken = "Bearer " + responseEntity.getBody().getAccessToken();
     }
 
-
     @Test
-    public void testGetDefinisaniPregledi() throws Exception {
-        Klinika klinika = new Klinika();
-        klinika.setId(KlinikaConstants.ID_KLINIKE);
-        klinika.setNaziv(KlinikaConstants.IME_KLINIKE);
-        klinika.setLokacija(KlinikaConstants.LOKACIJA_KLINIKE);
-        klinika.setOpis(KlinikaConstants.OPIS_KLINIKE);
+    public void dodijeliSaluPregleduTest() throws Exception {
+        Pregled pregled = new Pregled();
+        pregled.setId(6L);
 
-        Mockito.when(mockKlinikaService.findOne(KlinikaConstants.ID_KLINIKE)).thenReturn(klinika);
+        Mockito.when(mockPregledService.findOne(6L)).thenReturn(pregled);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(URI_PREFIX + "getSlobodniTermini/1")
-                //.param("idKlinike", klinika.getId().toString())
-                .header("Authorization", accessToken))
+        String json = asJsonString(pregled);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI_PREFIX + "dodijeliSaluPregledu/1")
+                .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .characterEncoding("utf-8"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.*", hasSize(KlinikaConstants.PREGLEDI_SIZE)));
+                .andReturn();
 
+    }
+    /*
+      @RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluPregledu/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluPregledu(@RequestBody PregledDTO pregledDTO, @PathVariable Long brojSale) throws AccessDeniedException, InterruptedException {
+        Pregled pregled = this.pregledService.findOne(pregledDTO.getId());
+        this.salaService.dodijeliSaluPregledu(pregled, brojSale);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+     */
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
+

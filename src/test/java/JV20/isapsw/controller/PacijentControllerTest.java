@@ -64,8 +64,6 @@ public class PacijentControllerTest {
 
         Korisnik korisnik = responseEntity.getBody();
 
-        System.out.println(korisnik.getIme());
-
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(UserConstants.ID, korisnik.getId());
         assertEquals(UserConstants.FIRST_NAME, korisnik.getIme());

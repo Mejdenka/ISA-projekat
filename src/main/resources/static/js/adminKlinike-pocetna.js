@@ -991,8 +991,22 @@ function dodajSlobodanTermin(klinika) {
 
         okBtn.onclick = function(){
             datum = $('#datum').val();
+
+            var danas = formatDate(new Date());
+
+            if(danas > datum){
+                alert("Ne možete kreirati pregled za prošle datume!");
+                return;
+            }
+
             pocetakSatnica =  $('#pocetak').val();
             krajSatnica =  $('#kraj').val();
+
+            if(pocetakSatnica > krajSatnica){
+                alert("Početna satnica mora biti manja od krajnje!");
+                return;
+            }
+
 
             if(pocetak == "" || kraj == "" || datum == ""){
                 alert("Popunite sva polja!");
@@ -1059,6 +1073,20 @@ function dodajSlobodanTermin(klinika) {
 
 
     }
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 
 function ukloniTermin(klinika, terminId) {

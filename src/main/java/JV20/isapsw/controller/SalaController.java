@@ -1,13 +1,11 @@
 package JV20.isapsw.controller;
 
+import JV20.isapsw.dto.OperacijaDTO;
 import JV20.isapsw.dto.PregledDTO;
 import JV20.isapsw.dto.TerminDTO;
 import JV20.isapsw.exception.ResourceConflictException;
 import JV20.isapsw.model.*;
-import JV20.isapsw.service.KlinikaService;
-import JV20.isapsw.service.PregledService;
-import JV20.isapsw.service.SalaService;
-import JV20.isapsw.service.TerminService;
+import JV20.isapsw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,6 +30,8 @@ public class SalaController {
     private KlinikaService klinikaService;
     @Autowired
     private PregledService pregledService;
+    @Autowired
+    private OperacijaService operacijaService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/getTermini/{salaId}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
@@ -95,4 +95,12 @@ public class SalaController {
 
          return new ResponseEntity<>( HttpStatus.CREATED);
     }
+
+    /*@RequestMapping(method = RequestMethod.POST, value = "/dodijeliSaluOperaciji/{brojSale}")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    public ResponseEntity<?> dodijeliSaluOperaciji(@RequestBody OperacijaDTO operacijaDTO, @PathVariable Long brojSale) throws AccessDeniedException, InterruptedException {
+        Operacija operacija = this.operacijaService.findOne(operacijaDTO.getId());
+        this.salaService.dodijeliSaluOperaciji(operacija, brojSale);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }*/
 }

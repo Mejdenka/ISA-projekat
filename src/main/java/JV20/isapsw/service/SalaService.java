@@ -27,6 +27,8 @@ public class SalaService {
     private EmailService emailService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private OperacijaService operacijaService;
 
     public Sala findOne(Long id) {
         return salaRepository.findById(id).orElseGet(null);
@@ -38,9 +40,6 @@ public class SalaService {
 
     public Sala findOneByBroj(Long broj){ return salaRepository.findByBroj(broj);}
 
-
-
-
     public void saveNew(Sala sala) {
         sala.setKlinikaSale(this.klinikaService.findOne(sala.getIdKlinike()));
         sala.setObrisana(false);
@@ -49,13 +48,12 @@ public class SalaService {
         save(sala);
     }
 
-        public void dodijeliSaluPregledu(Pregled pregled, Long brojSale) throws InterruptedException {
+    public void dodijeliSaluPregledu(Pregled pregled, Long brojSale) throws InterruptedException {
         Sala sala = findOneByBroj(brojSale);
         pregled.setSala(sala);
         sala.getPregledi().add(pregled);
         pregledService.save(pregled);
         save(sala);
-
         emailService.sendPregledEmail(pregled, brojSale);
     }
 
@@ -119,6 +117,15 @@ public class SalaService {
             return datum;
         }
     }
+
+    /*public void dodijeliSaluOperaciji(Operacija operacija, Long brojSale) throws InterruptedException {
+        Sala sala = findOneByBroj(brojSale);
+        operacija.setSalaOperacije(sala);
+        sala.getOperacije().add(operacija);
+        operacijaService.save(operacija);
+        save(sala);
+        //emailService.sendPregledEmail(pregled, brojSale);
+    }*/
 
     public List<Sala> findAll() {
         return salaRepository.findAll();

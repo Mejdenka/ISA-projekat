@@ -52,8 +52,6 @@ public class KlinikaService {
 
         for (Klinika k : klinikaRepository.findAll())
         {
-
-
             Boolean nadjeno = false;
 
             for (Lekar l : k.getLekari())

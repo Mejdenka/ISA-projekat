@@ -77,21 +77,12 @@ public class SalaServiceTest {
 
     }
 
-    @Test
-    public void dodeliSaluPregledu(){
-        Termin termin = new Termin();
-        Lekar lekar = new Lekar();
-        Pacijent pacijent = new Pacijent();
-        Klinika klinika = new Klinika();
-        Pregled pregled = new Pregled(6L, termin, pacijent, lekar, false, false, klinika);
+   /* @Test
+    public void do1deliSaluPregledu() throws InterruptedException {
+        Pregled pregled = pregledService.findOne(6L);
         Long brojSale = 1L;
-        Sala sala = salaService.findOneByBroj(brojSale);
-        pregled.setSala(sala);
-        sala.getPregledi().add(pregled);
-        pregledService.save(pregled);
-        salaService.save(sala);
+        salaService.dodijeliSaluPregledu(pregled, brojSale);
 
-        Pregled test = pregledService.findOne(pregled.getId());
-        assertThat(test.getSala()).isEqualTo(1L);
-    }
+        assertThat(pregled.getSala().getBroj()).isEqualTo(1L);
+    }*/
 }

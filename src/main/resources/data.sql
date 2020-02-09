@@ -13,10 +13,15 @@ INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabl
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_lekara_id, slobodan, na_godisnjem, zbir_ocena, broj_ocena, obrisan, radno_vreme, traje_pregled, promijenjena_lozinka) VALUES ('Lekar', 'karlje','$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Simo', 'Simic','simo@example.com', 1, '2017-10-01 18:57:58','1997-10-01 18:57:58', 1, 3, 0, 0, 4, 1, 0, '08:30-16:30', 0, 1);
 INSERT INTO korisnik (dtype, korisnicko_ime, lozinka, ime, prezime, email, enabled, last_password_reset_date, datum_rodjenja, confirmed, klinika_lekara_id, slobodan, na_godisnjem, zbir_ocena, broj_ocena, obrisan, radno_vreme, traje_pregled, promijenjena_lozinka) VALUES ('Lekar', 'doca','$2a$10$e.g6dKlg/9jbUZFp4IcdnOAFJZbydpsge2ODaRY4b3uvDN9eNsjZK', 'Doca', 'Docic','doco@example.com', 1, '2017-10-01 18:57:58','1997-10-01 18:57:58', 1, 4, 0, 0, 4, 1, 0, '08:30-16:30', 0, 1);
 
+
+INSERT INTO klinika (naziv, lokacija, opis, prosecna_ocena, lokacija_na_mapi_id) VALUES ('Klinika 1', 'Janka Veselinovica, 20',
+'Prva klinika u centru.', 4.3, 1);
+
 INSERT INTO klinika (naziv, lokacija, opis, zbir_ocena, broj_ocena, lokacija_na_mapi_id) VALUES ('Klinika 1', 'Janka Veselinovica, 20', 'Prva klinika u centru.', 4, 1, 1);
 INSERT INTO klinika (naziv, lokacija, opis, zbir_ocena, broj_ocena, lokacija_na_mapi_id) VALUES ('Klinika 2', 'Gogoljeva, 30', 'Druga klinika u centru.', 3, 1, 1);
 INSERT INTO klinika (naziv, lokacija, opis, zbir_ocena, broj_ocena, lokacija_na_mapi_id) VALUES ('Klinika 3', 'Alekse Santica, 22', 'Treca klinika u centru.', 3, 1, 1);
 INSERT INTO klinika (naziv, lokacija, opis, zbir_ocena, broj_ocena, lokacija_na_mapi_id) VALUES ('Klinika 4', 'Bulevar Cara Lazara, 30', 'Cetvrta klinika u centru.', 7, 2, 1);
+
 
 INSERT INTO lokacija (broj_ulice, lat, lon) VALUES ('Janka Veselinovica, 20', 45.261608, 19.815776);
 
@@ -54,7 +59,12 @@ VALUES ('2020-02-14 10:30:00', '2020-02-14 16:00:00', 0, 1, 0, 0, null, null, nu
 INSERT INTO godisnji_odsustvo_termin (godisnji, odsustvo, pocetak, kraj, obrisan, lekargo_id, lekar_ods_id, odobren, med_sestra_go_id, med_sestra_ods_id) VALUES
  (1, 0, '2020-02-14 01:01:00', '2020-02-22 11:11:00', 0, 5, null, 0, null, null);
 
+
+INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES
+(5, 3, 1, 1, 1, 1, 0, 0, 5);
+
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 2, 2, 0, 0, 5);
+
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 2, 1, 8, 1, 1, 1, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 1, 1, 8, 4, 1, 0, 0, 5);
 INSERT INTO pregled (lekar_id, sala_id, klinika_pregleda_id, pacijent_id, termin_id, tip_pregleda_id, obavljen, obrisan, lekar_pregleda_id) VALUES (5, 3, 1, 1, 3, 1, 0, 0, 5);

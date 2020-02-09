@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Pregled {
@@ -128,4 +129,5 @@ public class Pregled {
     public void setLekarPregleda(Lekar lekarPregleda) {
         this.lekarPregleda = lekarPregleda;
     }
+
 }

@@ -57,6 +57,34 @@ public class SalaService {
         emailService.sendPregledEmail(pregled, brojSale);
     }
 
+    public void dodijeliSaluPregleduAutomatski(Pregled pregled, Klinika klinika) throws ParseException {
+        if(pregledService.findOne(pregled.getId()).getSala() != null)
+            return;
+
+        Klinika k = klinikaService.findOne(klinika.getId());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strPocetak = dateFormat.format(pregled.getTermin().getPocetak());
+        boolean pronasao = false;
+        Sala s = new Sala();
+
+        for(Sala sala : k.getSale()){
+           if(daLiJeZauzeta(sala.getBroj(), strPocetak)){
+               continue;
+           }else {
+               pronasao = true;
+               s = sala;
+               break;
+           }
+        }
+        if(pronasao){
+            pregled.setSala(s);
+            return;
+        } else {
+            Sala sala = klinika.getSale().get(0);
+            dodijeliSaluPregleduIduciTermin(pregled, sala.getBroj(), strPocetak);
+        }
+    }
+
     public void dodijeliSaluPregleduIduciTermin(Pregled pregled, Long brojSale, String datumStr) throws ParseException {
         Sala sala = findOneByBroj(brojSale);
         Date datumPocetka = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(datumStr);

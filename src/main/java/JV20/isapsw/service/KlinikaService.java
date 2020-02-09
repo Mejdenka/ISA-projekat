@@ -1,5 +1,6 @@
 package JV20.isapsw.service;
 
+import JV20.isapsw.common.Reminder;
 import JV20.isapsw.dto.*;
 import JV20.isapsw.model.*;
 import JV20.isapsw.repository.KlinikaRepository;
@@ -130,6 +131,16 @@ public class KlinikaService {
         return klinika;
     }
 
+    public List<SalaDTO> getSlobodneSale(Klinika klinika) {
+        List<SalaDTO> retVal = new ArrayList<>();
+        for (Sala s : klinika.getSale()) {
+            if (s.isSlobodna() && !s.isObrisana()) {
+                retVal.add(new SalaDTO(s));
+            }
+        }
+        return retVal;
+    }
+
     public Klinika izmeniTipPregleda(TipPregleda tipPregleda) {
         TipPregleda tp = this.tipPregledaService.findOne(tipPregleda.getId());
         Klinika klinika = tp.getKlinika();
@@ -190,9 +201,12 @@ public class KlinikaService {
         klinika.getPregledi().add(pregled);
         save(klinika);
 
+        new Reminder(86400, pregled, klinika);
+
     }
 
-    public List<PregledDTO> pronadjiSlobodnePreglede(Klinika klinika) {
+    public List<PregledDTO> pronadjiSlobodnePreglede(Long klinikaId) {
+        Klinika klinika = findOne(klinikaId);
         List<PregledDTO> pregledi = new ArrayList<>();
 
         for(Pregled p : klinika.getPregledi()){

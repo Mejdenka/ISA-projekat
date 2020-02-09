@@ -69,19 +69,10 @@ public class KlinikaController {
     }
 
 
-
-    /* Mozda je ljepse sa salaDTO... problem je sto nije povezano sa rezervacijama */
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodneSale/{nazivKlinike}")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
     public List<SalaDTO> getSlobodneSale(@PathVariable String nazivKlinike) throws AccessDeniedException {
-        List<Sala> sale = klinikaService.findByNaziv(nazivKlinike).getSale();
-        List<SalaDTO> retVal = new ArrayList<>();
-        for(Sala s : sale){
-            if(s.isSlobodna() && !s.isObrisana()){
-                retVal.add(new SalaDTO(s));
-            }
-        }
-        return retVal;
+        return klinikaService.getSlobodneSale(klinikaService.findByNaziv(nazivKlinike));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllGoOds/{id}")
@@ -92,10 +83,9 @@ public class KlinikaController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{idKlinike}")
-    @PreAuthorize("hasRole('ADMIN_KLINIKE')")
+    @PreAuthorize("hasRole('ADMIN_KLINIKE') or hasRole('PACIJENT')")
     public List<PregledDTO> getSlobodniTermini(@PathVariable Long idKlinike) throws AccessDeniedException {
-        Klinika klinika = klinikaService.findOne(idKlinike);
-        return klinikaService.pronadjiSlobodnePreglede(klinika);
+        return klinikaService.pronadjiSlobodnePreglede(idKlinike);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/deleteTerminZaPregled/{idKlinike}/{idTermina}")
@@ -103,7 +93,7 @@ public class KlinikaController {
     public List<PregledDTO> deleteTermin(@PathVariable Long idKlinike, @PathVariable Long idTermina) throws AccessDeniedException {
         Klinika klinika = klinikaService.findOne(idKlinike);
         klinikaService.obrisiTerminZaPregled(klinika, idTermina);
-        return klinikaService.pronadjiSlobodnePreglede(klinika);
+        return klinikaService.pronadjiSlobodnePreglede(klinika.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getLekari/{idKlinike}")
@@ -196,7 +186,7 @@ public class KlinikaController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/dodajSlobodanPregled")
     @PreAuthorize("hasRole('ADMIN_KLINIKE')")
-    public ResponseEntity<?> dodajSlobodanTermin(@RequestBody PregledDTO pregledDTO ) throws AccessDeniedException, ParseException {
+    public ResponseEntity<?> dodajSlobodanTermin(@RequestBody PregledDTO pregledDTO) throws AccessDeniedException, ParseException {
         this.klinikaService.dodajPregled(pregledDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }

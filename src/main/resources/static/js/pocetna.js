@@ -460,7 +460,7 @@ function prikazKorisnika(korisnik) {
                 let poc = $('#pocRadnogVremena').val();
                 let kr = $('#krRadnogVremena').val();
                 let radnoVreme = poc + "-" + kr;
-                console.log(radnoVreme)
+
                 switch (zvjezdice) {
                     case "★★★★★":
                         prosecnaOcena = 5;

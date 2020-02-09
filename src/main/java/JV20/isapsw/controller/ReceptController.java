@@ -38,5 +38,7 @@ public class ReceptController {
         this.receptService.save(recept);
         return new ResponseEntity<User>( HttpStatus.CREATED);
     }
+
+
 }
 

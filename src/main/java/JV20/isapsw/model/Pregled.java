@@ -40,6 +40,16 @@ public class Pregled {
 
     public Pregled() {}
 
+    public Pregled(Long id, Termin termin, Pacijent pacijent, Lekar lekar, boolean obavljen, boolean obrisan, Klinika klinikaPregleda) {
+        this.id = id;
+        this.termin = termin;
+        this.pacijent = pacijent;
+        this.lekar = lekar;
+        this.obavljen = obavljen;
+        this.obrisan = obrisan;
+        this.klinikaPregleda = klinikaPregleda;
+    }
+
     public Long getId() {
         return id;
     }

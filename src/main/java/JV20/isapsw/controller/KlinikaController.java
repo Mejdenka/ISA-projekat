@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "api/klinike")
@@ -229,10 +227,29 @@ public class KlinikaController {
         }
 
         this.lokacijaService.save(klinika.getLokacijaNaMapi());
-        klinika.setProsecnaOcena(0.0);
+        klinika.setBrojOcena(0);
+        klinika.setZbirOcena(0);
         this.klinikaService.save(klinika);
 
 
         return new ResponseEntity<User>( HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getCena/{idKlinike}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public double getCena(@PathVariable Long idKlinike, @PathVariable String tipPregleda ) throws AccessDeniedException, ParseException {
+        for (TipPregleda tp : klinikaService.findOne(idKlinike).getTipoviPregleda()){
+            if (tp.getNaziv().equals(tipPregleda)){
+                return tp.getCena();
+            }
+        }
+
+        return -1.0;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniPregledi/{idKlinike}/{datum}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Pregled> getSlobodniPregledi(@PathVariable Long idKlinike, @PathVariable String datum, @PathVariable String tipPregleda ) throws AccessDeniedException, ParseException {
+        return klinikaService.getSlobodniPregledi(idKlinike, datum, tipPregleda);
     }
 }

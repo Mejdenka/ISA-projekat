@@ -1239,6 +1239,7 @@ function search_tabela_sala(value, flag, zahtev) {
                                     btn.value = "Rezervisi";
                                     btn.classList.add("btn2", "btn--light-blue");
                                     btn.onclick = zakaziSaluZaPregled(zahtev, brojSale);
+
                                     var btnCell = redTabele.insertCell(4);
                                     btnCell.appendChild(btn);
                                 }
@@ -2187,6 +2188,8 @@ function generisiZahteve() {
                                         var prihvatiBtn = document.createElement("BUTTON");
                                         prihvatiBtn.classList.add("btn", "btn--radius-2", "btn--light-blue");
                                         prihvatiBtn.innerHTML = "&#10003;";
+                                        prihvati.onclick = prikaziSaleKlinike(klinika, "rezervacija", zahtev);
+                                        prihvati.appendChild(prihvatiBtn);
                                         prihvati.appendChild(prihvatiBtn);
 
                                         var ukloni = podaciZahteva.insertCell(4);
@@ -2460,5 +2463,72 @@ function ukloniZahtevZaOperaciju(klinika, zahtevId) {
             }
         });
 
+    }
+}
+
+function zakaziSaluZaOperaciju(operacija, brojSale) {
+
+    return function () {
+
+        var modal = document.getElementById("rezervacijaSaleModal");
+        modal.style.display = "block";
+
+        var span = document.getElementById("closeRezervacijaSale");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var content = document.getElementById("rezervacijaSaleDiv");
+        content.innerHTML = "";
+        var naslov = document.createElement("HEADER");
+
+        naslov.innerText = "Rezervisati salu " + brojSale +" za " + operacija.termin.pocetak + " - " + operacija.termin.kraj + "?";
+        naslov.style.fontSize = "15px";
+        content.appendChild(naslov);
+        content.appendChild(document.createElement("br"));
+
+        var prviRed = document.createElement("var");
+        prviRed.classList.add("row", "wrapper--w680");
+        var btnDa = document.createElement('input');
+        btnDa.type = "button";
+        btnDa.id = "btnDa";
+        btnDa.value = "Da";
+        btnDa.onclick = function () {
+            let id = pregled.id;
+            $.post({
+                url: 'api/sale/dodijeliSaluOperaciji/' + brojSale,
+                data: JSON.stringify({id}),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt'))
+                },
+                success: function () {
+                    alert("Sala rezervisana.");
+                    modal.style.display = "none";
+                    document.getElementById("saleModal").style.display = "none";
+                    generisiZahteve();
+                }
+            });
+        };
+        btnDa.style.marginBottom = "10px";
+        btnDa.classList.add("btn", "btn--light-blue");
+        var btnNe = document.createElement('input');
+        btnNe.type = "button";
+        btnNe.id = "btnNe";
+        btnNe.value = "Ne";
+        btnNe.onclick = function(){
+            modal.style.display = "none";
+            content.innerHTML = "";
+        }
+        btnNe.classList.add("btn2", "btn--light-blue");
+        prviRed.appendChild(btnDa);
+        prviRed.appendChild(btnNe);
+        content.appendChild(prviRed);
     }
 }

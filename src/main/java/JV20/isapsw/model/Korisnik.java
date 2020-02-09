@@ -210,4 +210,5 @@ public class Korisnik implements UserDetails{
     public void setPromijenjenaLozinka(boolean promijenjenaLozinka) {
         this.promijenjenaLozinka = promijenjenaLozinka;
     }
+
 }

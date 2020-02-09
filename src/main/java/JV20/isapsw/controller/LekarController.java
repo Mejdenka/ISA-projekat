@@ -32,6 +32,8 @@ public class LekarController {
     @Autowired
     private KorisnikService korisnikService;
     @Autowired
+    private PacijentService pacijentService;
+    @Autowired
     private KlinikaService klinikaService;
     @Autowired
     private TerminService terminService;
@@ -193,11 +195,14 @@ public class LekarController {
         Lekar lekar = (Lekar) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<Pacijent> pacijenti = klinikaService.findOne(lekar.getKlinikaLekara().getId()).getPacijenti();
         List<PacijentDTO> retVal = new ArrayList<>();
-        for(Pacijent p : pacijenti){
+        for (Pacijent p : pacijenti) {
             retVal.add(new PacijentDTO(p));
         }
         return retVal;
     }
-
-
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{lekarId}/{datum}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Termin> getSlobodniTermini(Long lekarId, String datum, String tipPregleda){
+        return lekarService.getSlobodniTermini(lekarId, datum, tipPregleda);
+    }
 }

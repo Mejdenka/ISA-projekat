@@ -17,7 +17,8 @@ public class Klinika {
     private String naziv;
     private String lokacija;
     private String opis;
-    private Double prosecnaOcena;
+    private Integer zbirOcena;
+    private Integer brojOcena;
 
     @OneToOne
     private Lokacija lokacijaNaMapi;
@@ -63,8 +64,8 @@ public class Klinika {
     private List<Recept> recepti;
 
 
-
-    public Klinika() {}
+    public Klinika() {
+    }
 
     public Klinika(Long id, String naziv, String lokacija, String opis) {
         this.id = id;
@@ -97,12 +98,25 @@ public class Klinika {
         this.lokacija = lokacija;
     }
 
-    public Double getProsecnaOcena() {
-        return prosecnaOcena;
+    public Integer getZbirOcena() {
+        return zbirOcena;
     }
 
-    public void setProsecnaOcena(Double prosecnaOcena) {
-        this.prosecnaOcena = prosecnaOcena;
+    public void setZbirOcena(Integer zbirOcena) {
+        this.zbirOcena = zbirOcena;
+    }
+
+    public Integer getBrojOcena() {
+        return brojOcena;
+    }
+
+    public void setBrojOcena(Integer brojOcena) {
+        this.brojOcena = brojOcena;
+    }
+
+    public Double getProsecnaOcena() {
+        if (brojOcena != 0 ) return Double.valueOf(zbirOcena)/brojOcena;
+        else return 0.0;
     }
 
     public String getOpis() {

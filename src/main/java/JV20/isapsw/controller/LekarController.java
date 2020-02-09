@@ -32,6 +32,8 @@ public class LekarController {
     @Autowired
     private KorisnikService korisnikService;
     @Autowired
+    private PacijentService pacijentService;
+    @Autowired
     private KlinikaService klinikaService;
     @Autowired
     private TerminService terminService;
@@ -199,5 +201,12 @@ public class LekarController {
         return retVal;
     }
 
-
+    @RequestMapping(method = RequestMethod.POST, value = "/zakaziPregled/{pacijentId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Pregled pregled, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException, ParseException, InterruptedException {
+        pregled.setPacijent(pacijentService.findOne(pacijentId));
+        this.pregledService.save(pregled);
+        emailService.sendPregledLekara(pregled, pregled.getKlinikaPregleda());
+        return new ResponseEntity<User>( HttpStatus.OK);
+    }
 }

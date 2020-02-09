@@ -52,7 +52,7 @@ na studijskom programu Računarstvo i automatika Fakulteta tehničkih nauka Univ
     
     ![Korak 3.](https://i.imgur.com/eO5tCLc.png)
  
- 4. Sada je samo potrebno da kliknete na **Run** i aplikacija će biti dostupna na *[localhost:8080](localhost:8080)*.
+ 4. Sada je samo potrebno da kliknete na **Run** i aplikacija će biti dostupna na *[localhost:1111](https://localhost:1111/)*.
  
  
  

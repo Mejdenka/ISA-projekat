@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "api/klinike")
@@ -239,10 +237,52 @@ public class KlinikaController {
         }
 
         this.lokacijaService.save(klinika.getLokacijaNaMapi());
-        klinika.setProsecnaOcena(0.0);
+        klinika.setBrojOcena(0);
+        klinika.setZbirOcena(0);
         this.klinikaService.save(klinika);
 
 
         return new ResponseEntity<User>( HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getCena/{idKlinike}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public double getCena(@PathVariable Long idKlinike, @PathVariable String tipPregleda ) throws AccessDeniedException, ParseException {
+        for (TipPregleda tp : klinikaService.findOne(idKlinike).getTipoviPregleda()){
+            if (tp.getNaziv().equals(tipPregleda)){
+                return tp.getCena();
+            }
+        }
+
+        return -1.0;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniPregledi/{idKlinike}/{datum}/{tipPregleda}")
+    @PreAuthorize("hasRole('USER')")
+    public List<Pregled> getSlobodniPregledi(@PathVariable Long idKlinike, @PathVariable String datum, @PathVariable String tipPregleda ) throws AccessDeniedException, ParseException {
+        List<Pregled> pregledi = new ArrayList<>();
+
+        for (Pregled p : klinikaService.findOne(idKlinike).getPregledi()){
+            if (p.getPacijent() == null){
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(p.getTermin().getPocetak());
+                int day= cal.get(Calendar.DAY_OF_MONTH);
+                int month = cal.get(Calendar.MONTH)+1;
+                int year = cal.get(Calendar.YEAR);
+
+                if( Integer.parseInt(datum.substring(0,4)) == year )
+                {
+                    if( Integer.parseInt(datum.substring(5,7)) == month )
+                    {
+                        if( Integer.parseInt(datum.substring(8,10)) == day )
+                        {
+                            pregledi.add(p);
+                        }
+                    }
+                }
+            }
+        }
+
+        return pregledi;
     }
 }

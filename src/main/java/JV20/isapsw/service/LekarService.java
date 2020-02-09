@@ -62,7 +62,8 @@ public class LekarService {
         zaIzmenu.setPrezime(lekar.getPrezime());
         zaIzmenu.setEmail(lekar.getEmail());
         zaIzmenu.setDatumRodjenja(lekar.getDatumRodjenja());
-        zaIzmenu.setOcena(lekar.getOcena());
+        zaIzmenu.setZbirOcena(lekar.getZbirOcena());
+        zaIzmenu.setBrojOcena(lekar.getBrojOcena());
         zaIzmenu.setRadnoVreme(lekar.getRadnoVreme());
         return save(zaIzmenu);
     }
@@ -127,7 +128,8 @@ public class LekarService {
         lekar.setIme(userRequest.getIme());
         lekar.setPrezime(userRequest.getPrezime());
         lekar.setEmail(userRequest.getEmail());
-        lekar.setOcena(5);
+        lekar.setBrojOcena(0);
+        lekar.setZbirOcena(0);
         //SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         //Date date = df.parse(userRequest.getDatumRodjenja());
         lekar.setDatumRodjenja(timeProvider.now());

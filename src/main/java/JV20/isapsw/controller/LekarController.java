@@ -195,18 +195,14 @@ public class LekarController {
         Lekar lekar = (Lekar) korisnikService.findOneByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<Pacijent> pacijenti = klinikaService.findOne(lekar.getKlinikaLekara().getId()).getPacijenti();
         List<PacijentDTO> retVal = new ArrayList<>();
-        for(Pacijent p : pacijenti){
+        for (Pacijent p : pacijenti) {
             retVal.add(new PacijentDTO(p));
         }
         return retVal;
     }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/zakaziPregled/{pacijentId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getSlobodniTermini/{lekarId}/{datum}/{tipPregleda}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Pregled pregled, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException, ParseException, InterruptedException {
-        pregled.setPacijent(pacijentService.findOne(pacijentId));
-        this.pregledService.save(pregled);
-        emailService.sendPregledLekara(pregled, pregled.getKlinikaPregleda());
-        return new ResponseEntity<User>( HttpStatus.OK);
+    public List<Termin> getSlobodniTermini(Long lekarId, String datum, String tipPregleda){
+        return lekarService.getSlobodniTermini(lekarId, datum, tipPregleda);
     }
 }

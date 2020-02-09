@@ -14,12 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class LekarService {
@@ -36,6 +34,8 @@ public class LekarService {
     private KorisnikService korisnikService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private TipPregledaService tipPregledaService;
 
     public Lekar findOne(Long id) {
         return lekarRepository.findById(id).orElseGet(null);
@@ -169,8 +169,6 @@ public class LekarService {
                 Calendar datum = Calendar.getInstance();
                 datum.setTime(pregled.getTermin().getPocetak());
                 Calendar danas = Calendar.getInstance();
-                System.out.println(formatter.format(danas.getTime()));
-                System.out.println(formatter.format(datum.getTime()));
                 if (danas.get(Calendar.HOUR_OF_DAY) == datum.get(Calendar.HOUR_OF_DAY) - 1 && danas.get(Calendar.DATE) == datum.get(Calendar.DATE)) {
                     lekar.setTrajePregled(zapoceo);
                     lekar.setSlobodan(false);
@@ -181,5 +179,78 @@ public class LekarService {
         }
         // OVDE TREBA NAMESTITI - BILO JE FALSE
         return true;
+    }
+
+    public List<Termin> getSlobodniTermini(Long lekarId, String datum, String tipPregleda){
+        List<Termin> termini = new ArrayList<>();
+
+        Lekar l = findOne(lekarId);
+        List<Termin> zauzetiTermini = new ArrayList<>();
+
+        for (Pregled p : l.getPregledi()){
+            Calendar dat1 = Calendar.getInstance();
+            dat1.setTime(p.getTermin().getPocetak());
+            int dan = dat1.get(Calendar.DAY_OF_YEAR);
+            int mjesec = dat1.get(Calendar.MONTH) + 1;
+            int godina = dat1.get(Calendar.YEAR);
+            int godina1 = Integer.parseInt(datum.substring(0,4));
+            int mjesec1 = Integer.parseInt(datum.substring(5,7));
+            int dan1 = Integer.parseInt(datum.substring(8,10));
+
+            if (dan == dan1 && mjesec == mjesec1 && godina == godina1){
+                zauzetiTermini.add(p.getTermin());
+            }
+        }
+
+        zauzetiTermini.sort(Comparator.comparing(Termin::getPocetak));
+
+        int sat = Integer.parseInt(l.getRadnoVreme().substring(0,2));
+        int minut = Integer.parseInt(l.getRadnoVreme().substring(3,5));
+
+        if (zauzetiTermini.size() == 0){
+            return termini;
+        }
+
+        if (zauzetiTermini.size() == 1){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(zauzetiTermini.get(0).getPocetak());
+            int hour = cal.get(Calendar.HOUR);
+            int minute = cal.get(Calendar.MINUTE);
+
+            int period = hour * 60 + minute - sat * 60 + minut;
+            if (period > 10){ // Bar 10 minuta od pocetka radnog vremena do prvog pregleda
+                Date dateP = zauzetiTermini.get(0).getPocetak();
+                dateP.setTime(dateP.getTime()- period *60000);
+                Date dateK = zauzetiTermini.get(0).getPocetak();
+                Termin t = new Termin(dateP, dateK);
+                termini.add(t);
+            }
+
+            Date dateP = zauzetiTermini.get(0).getKraj();
+            Date dateK = zauzetiTermini.get(0).getKraj();
+
+
+            Calendar cal2 = Calendar.getInstance();
+            cal2.setTime(zauzetiTermini.get(0).getKraj());
+            int hour2 = cal2.get(Calendar.HOUR);
+            int minute2 = cal2.get(Calendar.MINUTE);
+
+            int satKraja = Integer.parseInt(l.getRadnoVreme().substring(6,8));
+            int minutKraja = Integer.parseInt(l.getRadnoVreme().substring(9,11));
+
+            int period2 = satKraja * 60 + minutKraja - hour2 * 60 + minute2;
+            if (period2 > 10) { // Bar 10 minuta do kraja radnog vremena
+
+                dateK.setTime(dateK.getTime() + period2 * 60000);
+                Termin t = new Termin(dateP, dateK);
+                termini.add(t);
+            }
+
+            return termini;
+        }
+
+
+
+        return termini;
     }
 }

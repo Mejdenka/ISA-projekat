@@ -43,6 +43,8 @@ public class PacijentController {
     private LekarService lekarService;
     @Autowired
     private KlinikaService klinikaService;
+    @Autowired
+    private PregledService pregledService;
 
     private Logger logger = LoggerFactory.getLogger(PacijentController.class);
 
@@ -177,5 +179,15 @@ public class PacijentController {
             logger.info("Greska prilikom slanja emaila: " + e.getMessage());
         }
         korisnikService.remove(existUser.getId());
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/zakaziPregled/{pacijentId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> napraviTerminZaPregled( @RequestBody Pregled pregled, @PathVariable("pacijentId") Long pacijentId) throws AccessDeniedException, ParseException, InterruptedException {
+        pregled.setPacijent(pacijentService.findOne(pacijentId));
+        pregled.setSala(null);
+        this.pregledService.save(pregled);
+        emailService.sendPregledLekara(pregled, pregled.getKlinikaPregleda());
+        return new ResponseEntity<User>( HttpStatus.OK);
     }
 }

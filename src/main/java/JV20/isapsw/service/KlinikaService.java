@@ -52,8 +52,6 @@ public class KlinikaService {
 
         for (Klinika k : klinikaRepository.findAll())
         {
-
-
             Boolean nadjeno = false;
 
             for (Lekar l : k.getLekari())
@@ -309,5 +307,32 @@ public class KlinikaService {
     public void ukloniZahtevZaOperaciju (Long zahtevId, Long klinikaId){
         this.operacijaService.findOne(zahtevId).setObrisana(true);
         save(findOne(klinikaId));
+    }
+
+    public List<Pregled> getSlobodniPregledi(Long idKlinike, String datum, String tipPregleda) {
+        List<Pregled> pregledi = new ArrayList<>();
+
+        for (Pregled p : findOne(idKlinike).getPregledi()){
+            if (p.getPacijent() == null){
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(p.getTermin().getPocetak());
+                int day= cal.get(Calendar.DAY_OF_MONTH);
+                int month = cal.get(Calendar.MONTH)+1;
+                int year = cal.get(Calendar.YEAR);
+
+                if( Integer.parseInt(datum.substring(0,4)) == year )
+                {
+                    if( Integer.parseInt(datum.substring(5,7)) == month )
+                    {
+                        if( Integer.parseInt(datum.substring(8,10)) == day )
+                        {
+                            pregledi.add(p);
+                        }
+                    }
+                }
+            }
+        }
+
+        return pregledi;
     }
 }

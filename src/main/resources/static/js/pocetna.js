@@ -353,7 +353,7 @@ function prikazKorisnika(korisnik) {
             //***************************************ZA LEKARA*************************************
             var varOcena = document.createElement("var");
             varOcena.classList.add("col-2", "input-group");
-            var ocena = document.createTextNode("Ocena: " + korisnik.ocena);
+            var ocena = document.createTextNode("Ocena: " + korisnik.zbirOcena / korisnik.brojOcena);
             varOcena.appendChild(ocena);
             varOcena.appendChild(document.createElement("br"));
             var selectOcena = document.createElement('select');
@@ -367,10 +367,9 @@ function prikazKorisnika(korisnik) {
                 option.text = array[i];
                 selectOcena.appendChild(option);
             }
-            if(korisnik.ocena != null){
-                varOcena.appendChild(selectOcena);
-                treciRed.appendChild(varOcena)
-            }
+            varOcena.appendChild(selectOcena);
+            treciRed.appendChild(varOcena)
+
             content.appendChild(treciRed);
 
             /*********************************RADNO VRIJEME***************************************************/

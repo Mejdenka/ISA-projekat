@@ -19,6 +19,7 @@ public class Klinika {
     private String opis;
     private Integer zbirOcena;
     private Integer brojOcena;
+    private Double prosecnaOcena;
 
     @OneToOne
     private Lokacija lokacijaNaMapi;
@@ -213,5 +214,9 @@ public class Klinika {
 
     public void setAdminiKlinike(List<AdministratorKlinike> adminiKlinike) {
         this.adminiKlinike = adminiKlinike;
+    }
+
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 }

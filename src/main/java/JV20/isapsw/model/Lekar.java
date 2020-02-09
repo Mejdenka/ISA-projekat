@@ -20,6 +20,7 @@ public class Lekar extends Korisnik {
     private boolean naGodisnjem;
     private boolean trajePregled;
     private String radnoVreme;
+    private Double prosecnaOcena;
 
     @OneToMany(mappedBy = "lekarGO", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -65,9 +66,14 @@ public class Lekar extends Korisnik {
     public void setBrojOcena(Integer ocena) {
         this.brojOcena = ocena;
     }
+
     public Double getProsecnaOcena() {
         if (brojOcena != 0 ) return Double.valueOf(zbirOcena)/brojOcena;
         else return 0.0;
+    }
+
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
     }
 
     public boolean isTrajePregled() {

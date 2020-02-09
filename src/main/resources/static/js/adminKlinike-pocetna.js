@@ -296,7 +296,11 @@ function prikaziIzvestajPoslovanja(klinika) {
                         naziv.appendChild(nazivText);
 
                         var ocenaLekara = lekarRed.insertCell(1);
-                        var ocenaLekaraText = document.createTextNode(lekar.ocena);
+                        if(lekar.brojOcena == 0){
+                        var ocenaLekaraText = document.createTextNode("");
+                        } else {
+                          var ocenaLekaraText = document.createTextNode(lekar.zbirOcena/lekar.brojOcena);
+                        }
                         ocenaLekara.appendChild(ocenaLekaraText);
                     }
                 }

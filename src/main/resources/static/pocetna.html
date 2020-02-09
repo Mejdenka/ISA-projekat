@@ -25,9 +25,27 @@
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
     <!-- Main CSS-->
     <link href="css/homepage.css" rel="stylesheet" media="all">
+    <link href="css/kalendar.css" rel="stylesheet" media="all">
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
+    <!--ZA KALENDAR-->
+
+    <!--ZA KLENDAR PRVO--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/js/datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/js/i18n/datepicker.en.js"></script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"></link>
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css"></link>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/css/datepicker.css"></link>
+    -->
 </head>
 
 <body >
@@ -239,6 +257,26 @@
 
 </div>
 
+<div id="modalKalendar" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id = "closeKalendar" class="close">&times;</span>
+        <div id = "kalendarDiv">
+            <div class="p-5">
+                <h2 class="mb-4">Radni kalendar</h2>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
 <!--ZA SORTIRANJE----------------------------->
 <input type="hidden" id="name_order" value="asc">
 <input type="hidden" id="prezime_order" value="asc">
@@ -252,6 +290,12 @@
 <script src="vendor/select2/select2.min.js"></script>
 <script src="vendor/datepicker/moment.min.js"></script>
 <script src="vendor/datepicker/daterangepicker.js"></script>
+
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery.min.js'></script>
+<script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+
 <!-- Main JS-->
 <script src="js/global.js"></script>
 <script src="js/pocetna.js"></script>
@@ -261,6 +305,7 @@
 <script src="js/adminKc-pocetna.js"></script>
 <script src="js/pacijent-pocetna.js"></script>
 <script src="js/medicinskaSestra-pocetna.js"></script>
+<script src="js/kalendar.js"></script>
 
 </body>
 </html>

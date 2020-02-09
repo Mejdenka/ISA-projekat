@@ -48,6 +48,10 @@ function pocetnaMedicinskaSestra(ulogovan) {
         overiRecept();
     });
 
+    $('body').on('click', '#radniKalendarBtn', function(e) {
+        radniKalendarMedSestre();
+    });
+
 }
 
 
@@ -136,10 +140,22 @@ function prikaziPacijenteKlinike(){
 }
 // ********** RADNI KALENDAR **********
 function radniKalendarMedSestre(){
-    document.getElementById("content").innerHTML = "";
+    var modal = document.getElementById("modalKalendar");
+    modal.style.display = "block";
 
+    var span = document.getElementById("closeKalendar");
 
-    $("#content").fadeIn(500);
+    span.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    var content = document.getElementById("kalendarDiv");
 
 }
 
